@@ -1,0 +1,19 @@
+{
+  "name": "Schlaufuchs – Volksschul-Lernplattform",
+  "short_name": "Schlaufuchs",
+  "description": "Übungs- und Festigungsplattform für die 1. bis 4. Schulstufe Österreich",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FBF7EE",
+  "theme_color": "#FBF7EE",
+  "lang": "de-AT",
+  "icons": [
+    {
+      "src": "assets/icons/fuchs.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

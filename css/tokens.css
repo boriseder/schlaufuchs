@@ -1,0 +1,108 @@
+/*
+  Schlaufuchs – Design-Tokens (Vorlage)
+  Kopieren nach css/tokens.css. Dies ist die EINZIGE Quelle für Farben, Abstände und Rahmen.
+  Kontrast geprüft (WCAG 2.2): Textfarben auf --papier mindestens 4,5 : 1.
+  Keine Verläufe, keine Schatten, keine Blur-Effekte.
+*/
+
+@font-face {
+  font-family: "PrimaeText";
+  src: url("../fonts/PrimaeText-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PrimaeText";
+  src: url("../fonts/PrimaeText-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Primae";
+  src: url("../fonts/Primae-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Primae";
+  src: url("../fonts/Primae-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Fläche und Text */
+  --papier:        #FBF7EE;   /* Seitenhintergrund, warmes Papier */
+  --flaeche:       #FFFFFF;   /* Arbeitsblatt (Aufgabe) */
+  --tinte:         #1E2A36;   /* Haupttext, 13,6 : 1 auf Papier */
+  --tinte-leise:   #4A5560;   /* Nebentext, 7,1 : 1 */
+  --linie:         #3B4651;   /* Rahmen 2 px */
+  --linie-leise:   #6B6558;   /* feine Trennlinie, 5,4 : 1 */
+
+  /* Fächer (Fläche mit weißer Schrift: mindestens 5 : 1) */
+  --mathe:         #2D5E9E;   /* Blau */
+  --mathe-hell:    #DCE8F6;
+  --deutsch:       #B5502B;   /* Ziegel/Orange */
+  --deutsch-hell:  #F6E1D8;
+  --sach:          #2F7A4F;   /* Grün */
+  --sach-hell:     #DCEFE3;
+  --denken:        #6B4C9A;   /* Violett (Gehirntraining) */
+  --denken-hell:   #E7DFF3;
+
+  /* Rückmeldung: bewusst weder Rot noch Grün */
+  --richtig:       #F2C14E;   /* Sonnengelb, dunkler Text darauf: 8,7 : 1 */
+  --nochmal:       #E6EAF0;   /* ruhiges Grau-Blau, 12 : 1 */
+  --fokus:         #1E2A36;   /* Fokus-Ring */
+
+  /* Abstände (8-px-Raster) */
+  --abstand-1: 8px;
+  --abstand-2: 12px;
+  --abstand-3: 16px;
+  --abstand-4: 24px;
+  --abstand-5: 32px;
+  --abstand-6: 48px;
+
+  /* Bedienelemente */
+  --ziel-min: 56px;           /* Mindestgröße Touch-Ziel */
+  --ziel-abstand: 12px;       /* Mindestabstand zwischen Zielen */
+  --rahmen: 2px solid var(--linie);
+  --radius: 8px;              /* klein und einheitlich, keine Pillen */
+
+  /* Schrift */
+  --schrift-text: "PrimaeText", "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --schrift-zahl: "Primae", "PrimaeText", "Verdana", sans-serif;
+  --text-basis: 1.25rem;      /* 20 px */
+  --text-aufgabe: 2.4rem;     /* Aufgabe im Fokus */
+  --text-titel: 1.75rem;
+  --zeilenhoehe: 1.5;
+}
+
+/* Hinweis: "Atkinson Hyperlegible" nur als Fallback-Name. Es wird NICHT von außen geladen. */
+
+html {
+  background: var(--papier);
+  color: var(--tinte);
+  font-family: var(--schrift-text);
+  font-size: 100%;
+  line-height: var(--zeilenhoehe);
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--fokus);
+  outline-offset: 3px;
+}
+
+/* Bewegung nur als kurze Reaktion. Nie Dauerschleifen. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

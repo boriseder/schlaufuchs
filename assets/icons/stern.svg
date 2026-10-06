@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Schlaufuchs Belohnungsstern (Flat Design, 3px Kontur) -->
+  <polygon points="24,4 30.18,16.52 44.02,18.53 34.01,28.29 36.37,42.07 24,35.56 11.63,42.07 13.99,28.29 3.98,18.53 17.82,16.52"
+           fill="#F1C40F" stroke="#B7950B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

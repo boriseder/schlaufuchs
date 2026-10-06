@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Lautsprecher an (Flat Design, 3px Kontur) -->
+  <path d="M12 18 L20 18 L30 10 L30 38 L20 30 L12 30 Z" fill="#2C3E50" stroke="#2C3E50" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M36 16 C39 20 39 28 36 32" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+  <path d="M41 11 C46 18 46 30 41 37" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+</svg>

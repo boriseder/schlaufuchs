@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Schlaufuchs Fuchs-Maskottchen (Flat Design, 3px Kontur) -->
+  <path d="M24 40 L8 24 L10 10 L20 18 L24 14 L28 18 L38 10 L40 24 Z" fill="#E67E22" stroke="#2C3E50" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Weiße Wangen -->
+  <path d="M12 24 L24 38 L16 38 Z" fill="#FFFFFF" stroke="#2C3E50" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M36 24 L24 38 L32 38 Z" fill="#FFFFFF" stroke="#2C3E50" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Augen -->
+  <circle cx="18" cy="24" r="2.5" fill="#2C3E50" />
+  <circle cx="30" cy="24" r="2.5" fill="#2C3E50" />
+  <!-- Schnauze -->
+  <ellipse cx="24" cy="35" rx="3.5" ry="2.5" fill="#2C3E50" />
+  <!-- Ohr-Innenflächen -->
+  <path d="M12 13 L17 19 L10 20 Z" fill="#FADBD8" />
+  <path d="M36 13 L31 19 L38 20 Z" fill="#FADBD8" />
+</svg>

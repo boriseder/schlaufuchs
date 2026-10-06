@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schlaufuchs – Volksschul-Lernplattform</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#FBF7EE">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Schlaufuchs">
+  <link rel="stylesheet" href="css/tokens.css?v=2.2">
+  <link rel="stylesheet" href="style.css?v=2.2">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Hauptkopfzeile (Ruhend & Kognitiv entlastet) -->
+    <header class="main-header">
+      <div class="brand" id="brand-home" title="Zurück zum Hauptmenü">
+        <span class="brand-icon"><img src="assets/icons/fuchs.svg" class="brand-icon-svg" alt="Schlaufuchs"></span>
+        <div class="brand-text">
+          <h1>Schlaufuchs</h1>
+          <span class="brand-sub">Lernplattform Volksschule</span>
+        </div>
+      </div>
+
+      <!-- Kind-Profil & Sterne (Zentral im Blickfeld) -->
+      <div class="header-center-identity">
+        <button class="header-child-pill" id="header-profile-btn" title="Kind-Profil wechseln">
+          <span class="user-avatar" id="header-user-avatar"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt=""></span>
+          <span class="user-name" id="header-user-name">Schlaufuchs</span>
+          <span class="pill-divider">·</span>
+          <span class="star-icon"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Sterne:"></span>
+          <span id="global-stars-count">0</span>
+          <span class="profile-caret">▾</span>
+        </button>
+      </div>
+
+      <!-- Werkzeuge & Aktionen (Dezent rechts gruppiert) -->
+      <div class="header-tools-group">
+        <button class="header-tool-btn" id="btn-toggle-sound" title="Ton ein-/ausschalten (Klassenzimmer-Modus)">
+          <span id="sound-icon"><img src="assets/icons/ton-an.svg" class="header-icon-svg" alt="Ton"></span>
+        </button>
+        <button class="header-tool-btn" id="btn-toggle-scratchpad" title="Schmierblatt zum Rechnen öffnen">
+          <img src="assets/icons/schmierblatt.svg" class="header-icon-svg" alt="Schmierblatt">
+        </button>
+        <button class="header-tool-btn" id="btn-open-stickers" title="Mein Sticker-Album & Trophäen">
+          <img src="assets/icons/buch.svg" class="header-icon-svg" alt="Sammelbuch">
+          <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
+        </button>
+        <button class="header-tool-btn" id="btn-admin-settings" title="Admin-Einstellungen für Eltern & Lehrkräfte">
+          <img src="assets/icons/einstellungen.svg" class="header-icon-svg" alt="Einstellungen">
+        </button>
+      </div>
+    </header>
+
+    <!-- ANSICHT 1: HAUPTMENÜ / THEMENAUSWAHL -->
+    <section id="view-menu" class="view-section active">
+      <!-- Klassenfilter -->
+      <nav class="grade-segmented-control class-filter-bar" aria-label="Schulstufe auswählen">
+        <button class="filter-btn active" data-grade="all">Alle Klassen</button>
+        <button class="filter-btn" data-grade="1">1. Klasse</button>
+        <button class="filter-btn" data-grade="2">2. Klasse</button>
+        <button class="filter-btn" data-grade="3">3. Klasse</button>
+        <button class="filter-btn" data-grade="4">4. Klasse</button>
+      </nav>
+
+      <div class="subjects-container">
+        
+        <!-- FACH: MATHEMATIK -->
+        <div class="subject-group" data-subject="math">
+          <div class="subject-title">
+            <span>🧮</span>
+            <span>Mathematik</span>
+            <span class="subject-badge badge-math">Zahlen & Logik</span>
+          </div>
+          <div class="topics-grid">
+            
+            <div class="topic-card" data-topic-id="math-addition" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">➕</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Addition (+)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-addition">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-subtraction" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">➖</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Subtraktion (−)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-subtraction">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-multiplication" data-grade="2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">✖️</span>
+                <span class="grade-pill">2. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Multiplikation (·)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-multiplication">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-division" data-grade="2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon topic-icon-colon">:</span>
+                <span class="grade-pill">2. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Division (:)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-division">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-pyramid" data-grade="1,2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🧱</span>
+                <span class="grade-pill">1. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Rechentürme & Zahlenmauern</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-pyramid">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-time-money" data-grade="2,3">
+              <div class="topic-header">
+                <span class="topic-icon">💶</span>
+                <span class="grade-pill">2. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Uhrzeit & Geld</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-time-money">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-million" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">🏛️</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Zahlenraum 1 000 000</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-million">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-units" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">⚖️</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Maße & Gewichte (dag, kg, t)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-units">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-geometry" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">📐</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Geometrie: Umfang & Fläche</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-geometry">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-written" data-grade="3,4">
+              <div class="topic-header">
+                <span class="topic-icon">📝</span>
+                <span class="grade-pill">3. & 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Schriftliche Rechenverfahren</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-written">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-twenty" data-grade="1">
+              <div class="topic-header">
+                <span class="topic-icon">🔴</span>
+                <span class="grade-pill">1. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Zwanzigerfeld & Mengen</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-twenty">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-stories" data-grade="2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">💭</span>
+                <span class="grade-pill">2. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Rechengeschichten (Textaufgaben)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-stories">☆☆☆</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FACH: DEUTSCH -->
+        <div class="subject-group" data-subject="german">
+          <div class="subject-title">
+            <span>📚</span>
+            <span>Deutsch</span>
+            <span class="subject-badge badge-german">Sprache & Wörter</span>
+          </div>
+          <div class="topics-grid">
+            
+            <div class="topic-card" data-topic-id="german-word-types" data-grade="2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🔍</span>
+                <span class="grade-pill">2. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Wortarten-Detektiv</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-word-types">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-capitalization" data-grade="1,2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🔤</span>
+                <span class="grade-pill">1. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Groß & Klein</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-capitalization">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-scramble" data-grade="1,2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🧩</span>
+                <span class="grade-pill">1. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Schüttelsätze</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-scramble">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-tenses" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">⏳</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Zeitformen der Verben</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-tenses">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-cases" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">❓</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Die 4 Fälle des Nomens</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-cases">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-syllables" data-grade="1,2">
+              <div class="topic-header">
+                <span class="topic-icon">👏</span>
+                <span class="grade-pill">1. – 2. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Silbenschwingen & Könige</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-syllables">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="german-reading" data-grade="3,4">
+              <div class="topic-header">
+                <span class="topic-icon">📖</span>
+                <span class="grade-pill">3. & 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Leseverständnis (PIRLS-Sachtexte)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-german-reading">☆☆☆</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FACH: SACHUNTERRICHT -->
+        <div class="subject-group" data-subject="general">
+          <div class="subject-title">
+            <span>🌍</span>
+            <span>Sachunterricht</span>
+            <span class="subject-badge badge-general">Mensch & Natur</span>
+          </div>
+          <div class="topics-grid">
+            
+            <div class="topic-card" data-topic-id="general-calendar" data-grade="1,2,3">
+              <div class="topic-header">
+                <span class="topic-icon">📅</span>
+                <span class="grade-pill">1. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Kalender & Jahreszeiten</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-general-calendar">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="general-animals" data-grade="2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🦔</span>
+                <span class="grade-pill">2. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Tiere im Winter</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-general-animals">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="general-traffic" data-grade="1,2,3">
+              <div class="topic-header">
+                <span class="topic-icon">🚦</span>
+                <span class="grade-pill">1. – 3. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Sicherer Schulweg & Verkehr</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-general-traffic">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="general-austria" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">🇦🇹</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Österreich: Bundesländer & Hauptstädte</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-general-austria">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="general-bike-test" data-grade="4">
+              <div class="topic-header">
+                <span class="topic-icon">🚴</span>
+                <span class="grade-pill">4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Freiwillige Radfahrprüfung</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-general-bike-test">☆☆☆</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FACH: GEHIRNTRAINING -->
+        <div class="subject-group" data-subject="brain">
+          <div class="subject-title">
+            <span>🧠</span>
+            <span>Gehirntraining</span>
+            <span class="subject-badge badge-brain">Denken & Gedächtnis</span>
+          </div>
+          <div class="topics-grid">
+            
+            <div class="topic-card" data-topic-id="brain-memory" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">🐾</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Tier- & Bilder-Memory</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-brain-memory">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="brain-sequence" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">🔢</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Zahlen-Ordner (Drag & Drop)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-brain-sequence">☆☆☆</span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="brain-pattern" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <span class="topic-icon">🔷</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Muster-Meister (Logik-Reihen)</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-brain-pattern">☆☆☆</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ANSICHT 2: INTERAKTIVE ÜBUNGS-ANSICHT (SINGLE-TASK FOCUS MODE) -->
+    <section id="view-exercise" class="view-section">
+      <!-- Schlanke 56px Fokus-Leiste (EINE einzige Kontrollleiste oben) -->
+      <div class="exercise-focus-topbar">
+        <div class="focus-topbar-left">
+          <button id="btn-back-menu" class="btn-focus-back" title="Übung beenden und zurück zur Themenübersicht">
+            <img src="assets/icons/zurueck.svg" class="focus-icon-svg" alt="">
+            <span class="back-text">Beenden</span>
+          </button>
+          <span id="exercise-title" class="focus-topic-label" style="display: none;">Thema</span>
+          <span id="exercise-badge" style="display: none;"></span>
+        </div>
+
+        <div class="focus-topbar-center">
+          <div id="exercise-steps-container" class="exercise-steps-row"></div>
+        </div>
+
+        <div class="focus-topbar-right" id="exercise-dynamic-controls">
+          <button type="button" id="btn-read-aloud" class="focus-tool-btn" title="Aufgabe vorlesen lassen">
+            <img src="assets/icons/ton-an.svg" class="focus-icon-svg" alt="Vorlesen">
+          </button>
+          <button type="button" id="btn-exercise-scratchpad" class="focus-tool-btn" title="Schmierblatt öffnen">
+            <img src="assets/icons/schmierblatt.svg" class="focus-icon-svg" alt="Schmierblatt">
+          </button>
+          <button type="button" id="btn-toggle-child-numpad" class="focus-tool-btn" title="Großtasten-Zahlenfeld ein-/ausblenden" style="display: none;">
+            <img src="assets/icons/numpad.svg" class="focus-icon-svg" alt="Zahlenfeld">
+          </button>
+          <button type="button" id="btn-print-worksheet" class="focus-tool-btn" title="Als A4-Arbeitsblatt drucken">
+            <img src="assets/icons/drucken.svg" class="focus-icon-svg" alt="Drucken">
+          </button>
+          <button type="button" id="btn-exercise-regenerate" class="focus-tool-btn" title="Neue Aufgaben laden">
+            <img src="assets/icons/neuladen.svg" class="focus-icon-svg" alt="Neu laden">
+          </button>
+        </div>
+      </div>
+
+      <!-- Single-Task Fokus-Bereich (Genau 1 Aufgabe im Zentrum) -->
+      <main id="exercise-container" class="exercise-focus-wrapper">
+        <!-- Hier wird genau die aktuelle Aufgabe gerendert -->
+      </main>
+
+      <!-- Fokus-Navigation (Vorige / Weiter) -->
+      <div id="exercise-focus-navigation" class="exercise-focus-nav">
+        <button type="button" id="btn-focus-prev" class="btn btn-secondary btn-focus-nav" title="Vorige Aufgabe">
+          <span>Vorige</span>
+        </button>
+        <button type="button" id="btn-focus-next" class="btn btn-secondary btn-focus-nav" title="Nächste Aufgabe">
+          <span>Nächste</span>
+        </button>
+      </div>
+
+      <!-- Großtasten-Zahlenfeld für Kinder (Touch & iPad) -->
+      <div id="child-numpad" class="child-numpad" style="display: none;">
+        <div class="child-numpad-header">
+          <div class="child-numpad-title">
+            <img src="assets/icons/numpad.svg" class="icon-inline-svg" alt=""> <span>Zahlenfeld</span>
+          </div>
+          <button type="button" id="btn-close-numpad" class="child-numpad-close" title="Schließen">
+            <img src="assets/icons/schliessen.svg" class="icon-inline-svg" alt="Schließen">
+          </button>
+        </div>
+        <div class="child-numpad-grid">
+          <button type="button" class="numpad-btn" data-key="1">1</button>
+          <button type="button" class="numpad-btn" data-key="2">2</button>
+          <button type="button" class="numpad-btn" data-key="3">3</button>
+          <button type="button" class="numpad-btn" data-key="4">4</button>
+          <button type="button" class="numpad-btn" data-key="5">5</button>
+          <button type="button" class="numpad-btn" data-key="6">6</button>
+          <button type="button" class="numpad-btn" data-key="7">7</button>
+          <button type="button" class="numpad-btn" data-key="8">8</button>
+          <button type="button" class="numpad-btn" data-key="9">9</button>
+          <button type="button" class="numpad-btn numpad-btn-clear" data-key="C" title="Löschen">C</button>
+          <button type="button" class="numpad-btn" data-key="0">0</button>
+          <button type="button" class="numpad-btn numpad-btn-backspace" data-key="backspace" title="Rücktaste">⌫</button>
+        </div>
+        <div class="child-numpad-footer">
+          <button type="button" class="numpad-btn-check" data-key="check">
+            <img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt="" style="filter: brightness(0) invert(1);"> <span>Prüfen</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Konfetti Canvas für Belohnung bei 100% -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- MODAL: KINDER-PROFILE -->
+    <div id="profile-modal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>🦊 Kind-Profil auswählen</h3>
+          <button id="btn-close-profile-modal" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="margin-bottom: 14px; color: #475569; font-weight: 700;">Wähle dein Profil aus, um deine gesammelten Sterne zu sehen:</p>
+          <div id="modal-profiles-grid" class="modal-profiles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: ADMIN-EINSTELLUNGEN -->
+    <div id="admin-modal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⚙️ Eltern- & Lehrkräfte-Bereich</h3>
+          <button id="btn-close-admin" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Sicherheitsabfrage / Rechen-Gate -->
+          <form id="admin-gate-form" class="admin-gate-box" style="text-align: center; padding: 16px 0;">
+            <p id="admin-gate-question" style="font-weight: 800; font-size: 1.15rem; color: #1e293b; margin-bottom: 14px;"></p>
+            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+              <input type="number" inputmode="numeric" id="admin-gate-input" class="task-input" placeholder="Ergebnis" style="width: 140px;" required />
+              <button type="submit" class="btn btn-primary">Öffnen</button>
+            </div>
+            <div id="admin-gate-error" style="display: none; color: #dc2626; font-weight: 800; margin-top: 12px;"></div>
+          </form>
+
+          <!-- Geschütztes Einstellungs-Panel mit Tab-Navigation -->
+          <div id="admin-settings-panel" style="display: none;">
+            <div class="admin-tabs-nav">
+              <button type="button" class="admin-tab-btn active" data-tab="tab-children">
+                <span>👥</span> <span>Kinder & Klassen</span>
+              </button>
+              <button type="button" class="admin-tab-btn" data-tab="tab-diagnosis">
+                <span>📊</span> <span>Lernstand & Diagnose</span>
+              </button>
+              <button type="button" class="admin-tab-btn" data-tab="tab-tools">
+                <span>⚙️</span> <span>Sicherung & Werkzeuge</span>
+              </button>
+            </div>
+
+            <!-- TAB 1: KINDER & KLASSEN -->
+            <div id="tab-children" class="admin-tab-pane active">
+              <div class="admin-pane-desc">
+                Passe die freigeschalteten Klassenstufen für jedes Kind an. Änderungen sind sofort aktiv:
+              </div>
+              <div id="admin-profiles-list" class="admin-profiles-container"></div>
+              
+              <div class="admin-add-profile-bar">
+                <input type="text" id="new-profile-name" class="task-input" placeholder="Name des neuen Kindes (z. B. Mia)" />
+                <button id="btn-add-profile" class="btn btn-secondary">
+                  <span>➕</span> <span>Kind hinzufügen</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- TAB 2: LERNSTAND & DIAGNOSE -->
+            <div id="tab-diagnosis" class="admin-tab-pane">
+              <div class="admin-pane-desc">
+                Übersicht über die erarbeiteten Kompetenzen des aktiven Kindes:
+              </div>
+              <div id="admin-diagnosis-container"></div>
+            </div>
+
+            <!-- TAB 3: SICHERUNG & WERKZEUGE -->
+            <div id="tab-tools" class="admin-tab-pane">
+              <div class="admin-tool-box">
+                <h4>🖨️ Druckzentrum (Volksschul-Vorlagen)</h4>
+                <p>Drucke offline druckfertige Arbeitsblätter oder die offizielle Urkunde:</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button id="btn-admin-print-cert" class="btn btn-secondary">
+                    <span>📜</span> <span>Schlaufuchs-Urkunde drucken</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="admin-tool-box" style="margin-top: 16px;">
+                <h4>💾 Datensicherung & Übertragung</h4>
+                <p>Sichere den Lernstand aller Kinder oder übertrage Profile auf ein anderes Tablet:</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button id="btn-export-backup" class="btn btn-secondary">
+                    <span>📥</span> <span>Daten als JSON sichern</span>
+                  </button>
+                  <label class="btn btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>📤</span> <span>Sicherung laden</span>
+                    <input type="file" id="input-import-backup" accept=".json" style="display: none;" />
+                  </label>
+                </div>
+              </div>
+
+              <div class="admin-tool-box" style="margin-top: 16px;">
+                <h4>⭐ Sterne zurücksetzen</h4>
+                <p>Setzt alle Sterne des aktuell gewählten Kindes auf 0 zurück:</p>
+                <button id="btn-reset-stars" class="btn btn-secondary" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3;">
+                  Sterne des aktiven Kindes zurücksetzen
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-panel-footer">
+              <button id="btn-close-admin-panel" class="btn btn-primary">
+                Fertig & Schließen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIGITALES SCHMIERBLATT / NOTIZ-CANVAS -->
+    <div id="scratchpad-panel" class="scratchpad-panel">
+      <div class="scratchpad-header">
+        <div class="scratchpad-title">
+          <span>✏️</span> <span>Digitales Schmierblatt (Notizen & Nebenrechnungen)</span>
+        </div>
+        <div class="scratchpad-actions">
+          <button id="btn-scratchpad-clear" class="btn btn-secondary btn-sm" title="Schmierblatt leeren">
+            <span>🗑️</span> <span>Löschen</span>
+          </button>
+          <button id="btn-scratchpad-close" class="btn btn-primary btn-sm" title="Schmierblatt schließen">
+            <span>✖️</span> <span>Schließen</span>
+          </button>
+        </div>
+      </div>
+      <div class="scratchpad-body">
+        <canvas id="scratchpad-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- MODAL: STICKER-ALBUM & TROPHÄEN -->
+    <div id="stickers-modal" class="modal-overlay">
+      <div class="modal-card modal-card-lg">
+        <div class="modal-header">
+          <h3>📖 Mein Sticker-Album & Trophäen</h3>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="btn-print-certificate" class="btn btn-secondary btn-sm" title="Offizielle Schlaufuchs-Urkunde drucken 📜">
+              <span>📜</span> <span>Urkunde drucken</span>
+            </button>
+            <button id="btn-close-stickers-modal" class="modal-close-btn">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="stickers-booster-banner">
+            <div class="booster-info">
+              <h4>🎁 Sammelpäckchen</h4>
+              <p>Für je 5 gesammelte Sterne erhältst du ein Überraschungs-Päckchen!</p>
+            </div>
+            <button id="btn-open-booster" class="btn btn-primary btn-booster">
+              <span>🎁</span> <span>Päckchen öffnen</span>
+            </button>
+          </div>
+
+          <div class="stickers-collection-header">
+            <div class="stickers-collection-title-wrap">
+              <h4 id="stickers-collection-title" class="stickers-collection-title">🌟 Mein Sammelheft</h4>
+              <span id="stickers-collection-stats" class="stickers-collection-stats">1 von 16 eingeklebt</span>
+            </div>
+            <div class="stickers-progress-bar-bg">
+              <div id="stickers-progress-bar-fill" class="stickers-progress-bar-fill" style="width: 6%;"></div>
+            </div>
+          </div>
+          <div id="stickers-album-grid" class="stickers-album-grid"></div>
+
+          <div class="trophies-section-header">
+            <h4 class="trophies-title">🏆 Trophäen-Vitrine</h4>
+            <span class="trophies-subtitle">Besondere Auszeichnungen für deine Rechen- und Leseabenteuer</span>
+          </div>
+          <div id="trophies-grid" class="trophies-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERLAY: BOOSTER REVEAL CELEBRATION -->
+    <div id="booster-reveal-overlay" class="modal-overlay booster-reveal-overlay"></div>
+  </div>
+
+  <!-- A4-Druckbereich für Arbeitsblätter & Urkunden -->
+  <div id="print-area"></div>
+
+  <!-- Core-Module (Format, Storage, Random, Texte) -->
+  <script src="js/core/format.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/random.js"></script>
+  <script src="js/core/texte.js"></script>
+
+  <!-- Modulare Schlaufuchs-Skripte (100% Offline- & Webserver-fähig) -->
+  <script src="js/dialog.js"></script>
+  <script src="js/signs.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/dragdrop.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/print.js"></script>
+  <script src="js/scratchpad.js"></script>
+  <script src="js/stickers.js"></script>
+  <script src="js/validators/index.js"></script>
+  <script src="js/generators/math.js"></script>
+  <script src="js/generators/german.js"></script>
+  <script src="js/generators/general.js"></script>
+  <script src="js/generators/brain.js"></script>
+  <script src="js/renderers.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- PWA Offline Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => {
+            console.log('Schlaufuchs ServiceWorker registriert:', reg.scope);
+          })
+          .catch(err => {
+            console.warn('ServiceWorker-Registrierung fehlgeschlagen:', err);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+// =============================================================
+// SCHLAUFUCHS – sw.js (Service Worker für 100% Offline-Betrieb)
+// =============================================================
+
+const CACHE_NAME = 'schlaufuchs-v2.3';
+
+const PRECACHE_ASSETS = [
+  './',
+  'index.html',
+  'manifest.webmanifest',
+  'css/tokens.css',
+  'style.css',
+  'js/core/format.js',
+  'js/core/storage.js',
+  'js/core/random.js',
+  'js/core/texte.js',
+  'js/dialog.js',
+  'js/signs.js',
+  'js/state.js',
+  'js/audio.js',
+  'js/dragdrop.js',
+  'js/confetti.js',
+  'js/print.js',
+  'js/scratchpad.js',
+  'js/stickers.js',
+  'js/validators/index.js',
+  'js/generators/math.js',
+  'js/generators/german.js',
+  'js/generators/general.js',
+  'js/generators/brain.js',
+  'js/renderers.js',
+  'js/admin.js',
+  'js/app.js',
+  'assets/icons/fuchs.svg',
+  'assets/icons/stern.svg',
+  'assets/icons/ton-an.svg',
+  'assets/icons/ton-aus.svg',
+  'assets/icons/schmierblatt.svg',
+  'assets/icons/einstellungen.svg',
+  'assets/icons/zurueck.svg',
+  'assets/icons/hakerl.svg',
+  'assets/icons/buch.svg',
+  'assets/icons/drucken.svg',
+  'assets/icons/neuladen.svg',
+  'assets/icons/numpad.svg',
+  'assets/icons/schliessen.svg',
+  'fonts/PrimaeText-Regular.otf',
+  'fonts/PrimaeText-Bold.otf',
+  'fonts/PrimaeText-Semibold.otf',
+  'fonts/PrimaeText-Cursive.otf',
+  'fonts/Primae-Regular.otf',
+  'fonts/Primae-Bold.otf'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(PRECACHE_ASSETS);
+    }).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).then((networkResponse) => {
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+          return networkResponse;
+        }
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+        return networkResponse;
+      }).catch(() => {
+        // Fallback auf gecachte Startseite
+        return caches.match('index.html');
+      });
+    })
+  );
+});

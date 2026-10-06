@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Einstellungen Zahnrad (Flat Design, 3px Kontur) -->
+  <circle cx="24" cy="24" r="8" fill="#ECF0F1" stroke="#2C3E50" stroke-width="3"/>
+  <path d="M22 6 L26 6 L27 11 C28.5 11.5 29.8 12.3 31 13.3 L35.5 11 L38.5 14 L36.2 18.5 C37.2 19.7 38 21 38.5 22.5 L43.5 23.5 L43.5 27.5 L38.5 28.5 C38 30 37.2 31.3 36.2 32.5 L38.5 37 L35.5 40 L31 37.7 C29.8 38.7 28.5 39.5 27 40 L26 45 L22 45 L21 40 C19.5 39.5 18.2 38.7 17 37.7 L12.5 40 L9.5 37 L11.8 32.5 C10.8 31.3 10 30 9.5 28.5 L4.5 27.5 L4.5 23.5 L9.5 22.5 C10 21 10.8 19.7 11.8 18.5 L9.5 14 L12.5 11 L17 13.3 C18.2 12.3 19.5 11.5 21 11 Z"
+        stroke="#2C3E50" stroke-width="3" stroke-linejoin="round"/>
+</svg>
