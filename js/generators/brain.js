@@ -10,27 +10,10 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.Brain = (function () {
   'use strict';
 
-  function shuffle(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function getEffectiveGrades(allowedTopicGrades) {
-    if (window.Schlaufuchs && window.Schlaufuchs.State && window.Schlaufuchs.State.getActiveGrades) {
-      const active = window.Schlaufuchs.State.getActiveGrades();
-      const filtered = allowedTopicGrades.filter(g => active.includes(g));
-      if (filtered.length > 0) return filtered;
-    }
-    return allowedTopicGrades;
-  }
+  // Zentrale Hilfsfunktionen aus Core (Zufall, Stufen-Filter)
+  const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
+  const rand = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.rand) || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
+  const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. TIER- & NATUR-MEMORY (Garantiert KEINE Rechnungen, 4 wechselnde Themensets)
   // Adaptiv: 4 Paare (8 Karten) für 1.–2. Klasse, 6 Paare (12 Karten) für 3.–4. Klasse

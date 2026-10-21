@@ -1,15 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Schlaufuchs Fuchs-Maskottchen (Flat Design, 3px Kontur) -->
-  <path d="M24 40 L8 24 L10 10 L20 18 L24 14 L28 18 L38 10 L40 24 Z" fill="#E67E22" stroke="#2C3E50" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-  <!-- Weiße Wangen -->
-  <path d="M12 24 L24 38 L16 38 Z" fill="#FFFFFF" stroke="#2C3E50" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M36 24 L24 38 L32 38 Z" fill="#FFFFFF" stroke="#2C3E50" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Augen -->
-  <circle cx="18" cy="24" r="2.5" fill="#2C3E50" />
-  <circle cx="30" cy="24" r="2.5" fill="#2C3E50" />
-  <!-- Schnauze -->
-  <ellipse cx="24" cy="35" rx="3.5" ry="2.5" fill="#2C3E50" />
-  <!-- Ohr-Innenflächen -->
-  <path d="M12 13 L17 19 L10 20 Z" fill="#FADBD8" />
-  <path d="M36 13 L31 19 L38 20 Z" fill="#FADBD8" />
+  <!-- Schlaufuchs Premium-Maskottchen (Feine 2px-Linienführung, elegant, leicht) -->
+  
+  <!-- Ohren außen (geschwungen, feine Kontur) -->
+  <path d="M12 20 C10 14 9.5 8 11.5 6 C13.5 5 16.5 8 19.5 13.5 Z" 
+        fill="#D96B27" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M36 20 C38 14 38.5 8 36.5 6 C34.5 5 31.5 8 28.5 13.5 Z" 
+        fill="#D96B27" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Ohren innen (zartes Pastell-Rosa) -->
+  <path d="M12.5 9 C14 10 16 12 17.5 14.5 L13.5 15 Z" fill="#FADBD8"/>
+  <path d="M35.5 9 C34 10 32 12 30.5 14.5 L34.5 15 Z" fill="#FADBD8"/>
+
+  <!-- Kopfform (luftig, weich, feine 2.1px Kontur) -->
+  <path d="M14 15 C19 13.5 29 13.5 34 15 C39 19 42 25 41 31 C40 36 34 40 28 41.5 C25.5 42 22.5 42 20 41.5 C14 40 8 36 7 31 C6 25 9 19 14 15 Z" 
+        fill="#E67E22" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Weiße Bäckchenmaske -->
+  <path d="M7.5 31 C10.5 36.5 17 40 24 40 C31 40 37.5 36.5 40.5 31 C38 27.5 33 25.5 29 27.5 C26 29 24 32 24 32 C24 32 22 29 19 27.5 C15 25.5 10 27.5 7.5 31 Z" 
+        fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8" stroke-linejoin="round"/>
+
+  <!-- Kulleraugen (groß, neugierig, freundlich) -->
+  <ellipse cx="16.5" cy="24" rx="3.2" ry="3.6" fill="#1E2A36"/>
+  <circle cx="17.6" cy="22.6" r="1.3" fill="#FFFFFF"/>
+  <circle cx="15.5" cy="25.3" r="0.6" fill="#FFFFFF"/>
+
+  <ellipse cx="31.5" cy="24" rx="3.2" ry="3.6" fill="#1E2A36"/>
+  <circle cx="32.6" cy="22.6" r="1.3" fill="#FFFFFF"/>
+  <circle cx="30.5" cy="25.3" r="0.6" fill="#FFFFFF"/>
+
+  <!-- Feine Augenbrauen -->
+  <path d="M14.5 18.5 C16 17.5 18 18 19 19" stroke="#3B4651" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M29 19 C30 18 32 17.5 33.5 18.5" stroke="#3B4651" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Kleine Stupsnase -->
+  <path d="M21.5 32 C21.5 31 26.5 31 26.5 32 C26.5 33.6 24 35 24 35 C24 35 21.5 33.6 21.5 32 Z" 
+        fill="#1E2A36"/>
+  <circle cx="23" cy="31.8" r="0.5" fill="#FFFFFF"/>
+
+  <!-- Zartes, feines Lächeln -->
+  <path d="M21.5 36.5 Q24 38.3 26.5 36.5" stroke="#1E2A36" stroke-width="1.8" stroke-linecap="round"/>
 </svg>

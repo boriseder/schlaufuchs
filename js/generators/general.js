@@ -11,14 +11,8 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.General = (function () {
   'use strict';
 
-  function shuffle(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
+  // Zentrale Hilfsfunktion aus Core (Zufallsmischen)
+  const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
 
   // 1. JAHRESKREIS & KALENDER (1. – 2. Klasse, inkl. Jänner!)
   function buildCalendarTasks() {
@@ -74,21 +68,25 @@ window.Schlaufuchs.Generators.General = (function () {
     ];
 
     const chosen = shuffle(pool).slice(0, 5);
-    return chosen.map(item => ({
-      fach: 'sachunterricht',
-      schulstufe: 1,
-      grade: 1,
-      lehrplanRef: 'SU-1-2-Zeit-Jahreskreis',
-      type: 'multiple-choice',
-      icon: '📅',
-      question: item.question,
-      options: item.options,
-      correctIndex: item.correct,
-      correctText: item.options[item.correct],
-      hint: item.hint,
-      selectedText: null,
-      isCorrect: null,
-    }));
+    return chosen.map(item => {
+      const correctText = item.options[item.correct];
+      const shuffledOptions = shuffle([...item.options]);
+      return {
+        fach: 'sachunterricht',
+        schulstufe: 1,
+        grade: 1,
+        lehrplanRef: 'SU-1-2-Zeit-Jahreskreis',
+        type: 'multiple-choice',
+        icon: '📅',
+        question: item.question,
+        options: shuffledOptions,
+        correctIndex: shuffledOptions.indexOf(correctText),
+        correctText: correctText,
+        hint: item.hint,
+        selectedText: null,
+        isCorrect: null,
+      };
+    });
   }
 
   // 2. HEIMISCHE TIERE IM WINTER (3. Klasse – Winterschlaf, Winterruhe, Winterstarre, Zugvögel)
@@ -111,7 +109,7 @@ window.Schlaufuchs.Generators.General = (function () {
       },
       {
         animal: 'Rauchschwalbe',
-        behavior: 'Zugvogel (fliegt im Herbst ins warme Afrika)',
+        behavior: 'Zugvogel (fliegt im Herbst in den warmen Süden)',
         hint: 'Schwalben finden im Winter bei uns keine fliegenden Insekten.'
       },
       {
@@ -121,28 +119,28 @@ window.Schlaufuchs.Generators.General = (function () {
       },
       {
         animal: 'Murmeltier',
-        behavior: 'Winterschlaf (schläft bis zu 6 Monate im Erdbau)',
-        hint: 'Murmeltiere kuscheln sich im alpinen Bau zusammen.'
+        behavior: 'Winterschlaf (Körpertemperatur sinkt drastisch)',
+        hint: 'Murmeltiere kuscheln sich im alpinen Bau zusammen und schlafen bis zu 6 Monate.'
       },
       {
         animal: 'Dachs',
-        behavior: 'Winterruhe (senkt Aktivität, schläft aber nicht durchgehend)',
-        hint: 'Der Dachs hält im gemütlichen Dachsbau Winterruhe.'
+        behavior: 'Winterruhe (wacht regelmäßig auf, um Vorräte zu fressen)',
+        hint: 'Der Dachs hält im gemütlichen Dachsbau Winterruhe und schläft nicht durchgehend.'
       },
       {
         animal: 'Zauneidechse',
-        behavior: 'Winterstarre (erstarrt bei Minusgraden)',
-        hint: 'Eidechsen sind wechselwarm und können ihre Wärme nicht selbst regeln.'
+        behavior: 'Winterstarre (passt sich der Kälte an, bewegt sich nicht)',
+        hint: 'Eidechsen sind wechselwarm und erstarren bei Minusgraden.'
       },
       {
         animal: 'Weißstorch',
-        behavior: 'Zugvogel (zieht über tausende Kilometer nach Süden)',
-        hint: 'Störche fliegen im Spätsommer nach Süden.'
+        behavior: 'Zugvogel (fliegt im Herbst in den warmen Süden)',
+        hint: 'Störche fliegen im Spätsommer tausende Kilometer nach Süden.'
       },
       {
         animal: 'Amsel',
-        behavior: 'Standvogel (bleibt den Winter über im heimischen Garten)',
-        hint: 'Amseln suchen Beeren und Futter im Schnee.'
+        behavior: 'Standvogel (bleibt den ganzen Winter bei uns)',
+        hint: 'Amseln suchen Beeren und Futter im Schnee und bleiben den Winter über im Garten.'
       }
     ];
 
@@ -150,25 +148,31 @@ window.Schlaufuchs.Generators.General = (function () {
       'Winterschlaf (Körpertemperatur sinkt drastisch)',
       'Winterruhe (wacht regelmäßig auf, um Vorräte zu fressen)',
       'Winterstarre (passt sich der Kälte an, bewegt sich nicht)',
-      'Zugvogel (fliegt im Herbst ins warme Afrika)'
+      'Zugvogel (fliegt im Herbst in den warmen Süden)',
+      'Standvogel (bleibt den ganzen Winter bei uns)'
     ];
 
     const chosen = shuffle(pool).slice(0, 5);
-    return chosen.map(item => ({
-      fach: 'sachunterricht',
-      schulstufe: 3,
-      grade: 3,
-      lehrplanRef: 'SU-3-Natur-Tiere-Winter',
-      type: 'multiple-choice',
-      icon: '❄️',
-      question: `Wie verbringt das Tier den Winter?\nTier: ${item.animal}`,
-      options: allBehaviors,
-      correctIndex: allBehaviors.indexOf(item.behavior) !== -1 ? allBehaviors.indexOf(item.behavior) : 0,
-      correctText: item.behavior,
-      hint: item.hint,
-      selectedText: null,
-      isCorrect: null,
-    }));
+    return chosen.map(item => {
+      const wrongBehaviors = allBehaviors.filter(b => b !== item.behavior);
+      const options = shuffle([item.behavior, ...shuffle(wrongBehaviors).slice(0, 3)]);
+
+      return {
+        fach: 'sachunterricht',
+        schulstufe: 3,
+        grade: 3,
+        lehrplanRef: 'SU-3-Natur-Tiere-Winter',
+        type: 'multiple-choice',
+        icon: '❄️',
+        question: `Wie verbringt das Tier den Winter?\nTier: ${item.animal}`,
+        options: options,
+        correctIndex: options.indexOf(item.behavior),
+        correctText: item.behavior,
+        hint: item.hint,
+        selectedText: null,
+        isCorrect: null,
+      };
+    });
   }
 
   // 3. ÖSTERREICH & HAUPTSTÄDTE (4. Klasse – 9 Bundesländer, Flüsse, Berge, Nachbarn)
@@ -410,6 +414,8 @@ window.Schlaufuchs.Generators.General = (function () {
       if (item.signId && signs) {
         customHtml = signs.getSignSvg(item.signId);
       }
+      const correctText = item.options[item.correct];
+      const shuffledOptions = shuffle([...item.options]);
 
       return {
         fach: 'sachunterricht',
@@ -420,9 +426,9 @@ window.Schlaufuchs.Generators.General = (function () {
         icon: item.signId ? null : '🚲',
         customVisualHtml: customHtml,
         question: item.question,
-        options: item.options,
-        correctIndex: item.correct,
-        correctText: item.options[item.correct],
+        options: shuffledOptions,
+        correctIndex: shuffledOptions.indexOf(correctText),
+        correctText: correctText,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,
@@ -493,15 +499,15 @@ window.Schlaufuchs.Generators.General = (function () {
       },
       {
         signId: 'geh-radweg',
-        question: 'Was bedeutet dieses blaue Verkehrszeichen?',
+        question: 'Was bedeutet dieses blaue Verkehrszeichen mit der weißen Trennlinie?',
         options: [
-          'Gemeinsamer Geh- und Radweg (Rücksichtnahme aufeinander!)',
+          'Getrennter Geh- und Radweg (Fußgänger und Radfahrer haben getrennte Bahnen)',
           'Autobahn',
           'Reine Fußgängerzone ohne Fahrräder',
           'Fahrverbot für alle'
         ],
         correct: 0,
-        hint: 'Fußgänger und Radfahrer teilen sich hier gemeinsam den Weg.'
+        hint: 'Die weiße Trennlinie trennt die Bahn für Fußgänger von der für Radfahrer.'
       }
     ];
 
@@ -511,6 +517,8 @@ window.Schlaufuchs.Generators.General = (function () {
       if (item.signId && signs) {
         customHtml = signs.getSignSvg(item.signId);
       }
+      const correctText = item.options[item.correct];
+      const shuffledOptions = shuffle([...item.options]);
 
       return {
         fach: 'sachunterricht',
@@ -521,9 +529,9 @@ window.Schlaufuchs.Generators.General = (function () {
         icon: item.signId ? null : '🚶',
         customVisualHtml: customHtml,
         question: item.question,
-        options: item.options,
-        correctIndex: item.correct,
-        correctText: item.options[item.correct],
+        options: shuffledOptions,
+        correctIndex: shuffledOptions.indexOf(correctText),
+        correctText: correctText,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,

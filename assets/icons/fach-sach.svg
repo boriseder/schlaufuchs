@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Fach: Sachunterricht (Lupe & Blatt, 2.1px Kontur) -->
+  <!-- Blatt im Hintergrund (Sach-Grün) -->
+  <path d="M14 26 C12 16 22 10 32 8 C34 18 28 28 18 30 Z" fill="#2F7A4F" stroke="#3B4651" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M15 28 C20 22 25 17 31 10 M21 21 L26 23 M25 17 L29 18" stroke="#DCEFE3" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Lupe Rahmen & Glas -->
+  <circle cx="21" cy="21" r="12.5" fill="#FFFFFF" fill-opacity="0.88" stroke="#3B4651" stroke-width="2.1"/>
+  <path d="M13.5 16 C15.5 12.5 19 10.5 23.5 10.5" stroke="#CBD5E1" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Lupengriff (zarter, 2.6px) -->
+  <path d="M30 30 L39.5 39.5" stroke="#3B4651" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M30.5 30.5 L38.5 38.5" stroke="#F2C14E" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

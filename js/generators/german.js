@@ -10,23 +10,9 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.German = (function () {
   'use strict';
 
-  function shuffle(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function getEffectiveGrades(allowedTopicGrades) {
-    if (window.Schlaufuchs && window.Schlaufuchs.State && window.Schlaufuchs.State.getActiveGrades) {
-      const active = window.Schlaufuchs.State.getActiveGrades();
-      const filtered = allowedTopicGrades.filter(g => active.includes(g));
-      if (filtered.length > 0) return filtered;
-    }
-    return allowedTopicGrades;
-  }
+  // Zentrale Hilfsfunktionen aus Core (Zufall, Stufen-Filter)
+  const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
+  const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. WORTARTEN (Namenwort 🔵, Tunwort 🔴, Wiewort 🟢 – 25+ Sätze Pool)
   function buildWordTypesTasks() {
@@ -276,9 +262,9 @@ window.Schlaufuchs.Generators.German = (function () {
       'Der schnelle Hase hoppelt über die grüne Wiese',
       'Das kleine Eichhörnchen versteckt fleißig braune Nüsse',
       'Im Jänner bauen die Kinder einen lustigen Schneemann',
-      'Auf dem Schulhof spielen alle Kinder gemeinsam',
+      'Auf dem Pausenhof spielen alle Kinder gemeinsam',
       'Der bunte Schmetterling nascht süßen Nektar',
-      'Meine Oma backt am Sonntag einen leckeren Kuchen',
+      'Meine Oma backt am Sonntag einen köstlichen Kuchen',
       'Der schlaue Fuchs schleicht leise durch das Unterholz',
       'Im Herbst färben sich die Blätter der Bäume bunt',
       'Die fleißige Biene summt von Blüte zu Blüte',

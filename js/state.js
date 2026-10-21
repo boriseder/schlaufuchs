@@ -19,16 +19,17 @@ window.Schlaufuchs.State = (function () {
 
   // Standard-Einstellungen
   const DEFAULT_SETTINGS = {
-    activeGrades: [1, 2, 3, 4], // standardmäßig alle Schulstufen aktiv
-    soundEffects: true
+    activeGrades: [1, 2, 3], // standardmäßig 1., 2. und 3. Schulstufe aktiv
+    soundEffects: true,
+    parentPin: '' // leer = kein PIN gesetzt, stattdessen anspruchsvolle Rechenaufgabe
   };
 
   // Standard-Profil
   const DEFAULT_PROFILE = {
     id: 'profile_default',
-    name: 'Schlaufuchs',
+    name: 'Nils',
     avatar: '🦊',
-    grades: [1, 2, 3, 4], // Am Kind hängende freigeschaltete Schulstufen
+    grades: [1, 2, 3], // Am Kind hängende freigeschaltete Schulstufen (1., 2., 3. Klasse)
     stars: {}, // topicId -> number (0..3)
     unlockedStickers: ['s1'], // Fuchs Felix als Starter-Sticker im Album
     openedPacks: 0,
@@ -80,6 +81,16 @@ window.Schlaufuchs.State = (function () {
     return getActiveGrades().includes(Number(gradeNum));
   }
 
+  function getParentPin() {
+    return loadSettings().parentPin || '';
+  }
+
+  function setParentPin(pin) {
+    const clean = (typeof pin === 'string' ? pin : String(pin || '')).trim();
+    saveSettings({ parentPin: clean });
+    return clean;
+  }
+
   // --- USER-PROFILE & SCHULSTUFEN AM KIND ---
 
   function loadAllProfiles() {
@@ -90,8 +101,13 @@ window.Schlaufuchs.State = (function () {
         // Sicherstellen, dass jedes Profil Schulstufen und Sticker-Felder besitzt
         let modified = false;
         list.forEach(p => {
+          if (p.id === 'profile_default' && p.name === 'Schlaufuchs') {
+            p.name = 'Nils';
+            p.grades = [1, 2, 3];
+            modified = true;
+          }
           if (!p.grades || !Array.isArray(p.grades) || p.grades.length === 0) {
-            p.grades = [1, 2, 3, 4];
+            p.grades = [1, 2, 3];
             modified = true;
           }
           if (!Array.isArray(p.unlockedStickers)) {
@@ -146,13 +162,13 @@ window.Schlaufuchs.State = (function () {
     if (profile && Array.isArray(profile.grades) && profile.grades.length > 0) {
       return profile.grades;
     }
-    return [1, 2, 3, 4];
+    return [1, 2, 3];
   }
 
   function getGradesForProfile(profileId) {
     const profiles = loadAllProfiles();
     const p = profiles.find(item => item.id === profileId);
-    return (p && Array.isArray(p.grades) && p.grades.length > 0) ? p.grades : [1, 2, 3, 4];
+    return (p && Array.isArray(p.grades) && p.grades.length > 0) ? p.grades : [1, 2, 3];
   }
 
   function setGradesForProfile(profileId, grades) {
@@ -281,6 +297,8 @@ window.Schlaufuchs.State = (function () {
     loadSettings: loadSettings,
     saveSettings: saveSettings,
     isGradeActive: isGradeActive,
+    getParentPin: getParentPin,
+    setParentPin: setParentPin,
     // Profile & Schulstufen am Kind
     loadAllProfiles: loadAllProfiles,
     saveAllProfiles: saveAllProfiles,

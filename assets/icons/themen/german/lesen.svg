@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Leseverständnis: Offenes Buch & Lupe, 2px Kontur -->
+  <path d="M8 13 C14 11 24 12 24 16 C24 12 34 11 40 13 L40 36 C34 34 24 35 24 39 C24 35 14 34 8 36 Z" 
+        fill="#FFFFFF" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+  <line x1="24" y1="16" x2="24" y2="39" stroke="#3B4651" stroke-width="1.8"/>
+  <line x1="12" y1="20" x2="20" y2="20" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="12" y1="25" x2="20" y2="25" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="12" y1="30" x2="18" y2="30" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="28" y1="20" x2="36" y2="20" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="28" y1="25" x2="36" y2="25" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Zarte Lupe rechts -->
+  <circle cx="31.5" cy="27" r="6" fill="#DCE8F6" fill-opacity="0.8" stroke="#3B4651" stroke-width="1.8"/>
+  <line x1="36" y1="31.5" x2="41.5" y2="37" stroke="#3B4651" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

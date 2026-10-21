@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Schüttelsätze: Wortkarten zum Ordnen, 1.8px Kontur -->
+  <rect x="6" y="9" width="22" height="14" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="17" y="19" font-family="'PrimaeText', sans-serif" font-size="8.5" font-weight="900" fill="#B5502B" text-anchor="middle">Hund</text>
+  <rect x="20" y="25" width="22" height="14" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="31" y="35" font-family="'PrimaeText', sans-serif" font-size="8.5" font-weight="900" fill="#2D5E9E" text-anchor="middle">bellt</text>
+  <!-- Zarter Tauschpfeil -->
+  <path d="M33 13 C38 13 41 16 41 21 L38 21" stroke="#F2C14E" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <polygon points="38,18 43,21 38,24" fill="#F2C14E"/>
+</svg>

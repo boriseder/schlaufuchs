@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Division (:) Freistehender Doppelpunkt & zarte Teilung -->
+  <!-- Oberer Divisions-Punkt -->
+  <circle cx="24" cy="14" r="5" fill="#2D5E9E"/>
+  <!-- Feine zarte Teilungslinie in der Mitte -->
+  <line x1="12" y1="24" x2="36" y2="24" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+  <!-- Unterer Divisions-Punkt -->
+  <circle cx="24" cy="34" r="5" fill="#2D5E9E"/>
+</svg>

@@ -11,30 +11,10 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.Math = (function () {
   'use strict';
 
-  // Hilfsfunktion: Zufallszahl zwischen min und max (inklusiv)
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  // Hilfsfunktion: Zahl formatieren (schmales Leerzeichen ab 4 Stellen, niemals Tausenderpunkt)
-  function formatAustrianNumber(num) {
-    if (window.Schlaufuchs && window.Schlaufuchs.formatZahl) {
-      return window.Schlaufuchs.formatZahl(num);
-    }
-    if (num === null || num === undefined) return '';
-    const n = Math.abs(num);
-    const str = num.toString();
-    return n >= 1000 ? str.replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F') : str;
-  }
-
-  // Ermittelt die effektiven Schulstufen für ein Thema basierend auf den freigeschalteten Stufen des aktiven Kindes
-  function getEffectiveGrades(allowedTopicGrades) {
-    const childGrades = (window.Schlaufuchs.State && window.Schlaufuchs.State.getActiveGrades)
-      ? window.Schlaufuchs.State.getActiveGrades()
-      : [1, 2, 3, 4];
-    const intersection = allowedTopicGrades.filter(g => childGrades.includes(g));
-    return intersection.length > 0 ? intersection : allowedTopicGrades;
-  }
+  // Zentrale Hilfsfunktionen aus Core (Zufall, Zahlenformatierung, Stufen-Filter)
+  const rand = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.rand) || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
+  const formatAustrianNumber = (window.Schlaufuchs && window.Schlaufuchs.formatZahl) || (num => String(num));
+  const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. ADDITION (➕ 1. bis 4. Klasse – adaptiv gemappt)
   function buildAdditionTasks(seed) {

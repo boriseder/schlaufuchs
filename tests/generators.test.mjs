@@ -88,3 +88,91 @@ test('Lehrplan: 1. Schulstufe nur ZR 20, keine Multiplikation / Division', () =>
     }
   }
 });
+
+test('Sachunterricht: Multiple-Choice Optionen sind vollständig, korrekt gemappt und geshuffelt', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  const mcGenerators = [
+    ['Calendar', G.General.buildCalendarTasks],
+    ['Winter', G.General.buildWinterTasks],
+    ['Traffic', G.General.buildTrafficTasks],
+    ['SchoolWalk', G.General.buildSchoolWalkTasks],
+    ['Austria', G.General.buildAustriaTasks]
+  ];
+
+  for (const [name, fn] of mcGenerators) {
+    const indicesSeen = new Set();
+    for (let r = 0; r < 30; r++) {
+      const tasks = fn();
+      for (const t of tasks) {
+        assert.ok(Array.isArray(t.options), `${name}: options muss Array sein`);
+        assert.ok(t.options.includes(t.correctText), `${name}: options muss correctText (${t.correctText}) enthalten`);
+        assert.equal(t.options[t.correctIndex], t.correctText, `${name}: options[correctIndex] muss correctText entsprechen`);
+        indicesSeen.add(t.correctIndex);
+      }
+    }
+    // Optionen müssen durchmischt sein (nicht nur Index 0)
+    assert.ok(indicesSeen.size > 1, `${name}: Optionen müssen variieren und dürfen nicht starr auf Index 0 stehen`);
+  }
+});
+
+test('Sachunterricht: Alle 10 Wintertiere haben valide Verhaltensweisen und Standvögel sind enthalten', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  const animalsSeen = new Set();
+
+  for (let r = 0; r < 50; r++) {
+    const tasks = G.General.buildWinterTasks();
+    for (const t of tasks) {
+      const match = t.question.match(/Tier:\s*(.+)$/m);
+      if (match) {
+        const animal = match[1].trim();
+        animalsSeen.add(animal);
+        assert.ok(t.options.includes(t.correctText), `Tier ${animal}: correctText (${t.correctText}) nicht in options`);
+        assert.equal(t.options[t.correctIndex], t.correctText, `Tier ${animal}: correctIndex stimmt nicht`);
+
+        if (animal === 'Kohlmeise' || animal === 'Amsel') {
+          assert.ok(t.correctText.startsWith('Standvogel'), `${animal} muss als Standvogel klassifiziert sein`);
+        }
+      }
+    }
+  }
+  assert.equal(animalsSeen.size, 10, 'Alle 10 Tiere aus dem Pool müssen generiert worden sein');
+});
+
+test('Deutsch: Schüttelsätze verwenden ausschließlich österreichische Standardsprache', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  for (let r = 0; r < 20; r++) {
+    const tasks = G.German.buildScrambleTasks();
+    for (const t of tasks) {
+      assert.ok(!t.targetSentence.toLowerCase().includes('lecker'), 'Schüttelsatz darf kein bundesdeutsches "lecker" enthalten');
+      assert.ok(!t.targetSentence.toLowerCase().includes('schulhof'), 'Schüttelsatz muss "Pausenhof" statt "Schulhof" verwenden');
+      assert.equal(
+        t.pool.slice().sort().join(' '),
+        t.targetSentence.split(' ').sort().join(' '),
+        'Schüttel-Pool muss exakt den Wörtern des Zielsatzes entsprechen'
+      );
+    }
+  }
+});
+
+test('Mathematik: Geometrie- und Maßeinheiten-Aufgaben sind mathematisch exakt', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  // Geometrie
+  const geoTasks = G.Math.buildGeometryTasks();
+  for (const t of geoTasks) {
+    if (t.taskType === 'umfang') {
+      if (t.shape === 'rect') assert.equal(t.answer, 2 * t.a + 2 * t.b);
+      if (t.shape === 'square') assert.equal(t.answer, 4 * t.a);
+    } else if (t.taskType === 'flaeche') {
+      if (t.shape === 'rect') assert.equal(t.answer, t.a * t.b);
+      if (t.shape === 'square') assert.equal(t.answer, t.a * t.a);
+    }
+  }
+
+  // Maße
+  for (let r = 0; r < 20; r++) {
+    const units = G.Math.buildUnitsTasks();
+    for (const t of units) {
+      assert.ok(typeof t.answer === 'number' && !isNaN(t.answer), `Ungültige Antwort in Maßeinheit: ${t.question}`);
+    }
+  }
+});

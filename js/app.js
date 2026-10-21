@@ -145,6 +145,10 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       card.style.cssText = 'cursor: pointer; padding: 14px; border-radius: 14px; border: 2px solid ' + (isActive ? '#2563eb' : '#e2e8f0') + '; background: ' + (isActive ? '#eff6ff' : 'white') + '; text-align: center; transition: all 0.2s;';
 
       const gradesList = (p.grades && p.grades.length > 0) ? p.grades : [1, 2, 3, 4];
+      const sortedGrades = [...gradesList].sort((a, b) => a - b);
+      const gradesText = sortedGrades.length === 4
+        ? '1. – 4. Klasse'
+        : sortedGrades.map(g => `${g}. Klasse`).join(', ');
       const esc = (window.Schlaufuchs && window.Schlaufuchs.escapeHtml) || (s => s);
       const safeAvatar = esc(p.avatar);
       const safeName = esc(p.name);
@@ -172,10 +176,17 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     const avatarEl = document.getElementById('header-user-avatar');
     const nameEl = document.getElementById('header-user-name');
     const starsEl = document.getElementById('global-stars-count');
+    const starIcon = document.querySelector('.header-child-pill .star-icon');
+    const divider = document.querySelector('.header-child-pill .pill-divider');
 
     if (avatarEl) avatarEl.textContent = active.avatar;
     if (nameEl) nameEl.textContent = active.name;
-    if (starsEl) starsEl.textContent = State.getTotalStars();
+    if (starsEl) {
+      starsEl.textContent = State.getTotalStars();
+      starsEl.style.display = 'inline';
+    }
+    if (starIcon) starIcon.style.display = 'inline';
+    if (divider) divider.style.display = 'inline';
   }
 
   function updateTopicStarsDisplay() {
@@ -727,12 +738,19 @@ window.Schlaufuchs = window.Schlaufuchs || {};
 
     const feedback = card.querySelector(`#feedback-${index}`);
     let isCorrect = false;
+    const V = window.Schlaufuchs && window.Schlaufuchs.Validators;
 
     if (task.type === 'equation') {
       const input = card.querySelector(`#input-${index}`);
       if (!input || input.value.trim() === '') return;
-      const parsed = parseInt(input.value.trim(), 10);
-      isCorrect = parsed === task.answer;
+      if (V && V.pruefeZahl) {
+        const res = V.pruefeZahl(input.value.trim(), task.answer);
+        if (!res.gueltig) return;
+        isCorrect = res.richtig;
+      } else {
+        const parsed = parseInt(input.value.trim(), 10);
+        isCorrect = parsed === task.answer;
+      }
     } else if (task.type === 'pyramid') {
       const inputs = card.querySelectorAll('.pyramid-input');
       let allRight = true;
@@ -745,7 +763,25 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         const valStr = inp.value.trim();
         const brick = inp.closest('.pyramid-brick');
 
-        if (valStr === '' || isNaN(parseInt(valStr, 10))) {
+        let isValEmpty = false;
+        let isValCorrect = false;
+
+        if (V && V.pruefeZahl) {
+          const res = V.pruefeZahl(valStr, correctVal);
+          if (!res.gueltig) {
+            isValEmpty = true;
+          } else {
+            isValCorrect = res.richtig;
+          }
+        } else {
+          if (valStr === '' || isNaN(parseInt(valStr, 10))) {
+            isValEmpty = true;
+          } else {
+            isValCorrect = parseInt(valStr, 10) === correctVal;
+          }
+        }
+
+        if (isValEmpty) {
           allFilled = false;
           if (!firstEmpty) firstEmpty = inp;
           if (brick) {
@@ -753,8 +789,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
             setTimeout(() => brick.classList.remove('brick-empty-warning'), 1200);
           }
         } else {
-          const val = parseInt(valStr, 10);
-          if (val === correctVal) {
+          if (isValCorrect) {
             if (brick) {
               brick.classList.add('brick-correct');
               brick.classList.remove('brick-incorrect', 'brick-empty-warning');
@@ -800,17 +835,35 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       isCorrect = task.words.every(w => w.isFixed || (Boolean(w.isCapital) === Boolean(w.isTarget)));
     } else if (task.type === 'scramble') {
       if (task.assembled.length === 0) return;
-      isCorrect = task.assembled.join(' ') === task.targetSentence;
+      if (V && V.pruefeWort) {
+        const res = V.pruefeWort(task.assembled.join(' '), task.targetSentence);
+        if (!res.gueltig) return;
+        isCorrect = res.richtig;
+      } else {
+        isCorrect = task.assembled.join(' ') === task.targetSentence;
+      }
     } else if (task.type === 'multiple-choice') {
       if (!task.selectedText) return;
-      isCorrect = task.selectedText === task.correctText;
+      if (V && V.pruefeAuswahl) {
+        const res = V.pruefeAuswahl(task.selectedText, task.correctText);
+        if (!res.gueltig) return;
+        isCorrect = res.richtig;
+      } else {
+        isCorrect = task.selectedText === task.correctText;
+      }
     } else if (task.type === 'memory') {
       isCorrect = task.matchedPairsCount === task.totalPairs;
     } else if (task.type === 'direct-input' || task.type === 'geometry' || task.type === 'text-problem' || task.type === 'twenty-field') {
       const input = card.querySelector(`#input-${index}`);
       if (!input || input.value.trim() === '') return;
-      const parsed = parseInt(input.value.trim(), 10);
-      isCorrect = parsed === task.answer;
+      if (V && V.pruefeZahl) {
+        const res = V.pruefeZahl(input.value.trim(), task.answer);
+        if (!res.gueltig) return;
+        isCorrect = res.richtig;
+      } else {
+        const parsed = parseInt(input.value.trim(), 10);
+        isCorrect = parsed === task.answer;
+      }
 
       if (task.type === 'text-problem') {
         const ansEl = card.querySelector(`#answer-text-${index}`);
@@ -824,7 +877,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       }
     } else if (task.type === 'written-calc') {
       if (!task.userAnswer || task.userAnswer.trim() === '') return;
-      const V = window.Schlaufuchs.Validators;
       if (V && V.pruefeZahl) {
         const res = V.pruefeZahl(task.userAnswer, task.answer);
         if (!res.gueltig) return;
@@ -862,7 +914,13 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       });
     } else if (task.type === 'pattern') {
       if (!task.userAnswer) return;
-      isCorrect = task.userAnswer === task.targetAnswer;
+      if (V && V.pruefeAuswahl) {
+        const res = V.pruefeAuswahl(task.userAnswer, task.targetAnswer);
+        if (!res.gueltig) return;
+        isCorrect = res.richtig;
+      } else {
+        isCorrect = task.userAnswer === task.targetAnswer;
+      }
     } else if (task.type === 'sequence') {
       if (task.slots.includes(null)) return;
       isCorrect = JSON.stringify(task.slots) === JSON.stringify(task.targetSequence);
@@ -876,7 +934,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       if (isCorrect) {
         card.classList.add('correct');
         feedback.classList.add('correct');
-        feedback.innerHTML = '<span>✅ Richtig!</span>';
+        const lobListe = (window.Schlaufuchs && window.Schlaufuchs.Texte && window.Schlaufuchs.Texte.lob) || ['Richtig!'];
+        const lob = lobListe[Math.floor(Math.random() * lobListe.length)];
+        feedback.innerHTML = `<span>✅ ${lob}</span>`;
         if (window.Schlaufuchs.Audio) window.Schlaufuchs.Audio.playSuccess();
 
         // 1. Auto-Advancement: nach ca. 450ms zur nächsten ungelösten Aufgabe scrollen & fokussieren
@@ -886,7 +946,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       } else {
         card.classList.add('incorrect');
         feedback.classList.add('incorrect');
-        feedback.innerHTML = '<span>❌ Nochmal probieren! 💪</span>';
+        const nochmalListe = (window.Schlaufuchs && window.Schlaufuchs.Texte && window.Schlaufuchs.Texte.nochmal) || ['Nochmal probieren! 💪'];
+        const nochmal = nochmalListe[Math.floor(Math.random() * nochmalListe.length)];
+        feedback.innerHTML = `<span>💪 ${nochmal}</span>`;
         if (window.Schlaufuchs.Audio) window.Schlaufuchs.Audio.playPlop();
 
         // 2. Auto-Select: Fehlerhafte Zahl markieren, sodass sofortiges Tippen den Fehler überschreibt

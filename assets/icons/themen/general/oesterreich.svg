@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Österreich: Rot-Weiß-Rot Wappenschild, 2.1px Kontur -->
+  <path d="M11 9 L37 9 L37 24 C37 34 24 41 24 41 C24 41 11 34 11 24 Z" 
+        fill="#FFFFFF" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+  <path d="M11 9 L37 9 L37 18 L11 18 Z" fill="#B5502B"/>
+  <path d="M11 27 L37 27 L37 24 C37 34 24 41 24 41 C24 41 11 34 11 24 Z" fill="#B5502B"/>
+  <line x1="11" y1="18" x2="37" y2="18" stroke="#3B4651" stroke-width="1.6"/>
+  <line x1="11" y1="27" x2="37" y2="27" stroke="#3B4651" stroke-width="1.6"/>
+  <path d="M11 9 L37 9 L37 24 C37 34 24 41 24 41 C24 41 11 34 11 24 Z" 
+        fill="none" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+</svg>

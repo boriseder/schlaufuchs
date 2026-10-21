@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Subtraktion (−) Freistehend, luftig, ohne dicken Rahmen -->
+  <!-- Vorhandener Punkt links & weggenommener gestrichelter Kreis rechts -->
+  <circle cx="12" cy="14" r="3" fill="#B5502B"/>
+  <circle cx="36" cy="14" r="3" fill="#E2E8F0" stroke="#3B4651" stroke-width="1.6" stroke-dasharray="2 2"/>
+  <!-- Freistehender, sauberer Minus-Balken -->
+  <path d="M9 26 L39 26" stroke="#2D5E9E" stroke-width="3.8" stroke-linecap="round"/>
+</svg>

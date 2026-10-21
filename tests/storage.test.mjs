@@ -64,3 +64,65 @@ test('Storage: Fallback bei defektem oder fehlendem LocalStorage', () => {
   const val = Storage.lesen('kind');
   assert.deepEqual(val, { id: 1, name: 'Fuchs' });
 });
+
+test('State: Default-User ist Nils mit Schulstufen 1, 2, 3', () => {
+  const mock = createMockStorage();
+  const sandbox = {
+    window: {},
+    localStorage: mock,
+    navigator: {}
+  };
+  sandbox.window = sandbox;
+  vm.runInNewContext(readFileSync('js/core/storage.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/state.js', 'utf8'), sandbox);
+
+  const State = sandbox.window.Schlaufuchs.State;
+  const active = State.getActiveProfile();
+  assert.equal(active.name, 'Nils');
+  assert.deepEqual([...active.grades], [1, 2, 3]);
+  assert.deepEqual([...State.getActiveGrades()], [1, 2, 3]);
+});
+
+test('State: Migration von vorigem Default-User Schlaufuchs auf Nils (1, 2, 3)', () => {
+  const mock = createMockStorage();
+  const sandbox = {
+    window: {},
+    localStorage: mock,
+    navigator: {}
+  };
+  sandbox.window = sandbox;
+  vm.runInNewContext(readFileSync('js/core/storage.js', 'utf8'), sandbox);
+  
+  // Vorherigen Stand simulieren
+  const Storage = sandbox.window.Schlaufuchs.Storage;
+  Storage.schreiben('profiles', [
+    { id: 'profile_default', name: 'Schlaufuchs', avatar: '🦊', grades: [1, 2, 3, 4], stars: {} }
+  ]);
+
+  vm.runInNewContext(readFileSync('js/state.js', 'utf8'), sandbox);
+  const State = sandbox.window.Schlaufuchs.State;
+  const profiles = State.loadAllProfiles();
+  assert.equal(profiles[0].name, 'Nils');
+  assert.deepEqual([...profiles[0].grades], [1, 2, 3]);
+});
+
+test('State: Eltern-PIN verwalten (Kindersicherung)', () => {
+  const mock = createMockStorage();
+  const sandbox = {
+    window: {},
+    localStorage: mock,
+    navigator: {}
+  };
+  sandbox.window = sandbox;
+  vm.runInNewContext(readFileSync('js/core/storage.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/state.js', 'utf8'), sandbox);
+
+  const State = sandbox.window.Schlaufuchs.State;
+  assert.equal(State.getParentPin(), '', 'Standardmäßig kein PIN gesetzt');
+
+  State.setParentPin('4829');
+  assert.equal(State.getParentPin(), '4829', 'Gespeicherter PIN wird korrekt abgerufen');
+
+  State.setParentPin('');
+  assert.equal(State.getParentPin(), '', 'PIN kann wieder entfernt werden');
+});

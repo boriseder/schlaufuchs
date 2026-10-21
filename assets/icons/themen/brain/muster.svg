@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Muster-Meister: Formenreihe, 2px Kontur, luftig -->
+  <circle cx="11" cy="24" r="6" fill="#F2C14E" stroke="#3B4651" stroke-width="2"/>
+  <rect x="20" y="18" width="12" height="12" rx="2" fill="#2D5E9E" stroke="#3B4651" stroke-width="2"/>
+  <polygon points="41,30 35,18 47,18" fill="#B5502B" stroke="#3B4651" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M22 8 L26 8 C27 8 28 9 28 10 C28 11.8 26 11.8 26 13 M26 15.5 L26 16" 
+        stroke="#6B4C9A" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

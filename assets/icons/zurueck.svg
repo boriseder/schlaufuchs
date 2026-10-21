@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Zurück-Pfeil (Flat Design, 3px Kontur) -->
-  <path d="M28 12 L16 24 L28 36" stroke="#2C3E50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="16" y1="24" x2="36" y2="24" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+  <!-- Zurück-Pfeil (Luftig, 2.2px Kontur) -->
+  <path d="M26 13 L15 24 L26 35" stroke="#3B4651" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="15" y1="24" x2="35" y2="24" stroke="#3B4651" stroke-width="2.2" stroke-linecap="round"/>
 </svg>

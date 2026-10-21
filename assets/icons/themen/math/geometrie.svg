@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Geometrie: Geodreieck & Formen, feine 2.1px Kontur -->
+  <polygon points="7,38 41,38 24,14" fill="#FFFFFF" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+  <polygon points="14,35 34,35 24,22" fill="#DCE8F6" stroke="#3B4651" stroke-width="1.6" stroke-linejoin="round"/>
+  <!-- Feine Millimeterteilung -->
+  <line x1="12" y1="38" x2="12" y2="34" stroke="#3B4651" stroke-width="1.5"/>
+  <line x1="18" y1="38" x2="18" y2="33" stroke="#3B4651" stroke-width="1.5"/>
+  <line x1="24" y1="38" x2="24" y2="31" stroke="#B5502B" stroke-width="2"/>
+  <line x1="30" y1="38" x2="30" y2="33" stroke="#3B4651" stroke-width="1.5"/>
+  <line x1="36" y1="38" x2="36" y2="34" stroke="#3B4651" stroke-width="1.5"/>
+</svg>

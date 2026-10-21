@@ -2,7 +2,7 @@
 // SCHLAUFUCHS – sw.js (Service Worker für 100% Offline-Betrieb)
 // =============================================================
 
-const CACHE_NAME = 'schlaufuchs-v2.3';
+const CACHE_NAME = 'schlaufuchs-v2.6';
 
 const PRECACHE_ASSETS = [
   './',
@@ -44,6 +44,37 @@ const PRECACHE_ASSETS = [
   'assets/icons/neuladen.svg',
   'assets/icons/numpad.svg',
   'assets/icons/schliessen.svg',
+  'assets/icons/fach-mathe.svg',
+  'assets/icons/fach-deutsch.svg',
+  'assets/icons/fach-sach.svg',
+  'assets/icons/fach-denken.svg',
+  'assets/icons/themen/math/addition.svg',
+  'assets/icons/themen/math/subtraktion.svg',
+  'assets/icons/themen/math/multiplikation.svg',
+  'assets/icons/themen/math/division.svg',
+  'assets/icons/themen/math/zahlenmauer.svg',
+  'assets/icons/themen/math/zwanzigerfeld.svg',
+  'assets/icons/themen/math/uhr-geld.svg',
+  'assets/icons/themen/math/tausender.svg',
+  'assets/icons/themen/math/schriftlich.svg',
+  'assets/icons/themen/math/geometrie.svg',
+  'assets/icons/themen/math/masse-gewichte.svg',
+  'assets/icons/themen/math/rechengeschichten.svg',
+  'assets/icons/themen/german/wortarten.svg',
+  'assets/icons/themen/german/gross-klein.svg',
+  'assets/icons/themen/german/silben.svg',
+  'assets/icons/themen/german/zeitformen.svg',
+  'assets/icons/themen/german/faelle.svg',
+  'assets/icons/themen/german/schuettelsatz.svg',
+  'assets/icons/themen/german/lesen.svg',
+  'assets/icons/themen/general/kalender.svg',
+  'assets/icons/themen/general/igel.svg',
+  'assets/icons/themen/general/verkehr.svg',
+  'assets/icons/themen/general/fahrrad.svg',
+  'assets/icons/themen/general/oesterreich.svg',
+  'assets/icons/themen/brain/memory.svg',
+  'assets/icons/themen/brain/muster.svg',
+  'assets/icons/themen/brain/reihenfolge.svg',
   'fonts/PrimaeText-Regular.otf',
   'fonts/PrimaeText-Bold.otf',
   'fonts/PrimaeText-Semibold.otf',

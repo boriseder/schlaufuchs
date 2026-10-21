@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Zahlen-Ordner (Zahlenreihen): 1.8px Kontur, luftig -->
+  <rect x="5.5" y="14" width="11" height="17" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="11" y="26" font-family="'PrimaeText', sans-serif" font-size="9.5" font-weight="900" fill="#2D5E9E" text-anchor="middle">1</text>
+  
+  <rect x="18.5" y="14" width="11" height="17" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="24" y="26" font-family="'PrimaeText', sans-serif" font-size="9.5" font-weight="900" fill="#B5502B" text-anchor="middle">2</text>
+  
+  <rect x="31.5" y="14" width="11" height="17" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="37" y="26" font-family="'PrimaeText', sans-serif" font-size="9.5" font-weight="900" fill="#2F7A4F" text-anchor="middle">3</text>
+  
+  <path d="M8 38 L36 38 M36 38 L32 34.5 M36 38 L32 41.5" stroke="#6B4C9A" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

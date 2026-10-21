@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Wortarten: Montessori-Symbole Nomen, Verb, Adjektiv, 2px Kontur -->
+  <!-- Nomen (großes Dreieck) -->
+  <polygon points="16,10 26,27 6,27" fill="#1E2A36" stroke="#3B4651" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Verb (roter Kreis) -->
+  <circle cx="34" cy="19" r="8.5" fill="#B5502B" stroke="#3B4651" stroke-width="2"/>
+  <!-- Adjektiv (kleines blaues Dreieck) -->
+  <polygon points="24,30 31,41 17,41" fill="#2D5E9E" stroke="#3B4651" stroke-width="1.8" stroke-linejoin="round"/>
+</svg>

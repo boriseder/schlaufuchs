@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Addition (+) Freistehend, luftig, ohne dicken Rahmen -->
+  <!-- Zwei zarte Zählpünktchen -->
+  <circle cx="12" cy="12" r="3" fill="#B5502B"/>
+  <circle cx="36" cy="36" r="3" fill="#F2C14E"/>
+  <!-- Freistehendes, klares Pluszeichen -->
+  <path d="M24 9 L24 39 M9 24 L39 24" stroke="#2D5E9E" stroke-width="3.8" stroke-linecap="round"/>
+</svg>

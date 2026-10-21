@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Fach: Mathematik (Geodreieck & Spielwürfel) -->
+  <!-- Geodreieck hinten (Sonnengelb) -->
+  <polygon points="6,39 42,39 24,11" fill="#F2C14E" stroke="#3B4651" stroke-width="2.8" stroke-linejoin="round"/>
+  <polygon points="14,35 34,35 24,20" fill="#FFF7D6" stroke="#3B4651" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Millimeterstriche Hypotenuse -->
+  <line x1="12" y1="39" x2="12" y2="34" stroke="#3B4651" stroke-width="2"/>
+  <line x1="18" y1="39" x2="18" y2="33" stroke="#3B4651" stroke-width="2"/>
+  <line x1="24" y1="39" x2="24" y2="31" stroke="#B5502B" stroke-width="2.5"/>
+  <line x1="30" y1="39" x2="30" y2="33" stroke="#3B4651" stroke-width="2"/>
+  <line x1="36" y1="39" x2="36" y2="34" stroke="#3B4651" stroke-width="2"/>
+  <!-- Rechenwürfel vorne rechts -->
+  <rect x="22" y="21" width="19" height="19" rx="3.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="2.8"/>
+  <!-- 5 Augen (Kraft der 5) -->
+  <circle cx="26.5" cy="25.5" r="1.8" fill="#B5502B"/>
+  <circle cx="36.5" cy="25.5" r="1.8" fill="#B5502B"/>
+  <circle cx="31.5" cy="30.5" r="2.2" fill="#2D5E9E"/>
+  <circle cx="26.5" cy="35.5" r="1.8" fill="#B5502B"/>
+  <circle cx="36.5" cy="35.5" r="1.8" fill="#B5502B"/>
+</svg>

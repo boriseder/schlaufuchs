@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Schriftliche Rechenverfahren: Leichtes Heftblatt mit Rechenstrich -->
+  <rect x="7" y="5" width="34" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.8"/>
+  <polygon points="34,5 41,12 34,12" fill="#E2E8F0"/>
+  <!-- Zartes Gitter -->
+  <line x1="18" y1="5" x2="18" y2="35" stroke="#E2E8F0" stroke-width="1.2"/>
+  <line x1="29" y1="5" x2="29" y2="35" stroke="#E2E8F0" stroke-width="1.2"/>
+  <line x1="7" y1="16" x2="34" y2="16" stroke="#E2E8F0" stroke-width="1.2"/>
+  <line x1="7" y1="26" x2="41" y2="26" stroke="#E2E8F0" stroke-width="1.2"/>
+  <!-- Ziffern -->
+  <text x="23.5" y="23" font-family="'PrimaeText', sans-serif" font-size="9" font-weight="900" fill="#3B4651" text-anchor="middle">4 2</text>
+  <text x="12.5" y="32" font-family="'PrimaeText', sans-serif" font-size="9" font-weight="900" fill="#2D5E9E" text-anchor="middle">+</text>
+  <text x="23.5" y="32" font-family="'PrimaeText', sans-serif" font-size="9" font-weight="900" fill="#3B4651" text-anchor="middle">3 5</text>
+  <!-- Roter Rechenstrich -->
+  <line x1="9" y1="35" x2="39" y2="35" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Schullineal zart -->
+  <rect x="5" y="38" width="38" height="6.5" rx="1.5" fill="#FFF7D6" stroke="#F2C14E" stroke-width="1.8"/>
+  <line x1="12" y1="38" x2="12" y2="41" stroke="#B7950B" stroke-width="1.2"/>
+  <line x1="18" y1="38" x2="18" y2="42" stroke="#B7950B" stroke-width="1.5"/>
+  <line x1="24" y1="38" x2="24" y2="41" stroke="#B7950B" stroke-width="1.2"/>
+  <line x1="30" y1="38" x2="30" y2="42" stroke="#B7950B" stroke-width="1.5"/>
+</svg>

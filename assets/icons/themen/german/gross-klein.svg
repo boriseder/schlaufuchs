@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Groß & Klein: A a auf Schreiblineatur -->
+  <line x1="4" y1="12" x2="44" y2="12" stroke="#CBD5E1" stroke-width="1.8"/>
+  <line x1="4" y1="24" x2="44" y2="24" stroke="#CBD5E1" stroke-width="1.8" stroke-dasharray="3 2"/>
+  <line x1="4" y1="36" x2="44" y2="36" stroke="#3B4651" stroke-width="2.5"/>
+  <path d="M10 36 L17 12 L24 36 M12.5 28 L21.5 28" stroke="#B5502B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="34" cy="30" r="6" stroke="#B5502B" stroke-width="2.5" fill="none"/>
+  <path d="M40 24 L40 36" stroke="#B5502B" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

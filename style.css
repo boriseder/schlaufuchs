@@ -388,6 +388,13 @@ body.in-exercise .app-container {
   color: #0f172a;
 }
 
+.subject-icon-svg {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .subject-badge {
   font-size: 0.75rem;
   font-weight: 800;
@@ -438,9 +445,50 @@ body.in-exercise .app-container {
   gap: 8px;
 }
 
+.topic-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.topic-card:hover .topic-icon-badge {
+  transform: scale(1.06);
+}
+
+.subject-group[data-subject="math"] .topic-icon-badge {
+  background: #EEF4FC;
+  border: 1px solid #D4E3F8;
+}
+
+.subject-group[data-subject="german"] .topic-icon-badge {
+  background: #FDF2ED;
+  border: 1px solid #FAD7C7;
+}
+
+.subject-group[data-subject="general"] .topic-icon-badge {
+  background: #EDF7F1;
+  border: 1px solid #CAEBD6;
+}
+
+.subject-group[data-subject="brain"] .topic-icon-badge {
+  background: #F6F0FC;
+  border: 1px solid #EDDCF9;
+}
+
 .topic-icon {
   font-size: 1.6rem;
   line-height: 1;
+}
+
+.topic-icon-svg {
+  width: 34px;
+  height: 34px;
+  display: block;
 }
 
 .topic-icon.topic-icon-colon {

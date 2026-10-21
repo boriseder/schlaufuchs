@@ -139,7 +139,7 @@ window.Schlaufuchs.Print = (function () {
       let wordsMarkup = '';
       task.sentence.forEach(w => {
         if (w.ignore) {
-          wordsMarkup += `<span style="margin: 0 4px; color: #475569;">${w.word}</span> `;
+          wordsMarkup += `<span style="margin: 0 4px; color: var(--tinte-leise);">${w.word}</span> `;
         } else {
           const typeName = w.type === 'nomen' ? 'Namenwort' : (w.type === 'verb' ? 'Tunwort' : 'Wiewort');
           if (isSolution) {
@@ -177,7 +177,7 @@ window.Schlaufuchs.Print = (function () {
           <span class="print-num">${idx + 1}.</span>
           <div>
             <div style="font-weight: 700; margin-bottom: 4px;">Schreibe den Satz mit allen Namenwörtern groß und richtig auf:</div>
-            <div style="font-style: italic; color: #475569; margin-bottom: 6px;">Vorgabe: ${task.words.map(w => w.text).join(' ')}.</div>
+            <div style="font-style: italic; color: var(--tinte-leise); margin-bottom: 6px;">Vorgabe: ${task.words.map(w => w.text).join(' ')}.</div>
             ${isSolution ? `<div class="print-solution-text">Lösung: ${fullSentence} (Namenwörter: <strong>${nounsList}</strong>)</div>` : '<div class="print-handwriting-lines"></div>'}
           </div>
         </div>
@@ -229,7 +229,7 @@ window.Schlaufuchs.Print = (function () {
           <span class="print-num">${idx + 1}.</span>
           <div>
             <div style="font-weight: 700; margin-bottom: 4px;">${task.question}</div>
-            <div style="font-size: 0.9rem; color: #475569; margin-bottom: 4px;">Formel: ${task.formula}</div>
+            <div style="font-size: 0.9rem; color: var(--tinte-leise); margin-bottom: 4px;">Formel: ${task.formula}</div>
             <div style="margin-top: 6px;">Ergebnis: ${sol}</div>
             ${!isSolution ? '<div class="print-calc-grid" style="height: 60px; margin-top: 8px;"></div>' : ''}
           </div>
@@ -278,11 +278,11 @@ window.Schlaufuchs.Print = (function () {
           <span class="print-num">${idx + 1}.</span>
           <div>
             <div style="font-weight: 700; margin-bottom: 6px;">Schriftliche ${task.operation === '+' ? 'Addition' : 'Subtraktion'} untereinander:</div>
-            <div style="display: inline-block; font-family: monospace; border: 1.5pt solid #0f172a; padding: 6px 12px; border-radius: 6px; background: white;">
-              <div style="border-bottom: 1pt solid #cbd5e1; padding-bottom: 2px;">&nbsp;&nbsp;${headRow}</div>
+            <div style="display: inline-block; font-family: monospace; border: 1.5pt solid var(--tinte); padding: 6px 12px; border-radius: 6px; background: white;">
+              <div style="border-bottom: 1pt solid var(--linie-leise); padding-bottom: 2px;">&nbsp;&nbsp;${headRow}</div>
               <div style="margin: 2px 0;">&nbsp;&nbsp;${n1Row}</div>
               <div style="margin: 2px 0;">${task.operation}&nbsp;${n2Row}</div>
-              <div style="border-top: 1.5pt solid #0f172a; border-bottom: 2pt double #0f172a; padding: 3px 0; margin-top: 3px;">=&nbsp;${ansRow}</div>
+              <div style="border-top: 1.5pt solid var(--tinte); border-bottom: 2pt double var(--tinte); padding: 3px 0; margin-top: 3px;">=&nbsp;${ansRow}</div>
             </div>
             ${!isSolution ? '<div class="print-calc-grid" style="display:inline-block; vertical-align:top; width: 140px; height: 75px; margin-left: 20px;"></div>' : ''}
           </div>
@@ -312,7 +312,7 @@ window.Schlaufuchs.Print = (function () {
           <span class="print-num">${idx + 1}.</span>
           <div style="flex: 1;">
             <div style="font-weight: 900; font-size: 12pt; color: #1e3a8a; margin-bottom: 4px;">${task.title}</div>
-            <div style="background: #f8fafc; border: 1pt solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 10pt; line-height: 1.5; margin-bottom: 8px;">
+            <div style="background: var(--flaeche); border: 1pt solid var(--linie-leise); border-radius: 6px; padding: 8px 12px; font-size: 10pt; line-height: 1.5; margin-bottom: 8px;">
               ${task.text}
             </div>
             <div style="font-weight: 800; font-size: 10.5pt; margin-bottom: 2px;">Fragen zum Leseverständnis (PIRLS):</div>
@@ -386,14 +386,14 @@ window.Schlaufuchs.Print = (function () {
             <div class="cert-footer">
               <div>
                 <div class="cert-sig-line">${dateStr}</div>
-                <div style="font-size: 9pt; color: #64748b; margin-top: 4px;">Datum</div>
+                <div style="font-size: 9pt; color: var(--tinte-leise); margin-top: 4px;">Datum</div>
               </div>
               <div>
                 <div class="cert-sig-line" style="min-width: 200px;"></div>
-                <div style="font-size: 9pt; color: #64748b; margin-top: 4px;">Unterschrift (Lehrkraft / Eltern)</div>
+                <div style="font-size: 9pt; color: var(--tinte-leise); margin-top: 4px;">Unterschrift (Lehrkraft / Eltern)</div>
               </div>
             </div>
-            <div style="margin-top: 24px; font-size: 8pt; color: #94a3b8;">
+            <div style="margin-top: 24px; font-size: 8pt; color: var(--linie-leise);">
               Schlaufuchs Lernplattform • BMBWF Lehrplan Österreich • DIN/ÖNORM 1083
             </div>
           </div>

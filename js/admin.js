@@ -10,9 +10,10 @@ window.Schlaufuchs.Admin = (function () {
   'use strict';
 
   let gatePassed = false;
-  let gateNum1 = 0;
-  let gateNum2 = 0;
+  let gateMode = 'math'; // 'pin' oder 'math'
   let gateAnswer = 0;
+  let gateAttempts = 0;
+  let cooldownUntil = 0;
 
   function init() {
     const adminBtn = document.getElementById('btn-admin-settings');
@@ -24,6 +25,7 @@ window.Schlaufuchs.Admin = (function () {
     const gateError = document.getElementById('admin-gate-error');
     const settingsPanel = document.getElementById('admin-settings-panel');
     const resetStarsBtn = document.getElementById('btn-reset-stars');
+    const toggleModeBtn = document.getElementById('btn-gate-toggle-mode');
 
     if (!adminBtn || !adminModal) return;
 
@@ -46,21 +48,57 @@ window.Schlaufuchs.Admin = (function () {
       if (e.target === adminModal) closeAdminModal();
     });
 
+    // Toggle-Modus Button (PIN <-> Rechenaufgabe)
+    if (toggleModeBtn) {
+      toggleModeBtn.addEventListener('click', () => {
+        setGateMode(gateMode === 'pin' ? 'math' : 'pin');
+      });
+    }
+
     // Sicherheitsabfrage absenden
     if (gateForm) {
       gateForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const val = parseInt(gateInput.value.trim(), 10);
-        if (val === gateAnswer) {
+        const now = Date.now();
+        if (cooldownUntil && now < cooldownUntil) {
+          const waitSec = Math.ceil((cooldownUntil - now) / 1000);
+          gateError.style.display = 'block';
+          gateError.textContent = `Zu viele Fehlversuche. Bitte warte noch ${waitSec} Sekunden.`;
+          return;
+        }
+
+        const entered = gateInput.value.trim();
+        let isCorrect = false;
+
+        if (gateMode === 'pin') {
+          const State = window.Schlaufuchs.State;
+          const storedPin = State && State.getParentPin ? State.getParentPin() : '';
+          isCorrect = Boolean(storedPin) && entered === storedPin;
+        } else {
+          const parsed = parseInt(entered, 10);
+          isCorrect = !isNaN(parsed) && parsed === gateAnswer;
+        }
+
+        if (isCorrect) {
           gatePassed = true;
+          gateAttempts = 0;
+          cooldownUntil = 0;
           gateError.style.display = 'none';
           gateForm.style.display = 'none';
           settingsPanel.style.display = 'block';
           populateSettings();
         } else {
+          gateAttempts++;
           gateError.style.display = 'block';
-          gateError.textContent = '❌ Das Ergebnis stimmt leider nicht. Bitte versuche es erneut!';
-          generateGateMath();
+          if (gateAttempts >= 3) {
+            cooldownUntil = Date.now() + 5000;
+            gateError.textContent = 'Falsche Eingabe. Bitte warte 5 Sekunden und versuche es erneut.';
+          } else {
+            gateError.textContent = 'Falsche Eingabe. Bitte versuche es erneut.';
+          }
+          if (gateMode === 'math') {
+            generateGateMath();
+          }
           gateInput.value = '';
           gateInput.focus();
         }
@@ -87,6 +125,7 @@ window.Schlaufuchs.Admin = (function () {
     }
 
     setupBackupControls();
+    setupPinControls();
     setupAdminTabs();
   }
 
@@ -123,6 +162,7 @@ window.Schlaufuchs.Admin = (function () {
         const reader = new FileReader();
         reader.onload = (ev) => {
           const Dialog = window.Schlaufuchs.Dialog;
+          try {
             const data = JSON.parse(ev.target.result);
             if (data && data.profiles && Array.isArray(data.profiles)) {
               // Validierung und Sanitizing der importierten Profile
@@ -130,9 +170,9 @@ window.Schlaufuchs.Admin = (function () {
                 .filter(p => p && typeof p === 'object' && !Array.isArray(p))
                 .map(p => ({
                   id: String(p.id || ('profile_' + Date.now())),
-                  name: String(p.name || 'Schlaufuchs').trim().slice(0, 50),
+                  name: String(p.name || 'Nils').trim().slice(0, 50),
                   avatar: String(p.avatar || '🦊').slice(0, 8),
-                  grades: Array.isArray(p.grades) ? p.grades.map(Number).filter(g => g >= 1 && g <= 4) : [1, 2, 3, 4],
+                  grades: Array.isArray(p.grades) ? p.grades.map(Number).filter(g => g >= 1 && g <= 4) : [1, 2, 3],
                   stars: (p.stars && typeof p.stars === 'object') ? Object.fromEntries(
                     Object.entries(p.stars).map(([k, v]) => [String(k), Math.max(0, Math.min(3, Number(v) || 0))])
                   ) : {},
@@ -183,15 +223,152 @@ window.Schlaufuchs.Admin = (function () {
     }
   }
 
+  function setupPinControls() {
+    const pinInput = document.getElementById('input-parent-pin');
+    const savePinBtn = document.getElementById('btn-save-parent-pin');
+    const removePinBtn = document.getElementById('btn-remove-parent-pin');
+    const pinStatus = document.getElementById('parent-pin-status');
+
+    if (!pinInput || !savePinBtn) return;
+
+    function updatePinUI() {
+      const State = window.Schlaufuchs.State;
+      const currentPin = State && State.getParentPin ? State.getParentPin() : '';
+      if (currentPin) {
+        pinInput.value = '';
+        pinInput.placeholder = '••••';
+        if (removePinBtn) removePinBtn.style.display = 'inline-block';
+        if (pinStatus) {
+          pinStatus.style.color = '#16a34a';
+          pinStatus.textContent = 'Eltern-PIN ist aktiv. Der Zugang zu den Einstellungen ist mit deinem PIN geschützt.';
+        }
+      } else {
+        pinInput.value = '';
+        pinInput.placeholder = '4-stelliger PIN';
+        if (removePinBtn) removePinBtn.style.display = 'none';
+        if (pinStatus) {
+          pinStatus.style.color = '#64748b';
+          pinStatus.textContent = 'Kein PIN gesetzt (Absicherung erfolgt über eine Rechenaufgabe für Erwachsene).';
+        }
+      }
+    }
+
+    const cloneSave = savePinBtn.cloneNode(true);
+    savePinBtn.parentNode.replaceChild(cloneSave, savePinBtn);
+
+    cloneSave.addEventListener('click', () => {
+      const Dialog = window.Schlaufuchs.Dialog;
+      const val = pinInput.value.trim();
+      if (!/^\d{4}$/.test(val)) {
+        const msg = 'Bitte gib genau 4 Ziffern für den Eltern-PIN ein (z. B. 4829).';
+        if (Dialog) Dialog.alert(msg);
+        else alert(msg);
+        return;
+      }
+      if (window.Schlaufuchs.State && window.Schlaufuchs.State.setParentPin) {
+        window.Schlaufuchs.State.setParentPin(val);
+      }
+      const successMsg = 'Eltern-PIN wurde erfolgreich gespeichert!';
+      if (Dialog) Dialog.alert(successMsg);
+      else alert(successMsg);
+      updatePinUI();
+    });
+
+    if (removePinBtn) {
+      const cloneRemove = removePinBtn.cloneNode(true);
+      removePinBtn.parentNode.replaceChild(cloneRemove, removePinBtn);
+
+      cloneRemove.addEventListener('click', () => {
+        const Dialog = window.Schlaufuchs.Dialog;
+        const doRemove = () => {
+          if (window.Schlaufuchs.State && window.Schlaufuchs.State.setParentPin) {
+            window.Schlaufuchs.State.setParentPin('');
+          }
+          if (Dialog) Dialog.alert('Eltern-PIN wurde entfernt. Einstellungen sind über die Rechenaufgabe geschützt.');
+          else alert('Eltern-PIN wurde entfernt.');
+          updatePinUI();
+        };
+
+        if (Dialog) {
+          Dialog.confirm('Möchtest du den Eltern-PIN wirklich entfernen? Der Zugang ist danach durch eine Rechenaufgabe geschützt.', doRemove);
+        } else if (confirm('Möchtest du den Eltern-PIN wirklich entfernen?')) {
+          doRemove();
+        }
+      });
+    }
+
+    updatePinUI();
+  }
+
   function generateGateMath() {
-    gateNum1 = Math.floor(Math.random() * 8) + 7; // 7..14
-    gateNum2 = Math.floor(Math.random() * 8) + 6; // 6..13
-    gateAnswer = gateNum1 + gateNum2;
+    // Anspruchsvolle Kopfrechenaufgabe für Erwachsene (deutlich außerhalb des Volksschul-Kopfrechnens)
+    // Variante 1: Zweistellige Zahl mal einstellig (24..49 · 6..9)
+    // Variante 2: Punkt-vor-Strich mit Zehneraddition (16..29 · 6..8 + 35..75)
+    const variant = Math.floor(Math.random() * 2) + 1;
+    let questionText = '';
+
+    if (variant === 1) {
+      const a = Math.floor(Math.random() * 26) + 24; // 24..49
+      const b = Math.floor(Math.random() * 4) + 6;   // 6..9
+      gateAnswer = a * b;
+      questionText = `Sicherheitsfrage für Erwachsene: Wie viel ist ${a} · ${b}?`;
+    } else {
+      const a = Math.floor(Math.random() * 14) + 16; // 16..29
+      const b = Math.floor(Math.random() * 3) + 6;   // 6..8
+      const c = Math.floor(Math.random() * 41) + 35; // 35..75
+      gateAnswer = a * b + c;
+      questionText = `Sicherheitsfrage für Erwachsene: Berechne ${a} · ${b} + ${c}`;
+    }
 
     const questionEl = document.getElementById('admin-gate-question');
     if (questionEl) {
-      questionEl.textContent = `Sicherheitsfrage für Eltern/Lehrer: Wie viel ist ${gateNum1} + ${gateNum2}?`;
+      questionEl.textContent = questionText;
     }
+  }
+
+  function setGateMode(mode) {
+    gateMode = mode;
+    const questionEl = document.getElementById('admin-gate-question');
+    const gateInput = document.getElementById('admin-gate-input');
+    const fallbackBox = document.getElementById('admin-gate-fallback');
+    const toggleBtn = document.getElementById('btn-gate-toggle-mode');
+    const hintEl = document.getElementById('admin-gate-hint');
+    const gateError = document.getElementById('admin-gate-error');
+
+    if (gateError) gateError.style.display = 'none';
+    if (gateInput) gateInput.value = '';
+
+    const State = window.Schlaufuchs.State;
+    const hasPin = Boolean(State && State.getParentPin && State.getParentPin());
+
+    if (mode === 'pin') {
+      if (questionEl) {
+        questionEl.textContent = 'Sicherheitsabfrage für Erwachsene: Bitte gib deinen 4-stelligen Eltern-PIN ein.';
+      }
+      if (gateInput) {
+        gateInput.placeholder = '4-stelliger PIN';
+        gateInput.type = 'password';
+        gateInput.maxLength = 4;
+      }
+      if (fallbackBox) fallbackBox.style.display = 'block';
+      if (toggleBtn) toggleBtn.textContent = 'PIN vergessen? Rechenaufgabe lösen';
+      if (hintEl) hintEl.style.display = 'none';
+    } else {
+      generateGateMath();
+      if (gateInput) {
+        gateInput.placeholder = 'Ergebnis';
+        gateInput.type = 'text';
+        gateInput.removeAttribute('maxlength');
+      }
+      if (fallbackBox) {
+        fallbackBox.style.display = hasPin ? 'block' : 'none';
+      }
+      if (toggleBtn) toggleBtn.textContent = 'Zurück zur PIN-Eingabe';
+      if (hintEl) {
+        hintEl.style.display = hasPin ? 'none' : 'block';
+      }
+    }
+    setTimeout(() => { if (gateInput) gateInput.focus(); }, 50);
   }
 
   function openAdminModal() {
@@ -203,15 +380,24 @@ window.Schlaufuchs.Admin = (function () {
 
     if (!adminModal) return;
 
-    generateGateMath();
     gatePassed = false;
-    gateError.style.display = 'none';
-    gateInput.value = '';
-    gateForm.style.display = 'block';
-    settingsPanel.style.display = 'none';
+    gateAttempts = 0;
+    cooldownUntil = 0;
+    if (gateError) gateError.style.display = 'none';
+    if (gateInput) gateInput.value = '';
+    if (gateForm) gateForm.style.display = 'block';
+    if (settingsPanel) settingsPanel.style.display = 'none';
+
+    const State = window.Schlaufuchs.State;
+    const currentPin = State && State.getParentPin ? State.getParentPin() : '';
+    if (currentPin && currentPin.length === 4) {
+      setGateMode('pin');
+    } else {
+      setGateMode('math');
+    }
 
     adminModal.classList.add('active');
-    setTimeout(() => gateInput.focus(), 150);
+    setTimeout(() => { if (gateInput) gateInput.focus(); }, 150);
   }
 
   function closeAdminModal() {
@@ -223,6 +409,7 @@ window.Schlaufuchs.Admin = (function () {
     // Profile & Diagnose anzeigen
     renderProfileManagement();
     renderDiagnosisDashboard();
+    setupPinControls();
   }
 
   function setupAdminTabs() {

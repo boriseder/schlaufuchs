@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Schlaufuchs">
-  <link rel="stylesheet" href="css/tokens.css?v=2.2">
-  <link rel="stylesheet" href="style.css?v=2.2">
+  <link rel="stylesheet" href="css/tokens.css?v=2.7">
+  <link rel="stylesheet" href="style.css?v=2.7">
 </head>
 <body>
   <div class="app-container">
@@ -29,7 +29,7 @@
       <div class="header-center-identity">
         <button class="header-child-pill" id="header-profile-btn" title="Kind-Profil wechseln">
           <span class="user-avatar" id="header-user-avatar"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt=""></span>
-          <span class="user-name" id="header-user-name">Schlaufuchs</span>
+          <span class="user-name" id="header-user-name">Nils</span>
           <span class="pill-divider">·</span>
           <span class="star-icon"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Sterne:"></span>
           <span id="global-stars-count">0</span>
@@ -71,7 +71,7 @@
         <!-- FACH: MATHEMATIK -->
         <div class="subject-group" data-subject="math">
           <div class="subject-title">
-            <span>🧮</span>
+            <img src="assets/icons/fach-mathe.svg" class="subject-icon-svg" alt="">
             <span>Mathematik</span>
             <span class="subject-badge badge-math">Zahlen & Logik</span>
           </div>
@@ -79,157 +79,181 @@
             
             <div class="topic-card" data-topic-id="math-addition" data-grade="1,2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">➕</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/addition.svg" class="topic-icon-svg" alt="Addition">
+                </div>
                 <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Addition (+)</h3>
+                <h3>Addition</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-addition">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-addition"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-subtraction" data-grade="1,2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">➖</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/subtraktion.svg" class="topic-icon-svg" alt="Subtraktion">
+                </div>
                 <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Subtraktion (−)</h3>
+                <h3>Subtraktion</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-subtraction">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-subtraction"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-multiplication" data-grade="2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">✖️</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/multiplikation.svg" class="topic-icon-svg" alt="Multiplikation">
+                </div>
                 <span class="grade-pill">2. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Multiplikation (·)</h3>
+                <h3>Multiplikation</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-multiplication">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-multiplication"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-division" data-grade="2,3,4">
               <div class="topic-header">
-                <span class="topic-icon topic-icon-colon">:</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/division.svg" class="topic-icon-svg" alt="Division">
+                </div>
                 <span class="grade-pill">2. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Division (:)</h3>
+                <h3>Division</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-division">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-division"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-pyramid" data-grade="1,2,3">
               <div class="topic-header">
-                <span class="topic-icon">🧱</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/zahlenmauer.svg" class="topic-icon-svg" alt="Zahlenmauern">
+                </div>
                 <span class="grade-pill">1. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Rechentürme & Zahlenmauern</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-pyramid">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-pyramid"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-time-money" data-grade="2,3">
               <div class="topic-header">
-                <span class="topic-icon">💶</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/uhr-geld.svg" class="topic-icon-svg" alt="Uhrzeit & Geld">
+                </div>
                 <span class="grade-pill">2. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Uhrzeit & Geld</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-time-money">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-time-money"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-million" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">🏛️</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/tausender.svg" class="topic-icon-svg" alt="Zahlenraum 1 000 000">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Zahlenraum 1 000 000</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-million">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-million"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-units" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">⚖️</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/masse-gewichte.svg" class="topic-icon-svg" alt="Maße & Gewichte">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Maße & Gewichte (dag, kg, t)</h3>
+                <h3>Maße & Gewichte</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-units">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-units"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-geometry" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">📐</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/geometrie.svg" class="topic-icon-svg" alt="Geometrie">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Geometrie: Umfang & Fläche</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-geometry">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-geometry"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-written" data-grade="3,4">
               <div class="topic-header">
-                <span class="topic-icon">📝</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/schriftlich.svg" class="topic-icon-svg" alt="Schriftliche Rechenverfahren">
+                </div>
                 <span class="grade-pill">3. & 4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Schriftliche Rechenverfahren</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-written">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-written"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-twenty" data-grade="1">
               <div class="topic-header">
-                <span class="topic-icon">🔴</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/zwanzigerfeld.svg" class="topic-icon-svg" alt="Zwanzigerfeld & Mengen">
+                </div>
                 <span class="grade-pill">1. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Zwanzigerfeld & Mengen</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-twenty">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-twenty"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="math-stories" data-grade="2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">💭</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/rechengeschichten.svg" class="topic-icon-svg" alt="Rechengeschichten">
+                </div>
                 <span class="grade-pill">2. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Rechengeschichten (Textaufgaben)</h3>
+                <h3>Rechengeschichten</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-stories">☆☆☆</span>
+                <span class="topic-stars" id="stars-math-stories"></span>
               </div>
             </div>
 
@@ -239,7 +263,7 @@
         <!-- FACH: DEUTSCH -->
         <div class="subject-group" data-subject="german">
           <div class="subject-title">
-            <span>📚</span>
+            <img src="assets/icons/fach-deutsch.svg" class="subject-icon-svg" alt="">
             <span>Deutsch</span>
             <span class="subject-badge badge-german">Sprache & Wörter</span>
           </div>
@@ -247,92 +271,106 @@
             
             <div class="topic-card" data-topic-id="german-word-types" data-grade="2,3">
               <div class="topic-header">
-                <span class="topic-icon">🔍</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/wortarten.svg" class="topic-icon-svg" alt="Wortarten-Detektiv">
+                </div>
                 <span class="grade-pill">2. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Wortarten-Detektiv</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-word-types">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-word-types"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-capitalization" data-grade="1,2,3">
               <div class="topic-header">
-                <span class="topic-icon">🔤</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/gross-klein.svg" class="topic-icon-svg" alt="Groß & Klein">
+                </div>
                 <span class="grade-pill">1. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Groß & Klein</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-capitalization">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-capitalization"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-scramble" data-grade="1,2,3">
               <div class="topic-header">
-                <span class="topic-icon">🧩</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/schuettelsatz.svg" class="topic-icon-svg" alt="Schüttelsätze">
+                </div>
                 <span class="grade-pill">1. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Schüttelsätze</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-scramble">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-scramble"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-tenses" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">⏳</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/zeitformen.svg" class="topic-icon-svg" alt="Zeitformen der Verben">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Zeitformen der Verben</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-tenses">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-tenses"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-cases" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">❓</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/faelle.svg" class="topic-icon-svg" alt="Die 4 Fälle des Nomens">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Die 4 Fälle des Nomens</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-cases">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-cases"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-syllables" data-grade="1,2">
               <div class="topic-header">
-                <span class="topic-icon">👏</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/silben.svg" class="topic-icon-svg" alt="Silbenschwingen & Könige">
+                </div>
                 <span class="grade-pill">1. – 2. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Silbenschwingen & Könige</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-syllables">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-syllables"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="german-reading" data-grade="3,4">
               <div class="topic-header">
-                <span class="topic-icon">📖</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/german/lesen.svg" class="topic-icon-svg" alt="Leseverständnis">
+                </div>
                 <span class="grade-pill">3. & 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Leseverständnis (PIRLS-Sachtexte)</h3>
+                <h3>Lesegeschichten</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-german-reading">☆☆☆</span>
+                <span class="topic-stars" id="stars-german-reading"></span>
               </div>
             </div>
 
@@ -342,7 +380,7 @@
         <!-- FACH: SACHUNTERRICHT -->
         <div class="subject-group" data-subject="general">
           <div class="subject-title">
-            <span>🌍</span>
+            <img src="assets/icons/fach-sach.svg" class="subject-icon-svg" alt="">
             <span>Sachunterricht</span>
             <span class="subject-badge badge-general">Mensch & Natur</span>
           </div>
@@ -350,66 +388,76 @@
             
             <div class="topic-card" data-topic-id="general-calendar" data-grade="1,2,3">
               <div class="topic-header">
-                <span class="topic-icon">📅</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/general/kalender.svg" class="topic-icon-svg" alt="Kalender & Jahreszeiten">
+                </div>
                 <span class="grade-pill">1. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Kalender & Jahreszeiten</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-general-calendar">☆☆☆</span>
+                <span class="topic-stars" id="stars-general-calendar"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="general-animals" data-grade="2,3">
               <div class="topic-header">
-                <span class="topic-icon">🦔</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/general/igel.svg" class="topic-icon-svg" alt="Tiere im Winter">
+                </div>
                 <span class="grade-pill">2. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Tiere im Winter</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-general-animals">☆☆☆</span>
+                <span class="topic-stars" id="stars-general-animals"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="general-traffic" data-grade="1,2,3">
               <div class="topic-header">
-                <span class="topic-icon">🚦</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/general/verkehr.svg" class="topic-icon-svg" alt="Sicherer Schulweg & Verkehr">
+                </div>
                 <span class="grade-pill">1. – 3. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Sicherer Schulweg & Verkehr</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-general-traffic">☆☆☆</span>
+                <span class="topic-stars" id="stars-general-traffic"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="general-austria" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">🇦🇹</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/general/oesterreich.svg" class="topic-icon-svg" alt="Österreich">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Österreich: Bundesländer & Hauptstädte</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-general-austria">☆☆☆</span>
+                <span class="topic-stars" id="stars-general-austria"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="general-bike-test" data-grade="4">
               <div class="topic-header">
-                <span class="topic-icon">🚴</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/general/fahrrad.svg" class="topic-icon-svg" alt="Freiwillige Radfahrprüfung">
+                </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
                 <h3>Freiwillige Radfahrprüfung</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-general-bike-test">☆☆☆</span>
+                <span class="topic-stars" id="stars-general-bike-test"></span>
               </div>
             </div>
 
@@ -419,7 +467,7 @@
         <!-- FACH: GEHIRNTRAINING -->
         <div class="subject-group" data-subject="brain">
           <div class="subject-title">
-            <span>🧠</span>
+            <img src="assets/icons/fach-denken.svg" class="subject-icon-svg" alt="">
             <span>Gehirntraining</span>
             <span class="subject-badge badge-brain">Denken & Gedächtnis</span>
           </div>
@@ -427,40 +475,46 @@
             
             <div class="topic-card" data-topic-id="brain-memory" data-grade="1,2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">🐾</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/brain/memory.svg" class="topic-icon-svg" alt="Tier- & Bilder-Memory">
+                </div>
                 <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Tier- & Bilder-Memory</h3>
+                <h3>Bilder-Memory</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-brain-memory">☆☆☆</span>
+                <span class="topic-stars" id="stars-brain-memory"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="brain-sequence" data-grade="1,2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">🔢</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/brain/reihenfolge.svg" class="topic-icon-svg" alt="Zahlen-Ordner">
+                </div>
                 <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Zahlen-Ordner (Drag & Drop)</h3>
+                <h3>Zahlen ordnen</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-brain-sequence">☆☆☆</span>
+                <span class="topic-stars" id="stars-brain-sequence"></span>
               </div>
             </div>
 
             <div class="topic-card" data-topic-id="brain-pattern" data-grade="1,2,3,4">
               <div class="topic-header">
-                <span class="topic-icon">🔷</span>
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/brain/muster.svg" class="topic-icon-svg" alt="Muster-Meister">
+                </div>
                 <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Muster-Meister (Logik-Reihen)</h3>
+                <h3>Muster-Meister</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-brain-pattern">☆☆☆</span>
+                <span class="topic-stars" id="stars-brain-pattern"></span>
               </div>
             </div>
 
@@ -560,7 +614,7 @@
     <div id="profile-modal" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-header">
-          <h3>🦊 Kind-Profil auswählen</h3>
+          <h3><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt=""> Kind-Profil auswählen</h3>
           <button id="btn-close-profile-modal" class="modal-close-btn">&times;</button>
         </div>
         <div class="modal-body">
@@ -574,17 +628,22 @@
     <div id="admin-modal" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-header">
-          <h3>⚙️ Eltern- & Lehrkräfte-Bereich</h3>
+          <h3><img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt=""> Eltern- & Lehrkräfte-Bereich</h3>
           <button id="btn-close-admin" class="modal-close-btn">&times;</button>
         </div>
         <div class="modal-body">
           <!-- Sicherheitsabfrage / Rechen-Gate -->
           <form id="admin-gate-form" class="admin-gate-box" style="text-align: center; padding: 16px 0;">
+            <div id="admin-gate-badge" style="display: inline-block; padding: 4px 12px; background: var(--flaeche, #F3EEDF); border: 1.5px solid var(--linie-leise, #C8C2B4); border-radius: 999px; font-weight: 800; font-size: 0.85rem; color: var(--text-sekundaer, #5A626A); margin-bottom: 12px;">Kindersicherung</div>
             <p id="admin-gate-question" style="font-weight: 800; font-size: 1.15rem; color: #1e293b; margin-bottom: 14px;"></p>
-            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-              <input type="number" inputmode="numeric" id="admin-gate-input" class="task-input" placeholder="Ergebnis" style="width: 140px;" required />
-              <button type="submit" class="btn btn-primary">Öffnen</button>
+            <div style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+              <input type="text" inputmode="numeric" id="admin-gate-input" class="task-input" placeholder="Ergebnis" style="width: 150px; text-align: center; font-size: 1.25rem;" required autocomplete="off" />
+              <button type="submit" id="btn-gate-submit" class="btn btn-primary">Öffnen</button>
             </div>
+            <div id="admin-gate-fallback" style="margin-top: 14px; display: none;">
+              <button type="button" id="btn-gate-toggle-mode" style="font-size: 0.9rem; font-weight: 700; background: transparent; border: none; text-decoration: underline; cursor: pointer; color: var(--mathe, #2255A4);">PIN vergessen? Rechenaufgabe lösen</button>
+            </div>
+            <div id="admin-gate-hint" style="margin-top: 12px; font-size: 0.85rem; color: #64748b; display: none;">Tipp: Du kannst in den Einstellungen einen eigenen 4-stelligen Eltern-PIN festlegen.</div>
             <div id="admin-gate-error" style="display: none; color: #dc2626; font-weight: 800; margin-top: 12px;"></div>
           </form>
 
@@ -592,13 +651,13 @@
           <div id="admin-settings-panel" style="display: none;">
             <div class="admin-tabs-nav">
               <button type="button" class="admin-tab-btn active" data-tab="tab-children">
-                <span>👥</span> <span>Kinder & Klassen</span>
+                <span>Kinder & Klassen</span>
               </button>
               <button type="button" class="admin-tab-btn" data-tab="tab-diagnosis">
-                <span>📊</span> <span>Lernstand & Diagnose</span>
+                <span>Lernstand & Diagnose</span>
               </button>
               <button type="button" class="admin-tab-btn" data-tab="tab-tools">
-                <span>⚙️</span> <span>Sicherung & Werkzeuge</span>
+                <span>Sicherung & Werkzeuge</span>
               </button>
             </div>
 
@@ -612,7 +671,7 @@
               <div class="admin-add-profile-bar">
                 <input type="text" id="new-profile-name" class="task-input" placeholder="Name des neuen Kindes (z. B. Mia)" />
                 <button id="btn-add-profile" class="btn btn-secondary">
-                  <span>➕</span> <span>Kind hinzufügen</span>
+                  <span>Kind hinzufügen</span>
                 </button>
               </div>
             </div>
@@ -628,31 +687,42 @@
             <!-- TAB 3: SICHERUNG & WERKZEUGE -->
             <div id="tab-tools" class="admin-tab-pane">
               <div class="admin-tool-box">
-                <h4>🖨️ Druckzentrum (Volksschul-Vorlagen)</h4>
+                <h4><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Druckzentrum (Volksschul-Vorlagen)</h4>
                 <p>Drucke offline druckfertige Arbeitsblätter oder die offizielle Urkunde:</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                   <button id="btn-admin-print-cert" class="btn btn-secondary">
-                    <span>📜</span> <span>Schlaufuchs-Urkunde drucken</span>
+                    <span><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Schlaufuchs-Urkunde drucken</span>
                   </button>
                 </div>
               </div>
 
               <div class="admin-tool-box" style="margin-top: 16px;">
-                <h4>💾 Datensicherung & Übertragung</h4>
+                <h4>Datensicherung & Übertragung</h4>
                 <p>Sichere den Lernstand aller Kinder oder übertrage Profile auf ein anderes Tablet:</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                   <button id="btn-export-backup" class="btn btn-secondary">
-                    <span>📥</span> <span>Daten als JSON sichern</span>
+                    <span>Daten als JSON sichern</span>
                   </button>
                   <label class="btn btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-                    <span>📤</span> <span>Sicherung laden</span>
+                    <span>Sicherung laden</span>
                     <input type="file" id="input-import-backup" accept=".json" style="display: none;" />
                   </label>
                 </div>
               </div>
 
               <div class="admin-tool-box" style="margin-top: 16px;">
-                <h4>⭐ Sterne zurücksetzen</h4>
+                <h4>Eltern-PIN (Kindersicherung)</h4>
+                <p>Lege einen optionalen 4-stelligen Zahlencode fest, um den Einstellungen-Bereich noch sicherer vor Kindern zu sperren:</p>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                  <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" id="input-parent-pin" class="task-input" placeholder="4-stelliger PIN" style="width: 160px; text-align: center; font-size: 1.15rem;" />
+                  <button type="button" id="btn-save-parent-pin" class="btn btn-secondary">PIN speichern</button>
+                  <button type="button" id="btn-remove-parent-pin" class="btn btn-secondary" style="display: none; background: #fff1f2; color: #e11d48; border-color: #fecdd3;">PIN entfernen</button>
+                </div>
+                <div id="parent-pin-status" style="margin-top: 8px; font-weight: 700; font-size: 0.95rem; color: #16a34a;"></div>
+              </div>
+
+              <div class="admin-tool-box" style="margin-top: 16px;">
+                <h4><img src="assets/icons/stern.svg" class="icon-inline-svg" alt=""> Sterne zurücksetzen</h4>
                 <p>Setzt alle Sterne des aktuell gewählten Kindes auf 0 zurück:</p>
                 <button id="btn-reset-stars" class="btn btn-secondary" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3;">
                   Sterne des aktiven Kindes zurücksetzen
@@ -674,14 +744,14 @@
     <div id="scratchpad-panel" class="scratchpad-panel">
       <div class="scratchpad-header">
         <div class="scratchpad-title">
-          <span>✏️</span> <span>Digitales Schmierblatt (Notizen & Nebenrechnungen)</span>
+          <span><img src="assets/icons/schmierblatt.svg" class="icon-inline-svg" alt=""></span> <span>Digitales Schmierblatt (Notizen & Nebenrechnungen)</span>
         </div>
         <div class="scratchpad-actions">
           <button id="btn-scratchpad-clear" class="btn btn-secondary btn-sm" title="Schmierblatt leeren">
-            <span>🗑️</span> <span>Löschen</span>
+            <span>Löschen</span>
           </button>
           <button id="btn-scratchpad-close" class="btn btn-primary btn-sm" title="Schmierblatt schließen">
-            <span>✖️</span> <span>Schließen</span>
+            <img src="assets/icons/schliessen.svg" class="icon-inline-svg" alt=""> <span>Schließen</span>
           </button>
         </div>
       </div>
@@ -694,10 +764,10 @@
     <div id="stickers-modal" class="modal-overlay">
       <div class="modal-card modal-card-lg">
         <div class="modal-header">
-          <h3>📖 Mein Sticker-Album & Trophäen</h3>
+          <h3><img src="assets/icons/buch.svg" class="icon-inline-svg" alt=""> Mein Sticker-Album & Trophäen</h3>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button id="btn-print-certificate" class="btn btn-secondary btn-sm" title="Offizielle Schlaufuchs-Urkunde drucken 📜">
-              <span>📜</span> <span>Urkunde drucken</span>
+            <button id="btn-print-certificate" class="btn btn-secondary btn-sm" title="Offizielle Schlaufuchs-Urkunde drucken">
+              <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> <span>Urkunde drucken</span>
             </button>
             <button id="btn-close-stickers-modal" class="modal-close-btn">&times;</button>
           </div>
@@ -705,17 +775,17 @@
         <div class="modal-body">
           <div class="stickers-booster-banner">
             <div class="booster-info">
-              <h4>🎁 Sammelpäckchen</h4>
+              <h4>Sammelpäckchen</h4>
               <p>Für je 5 gesammelte Sterne erhältst du ein Überraschungs-Päckchen!</p>
             </div>
             <button id="btn-open-booster" class="btn btn-primary btn-booster">
-              <span>🎁</span> <span>Päckchen öffnen</span>
+              <span>Päckchen öffnen</span>
             </button>
           </div>
 
           <div class="stickers-collection-header">
             <div class="stickers-collection-title-wrap">
-              <h4 id="stickers-collection-title" class="stickers-collection-title">🌟 Mein Sammelheft</h4>
+              <h4 id="stickers-collection-title" class="stickers-collection-title"><img src="assets/icons/buch.svg" class="icon-inline-svg" alt=""> Mein Sammelheft</h4>
               <span id="stickers-collection-stats" class="stickers-collection-stats">1 von 16 eingeklebt</span>
             </div>
             <div class="stickers-progress-bar-bg">
@@ -725,7 +795,7 @@
           <div id="stickers-album-grid" class="stickers-album-grid"></div>
 
           <div class="trophies-section-header">
-            <h4 class="trophies-title">🏆 Trophäen-Vitrine</h4>
+            <h4 class="trophies-title"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt=""> Trophäen-Vitrine</h4>
             <span class="trophies-subtitle">Besondere Auszeichnungen für deine Rechen- und Leseabenteuer</span>
           </div>
           <div id="trophies-grid" class="trophies-grid"></div>

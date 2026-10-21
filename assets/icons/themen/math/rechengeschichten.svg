@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Rechengeschichten: Illustrierte Aufgabenkarte mit Rechen-Sprechblase -->
+  <!-- Aufgabenkarte / Heftchen im Hintergrund -->
+  <rect x="7" y="16" width="34" height="25" rx="3.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="2"/>
+  <!-- Text- und Bildzeilen auf der Karte -->
+  <line x1="12" y1="23" x2="26" y2="23" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="12" y1="28" x2="22" y2="28" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="12" y1="33" x2="32" y2="33" stroke="#2D5E9E" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Kleines Bildsymbol auf der Karte (Sonnengelber Stern) -->
+  <polygon points="33,22 34.2,25.2 37.5,25.4 34.8,27.3 35.7,30.5 33,28.8 30.3,30.5 31.2,27.3 28.5,25.4 31.8,25.2" 
+           fill="#F2C14E" stroke="#3B4651" stroke-width="1.2"/>
+
+  <!-- Sprechblase vorne oben rechts mit Fragezeichen -->
+  <path d="M22 6 C22 4 25 3 32 3 C39 3 43 5 43 10 C43 14 39 16 34 16 L31 20 L32 16 C25 16 22 14 22 10 Z" 
+        fill="#EEF4FC" stroke="#2D5E9E" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Rechensymbol ? in der Sprechblase -->
+  <text x="32" y="13" font-family="'PrimaeText', sans-serif" font-size="10" font-weight="900" fill="#2D5E9E" text-anchor="middle">?</text>
+</svg>

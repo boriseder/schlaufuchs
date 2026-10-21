@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Sicherer Schulweg & Verkehr: StVO Schutzweg Hinweiszeichen am Schilderständer -->
+  <!-- Schilderpfosten unten -->
+  <line x1="24" y1="35" x2="24" y2="44" stroke="#3B4651" stroke-width="3" stroke-linecap="round"/>
+  <rect x="21" y="42" width="6" height="2" rx="1" fill="#3B4651"/>
+  
+  <!-- StVO Schutzweg Hinweistafel (Blaues Quadrat) -->
+  <rect x="9" y="6" width="30" height="30" rx="3" fill="#2D5E9E" stroke="#3B4651" stroke-width="2"/>
+  <!-- Weißes gleichseitiges Dreieck nach StVO -->
+  <polygon points="24,9 37,33 11,33" fill="#FFFFFF"/>
+  
+  <!-- Zebrastreifen-Balken auf dem Boden -->
+  <line x1="14" y1="31" x2="17" y2="31" stroke="#3B4651" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19.5" y1="31" x2="22.5" y2="31" stroke="#3B4651" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="25" y1="31" x2="28" y2="31" stroke="#3B4651" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="30.5" y1="31" x2="33.5" y2="31" stroke="#3B4651" stroke-width="1.8" stroke-linecap="round"/>
+  
+  <!-- Fußgänger (Gehendes Schulkind) -->
+  <circle cx="24" cy="16" r="2" fill="#3B4651"/>
+  <path d="M24 18 L24 24 L21 29 M24 24 L27 29 M20.5 21 L27 20" stroke="#3B4651" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

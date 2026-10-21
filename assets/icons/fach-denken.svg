@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Fach: Gehirntraining / Denken (Zwei Puzzleteile, 2.1px Kontur) -->
+  <!-- Linkes Puzzleteil (Violett / denken) -->
+  <path d="M9 13 L22 13 L22 17.5 C24.5 17.5 26 19 26 21 C26 23 24.5 24.5 22 24.5 L22 35 L9 35 L9 27.5 C10.5 27.5 12 26 12 24 C12 22 10.5 20.5 9 20.5 Z" 
+        fill="#6B4C9A" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+  <!-- Rechtes Puzzleteil (Gelb / richtig) -->
+  <path d="M22 13 L37 13 L37 20.5 C35.5 20.5 34 22 34 24 C34 26 35.5 27.5 37 27.5 L37 35 L22 35 L22 24.5 C24.5 24.5 26 23 26 21 C26 19 24.5 17.5 22 17.5 Z" 
+        fill="#F2C14E" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round"/>
+  <line x1="13" y1="17" x2="18" y2="17" stroke="#E7DFF3" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="28" y1="17" x2="33" y2="17" stroke="#FFF7D6" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

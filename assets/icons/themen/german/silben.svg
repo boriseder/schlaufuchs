@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Silbenschwingen & Könige: Zarte Kärtchen mit Silbenbögen, 1.8px Kontur -->
+  <rect x="7" y="11" width="15" height="14" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="14.5" y="21" font-family="'PrimaeText', sans-serif" font-size="8" font-weight="bold" fill="#3B4651" text-anchor="middle">Schu</text>
+  
+  <rect x="26" y="11" width="15" height="14" rx="2.5" fill="#FFFFFF" stroke="#3B4651" stroke-width="1.8"/>
+  <text x="33.5" y="21" font-family="'PrimaeText', sans-serif" font-size="8" font-weight="bold" fill="#3B4651" text-anchor="middle">le</text>
+  
+  <!-- Zarte Silbenbögen unten -->
+  <path d="M7 31 C10 37 19 37 22 31" stroke="#B5502B" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <path d="M26 31 C29 37 38 37 41 31" stroke="#B5502B" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  
+  <!-- Zarte Königskrone -->
+  <path d="M11 7 L14.5 9.5 L18 7 L17 11.5 L12 11.5 Z" fill="#F2C14E" stroke="#3B4651" stroke-width="1.2"/>
+</svg>

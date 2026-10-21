@@ -1,5 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Offenes Buch (Schulbuch-Look, 3px Kontur) -->
-  <path d="M24 14 C20 10 12 10 6 12 L6 38 C12 36 20 36 24 40 C28 36 36 36 42 38 L42 12 C36 10 28 10 24 14 Z" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-  <line x1="24" y1="14" x2="24" y2="40" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+  <!-- Offenes Buch (Luftig, 2.1px Kontur) -->
+  <path d="M24 14 C20 10.5 12 10.5 6 12.5 L6 37.5 C12 35.5 20 35.5 24 39 C28 35.5 36 35.5 42 37.5 L42 12.5 C36 10.5 28 10.5 24 14 Z" 
+        fill="#FFFFFF" stroke="#3B4651" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>
+  <line x1="24" y1="14" x2="24" y2="39" stroke="#3B4651" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M24 14 L24 22 L26.5 20.5 L29 22 L29 14" fill="#F2C14E" stroke="#3B4651" stroke-width="1.2" stroke-linejoin="round"/>
 </svg>

@@ -54,8 +54,33 @@
     };
   }
 
+  const defaultRng = erstelleZufall();
+
+  function rand(min, max) {
+    return defaultRng.int(min, max);
+  }
+
+  function mischen(array) {
+    return defaultRng.mischen(array);
+  }
+
+  function wahl(array) {
+    return defaultRng.wahl(array);
+  }
+
+  function getEffectiveGrades(allowedTopicGrades) {
+    const State = S.State || (typeof window !== 'undefined' && window.Schlaufuchs && window.Schlaufuchs.State);
+    const active = (State && State.getActiveGrades) ? State.getActiveGrades() : [1, 2, 3, 4];
+    const filtered = allowedTopicGrades.filter(g => active.includes(g));
+    return filtered.length > 0 ? filtered : allowedTopicGrades;
+  }
+
   S.Random = {
     mulberry32,
-    erstelleZufall
+    erstelleZufall,
+    rand,
+    mischen,
+    wahl
   };
+  S.getEffectiveGrades = getEffectiveGrades;
 })(typeof window !== 'undefined' ? (window.Schlaufuchs = window.Schlaufuchs || {}) : (globalThis.Schlaufuchs = globalThis.Schlaufuchs || {}));
