@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Schlaufuchs">
-  <link rel="stylesheet" href="css/tokens.css?v=2.7">
-  <link rel="stylesheet" href="style.css?v=2.7">
+  <link rel="stylesheet" href="css/tokens.css?v=2.8">
+  <link rel="stylesheet" href="style.css?v=2.8">
 </head>
 <body>
   <div class="app-container">
@@ -551,12 +551,23 @@
           <button type="button" id="btn-toggle-child-numpad" class="focus-tool-btn" title="Großtasten-Zahlenfeld ein-/ausblenden" style="display: none;">
             <img src="assets/icons/numpad.svg" class="focus-icon-svg" alt="Zahlenfeld">
           </button>
-          <button type="button" id="btn-print-worksheet" class="focus-tool-btn" title="Als A4-Arbeitsblatt drucken">
-            <img src="assets/icons/drucken.svg" class="focus-icon-svg" alt="Drucken">
-          </button>
-          <button type="button" id="btn-exercise-regenerate" class="focus-tool-btn" title="Neue Aufgaben laden">
-            <img src="assets/icons/neuladen.svg" class="focus-icon-svg" alt="Neu laden">
-          </button>
+
+          <!-- Sekundäres Menü für Eltern & Lehrkräfte -->
+          <div class="focus-options-menu-wrapper">
+            <button type="button" id="btn-exercise-more" class="focus-tool-btn" title="Optionen für Eltern & Lehrkräfte" aria-haspopup="true" aria-expanded="false">
+              <span style="font-size: 1.15rem; font-weight: 900; line-height: 1; letter-spacing: 1px; color: #475569;">•••</span>
+            </button>
+            <div id="exercise-more-dropdown" class="focus-options-dropdown" style="display: none;">
+              <button type="button" id="btn-print-worksheet" class="focus-dropdown-btn" title="Als A4-Arbeitsblatt drucken">
+                <img src="assets/icons/drucken.svg" class="dropdown-icon-svg" alt="">
+                <span>Arbeitsblatt drucken</span>
+              </button>
+              <button type="button" id="btn-exercise-regenerate" class="focus-dropdown-btn" title="Neue Aufgaben laden">
+                <img src="assets/icons/neuladen.svg" class="dropdown-icon-svg" alt="">
+                <span>Neue Aufgaben</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

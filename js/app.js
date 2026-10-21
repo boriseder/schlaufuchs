@@ -284,6 +284,33 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         window.Schlaufuchs.Scratchpad.toggle();
       });
     }
+
+    // Mehr-Optionen Dropdown für Lehrkräfte & Eltern
+    const btnExerciseMore = document.getElementById('btn-exercise-more');
+    const exerciseMoreDropdown = document.getElementById('exercise-more-dropdown');
+    if (btnExerciseMore && exerciseMoreDropdown) {
+      btnExerciseMore.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = exerciseMoreDropdown.style.display === 'flex';
+        exerciseMoreDropdown.style.display = isOpen ? 'none' : 'flex';
+        btnExerciseMore.setAttribute('aria-expanded', !isOpen);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!btnExerciseMore.contains(e.target) && !exerciseMoreDropdown.contains(e.target)) {
+          exerciseMoreDropdown.style.display = 'none';
+          btnExerciseMore.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const dropdownBtns = exerciseMoreDropdown.querySelectorAll('button');
+      dropdownBtns.forEach(b => {
+        b.addEventListener('click', () => {
+          exerciseMoreDropdown.style.display = 'none';
+          btnExerciseMore.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
   }
 
   function speakCurrentTask() {
@@ -312,6 +339,8 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     currentTasks = [];
     const numpad = document.getElementById('child-numpad');
     if (numpad) numpad.style.display = 'none';
+    const moreDropdown = document.getElementById('exercise-more-dropdown');
+    if (moreDropdown) moreDropdown.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     updateTopicStarsDisplay();
     updateProfileDisplay();
@@ -321,6 +350,8 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     document.body.classList.add('in-exercise');
     viewMenu.classList.remove('active');
     viewExercise.classList.add('active');
+    const moreDropdown = document.getElementById('exercise-more-dropdown');
+    if (moreDropdown) moreDropdown.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -333,6 +364,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentGradeFilter = btn.getAttribute('data-grade');
+        if (window.Schlaufuchs.Storage) {
+          window.Schlaufuchs.Storage.schreiben('last_grade_filter', currentGradeFilter);
+        }
         applyGradeFilter();
       });
     });
@@ -340,10 +374,16 @@ window.Schlaufuchs = window.Schlaufuchs || {};
 
   function updateMenuDisplay() {
     const activeGrades = State.getActiveGrades();
+    let savedFilter = null;
+    if (window.Schlaufuchs.Storage) {
+      savedFilter = window.Schlaufuchs.Storage.lesen('last_grade_filter');
+    }
 
     // Standard-Filterung: Wenn Kind genau 1 Schulstufe hat, standardmäßig diese wählen!
     if (activeGrades.length === 1) {
       currentGradeFilter = String(activeGrades[0]);
+    } else if (savedFilter && (savedFilter === 'all' || activeGrades.includes(parseInt(savedFilter, 10)))) {
+      currentGradeFilter = savedFilter;
     } else if (currentGradeFilter !== 'all') {
       const selectedGradeNum = parseInt(currentGradeFilter, 10);
       if (!activeGrades.includes(selectedGradeNum)) {
