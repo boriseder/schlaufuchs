@@ -384,6 +384,26 @@ window.Schlaufuchs.Renderers = (function () {
 
   // --- EINHEITLICHE BODENLEISTE (ACTION-BAR) & WIDGET-LOGIK ---
 
+  function renderBottomBarHtml(index, hintTitle = 'Tipp anzeigen', buttonText = 'Prüfen') {
+    return `
+      <div class="scaffolding-box" id="scaffolding-${index}"></div>
+      <div class="task-bottom-bar">
+        <div class="task-tools-group">
+          <div id="spk-container-${index}"></div>
+          <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="${hintTitle}">
+            💡 Tipp
+          </button>
+        </div>
+        <div class="task-feedback" id="feedback-${index}"></div>
+        <div class="task-submit-group">
+          <button class="btn btn-check" id="btn-check-${index}">
+            <span>${buttonText}</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
   function attachBottomActions(card, task, index, onCheck, textToSpeak) {
     const audio = window.Schlaufuchs.Audio;
 
@@ -523,21 +543,7 @@ window.Schlaufuchs.Renderers = (function () {
             />
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Rechen-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Rechen-Tipp anzeigen')}
       </div>
     `;
 
@@ -593,7 +599,7 @@ window.Schlaufuchs.Renderers = (function () {
           <span class="task-index">${index + 1}.</span>
           <div class="task-question-title">
             <div>Zahlenmauer / Rechenturm</div>
-            <div style="font-size: 0.95rem; font-weight: 500; color: var(--tinte-leise, #64748B);">Zwei nebeneinanderliegende Steine ergeben zusammen den Stein darüber.</div>
+            <div class="pyramid-subtext">Zwei nebeneinanderliegende Steine ergeben zusammen den Stein darüber.</div>
           </div>
         </div>
         <div class="task-stage">
@@ -612,21 +618,7 @@ window.Schlaufuchs.Renderers = (function () {
             </div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Mauer-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Mauer-Tipp anzeigen')}
       </div>
     `;
 
@@ -679,25 +671,11 @@ window.Schlaufuchs.Renderers = (function () {
             Bestimme für jedes hervorgehobene Wort die richtige Wortart (blau = Namenwort, rot = Tunwort${hasAdjektiv ? ', grün = Wiewort' : ''}):
           </div>
         </div>
-        <div class="task-stage" style="align-items: stretch;">
-          <div class="story-box" style="background: var(--flaeche, #F3EEDF); border-left: 4px solid var(--mathe, #2255A4); padding: 12px 16px; border-radius: 10px; margin: 4px 0 16px 0; font-size: 1.25rem; font-weight: 700; color: var(--tinte, #1E252B); line-height: 1.6;" id="sentence-preview-${index}"></div>
+        <div class="task-stage task-stage-stretch">
+          <div class="story-box sentence-preview" id="sentence-preview-${index}"></div>
           <div class="word-cards-grid" id="word-cards-${index}"></div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Grammatik-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Grammatik-Tipp anzeigen')}
       </div>
     `;
 
@@ -794,7 +772,7 @@ window.Schlaufuchs.Renderers = (function () {
     task.words.forEach((w, wIdx) => {
       if (w.isFixed) {
         tokensHtml += `
-          <span class="scramble-token" style="background: var(--flaeche, #F3EEDF); border-color: var(--linie-leise, #C8C2B4); cursor: default; font-weight: 900; color: var(--tinte, #1E252B); min-height: 48px; display: inline-flex; align-items: center;">
+          <span class="scramble-token cap-token-fixed">
             ${w.text}
           </span>
         `;
@@ -803,14 +781,14 @@ window.Schlaufuchs.Renderers = (function () {
         const activeClass = w.isCapital ? 'cap-active' : 'cap-inactive';
 
         tokensHtml += `
-          <button class="scramble-token ${activeClass}" id="cap-btn-${index}-${wIdx}" data-widx="${wIdx}" style="min-height: 52px; font-size: 1.15rem; padding: 8px 14px;">
+          <button class="scramble-token cap-token-btn ${activeClass}" id="cap-btn-${index}-${wIdx}" data-widx="${wIdx}">
             ${displayWord}
           </button>
         `;
       }
     });
 
-    tokensHtml += `<span style="font-size: 1.5rem; font-weight: 900; color: var(--tinte-leise, #64748B); margin-left: 2px;">.</span>`;
+    tokensHtml += `<span class="cap-dot">.</span>`;
 
     card.innerHTML = `
       <div class="task-card-content">
@@ -821,25 +799,11 @@ window.Schlaufuchs.Renderers = (function () {
           </div>
         </div>
         <div class="task-stage">
-          <div class="scramble-pool" style="border: none; background: var(--flaeche, #F3EEDF); padding: 14px 12px; margin: 8px 0; align-items: center; border-radius: var(--radius, 12px); width: 100%;">
+          <div class="scramble-pool cap-pool">
             ${tokensHtml}
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Rechtschreib-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Rechtschreib-Tipp anzeigen')}
       </div>
     `;
 
@@ -877,29 +841,15 @@ window.Schlaufuchs.Renderers = (function () {
             Baue den Satz zusammen (Wörter antippen oder mit dem Finger hineinziehen):
           </div>
         </div>
-        <div class="task-stage" style="align-items: stretch;">
-          <div class="scramble-box" style="width: 100%;">
-            <div class="scramble-target drop-zone" id="scramble-target-${index}" title="Dein Satz" style="min-height: 60px;">
-              <span class="hint-text" style="padding-left: 6px;">Wörter hier ablegen oder antippen...</span>
+        <div class="task-stage task-stage-stretch">
+          <div class="scramble-box">
+            <div class="scramble-target drop-zone" id="scramble-target-${index}" title="Dein Satz">
+              <span class="hint-text">Wörter hier ablegen oder antippen...</span>
             </div>
-            <div class="scramble-pool drop-zone" id="scramble-pool-${index}" style="min-height: 60px;"></div>
+            <div class="scramble-pool drop-zone" id="scramble-pool-${index}"></div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Satz-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Satz-Tipp anzeigen')}
       </div>
     `;
 
@@ -911,7 +861,7 @@ window.Schlaufuchs.Renderers = (function () {
       targetEl.innerHTML = '';
 
       if (task.assembled.length === 0) {
-        targetEl.innerHTML = '<span class="hint-text" style="padding-left: 6px;">Wörter hier ablegen oder antippen (Reihenfolge verschiebbar)...</span>';
+        targetEl.innerHTML = '<span class="hint-text">Wörter hier ablegen oder antippen (Reihenfolge verschiebbar)...</span>';
       } else {
         task.assembled.forEach((word, aIdx) => {
           const btn = document.createElement('button');
@@ -1003,9 +953,9 @@ window.Schlaufuchs.Renderers = (function () {
   function renderMultipleChoice(card, task, index, onCheck) {
     let visualHtml = '';
     if (task.customVisualHtml) {
-      visualHtml = `<div class="task-sign-display" style="margin-bottom: 12px; display: flex; justify-content: center;">${task.customVisualHtml}</div>`;
+      visualHtml = `<div class="task-sign-display">${task.customVisualHtml}</div>`;
     } else if (task.icon) {
-      visualHtml = `<div style="font-size: 2.8rem; margin-bottom: 8px; text-align: center;">${task.icon}</div>`;
+      visualHtml = `<div class="task-visual-icon">${task.icon}</div>`;
     }
 
     let optionsHtml = '';
@@ -1013,7 +963,7 @@ window.Schlaufuchs.Renderers = (function () {
       const isSelected = task.selectedText === optText;
       const selClass = isSelected ? 'selected-option' : '';
       optionsHtml += `
-        <button class="choice-btn ${selClass}" data-opt-idx="${optIdx}" style="min-height: 56px; font-size: 1.15rem; padding: 12px 18px;">
+        <button class="choice-btn choice-btn-lg ${selClass}" data-opt-idx="${optIdx}">
           ${optText}
         </button>
       `;
@@ -1028,26 +978,12 @@ window.Schlaufuchs.Renderers = (function () {
             <div>${task.question}</div>
           </div>
         </div>
-        <div class="task-stage" style="align-items: stretch;">
-          <div class="choice-options-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%;">
+        <div class="task-stage task-stage-stretch">
+          <div class="choice-options-grid">
             ${optionsHtml}
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Tipp anzeigen')}
       </div>
     `;
 
@@ -1076,11 +1012,11 @@ window.Schlaufuchs.Renderers = (function () {
         <div class="memory-card ${flippedClass} ${matchedClass}" data-card-idx="${cIdx}">
           <div class="memory-card-inner">
             <div class="memory-card-back">
-              <span class="memory-brand" style="font-size: 2.2rem;">🦊</span>
+              <span class="memory-brand">🦊</span>
             </div>
             <div class="memory-card-front">
-              <span class="memory-symbol" style="font-size: 2.5rem; line-height: 1;">${c.content}</span>
-              ${c.subtitle ? `<span style="font-size: 0.85rem; font-weight: 800; color: #334155; margin-top: 4px;">${c.subtitle}</span>` : ''}
+              <span class="memory-symbol">${c.content}</span>
+              ${c.subtitle ? `<span class="memory-subtitle">${c.subtitle}</span>` : ''}
             </div>
           </div>
         </div>
@@ -1088,20 +1024,20 @@ window.Schlaufuchs.Renderers = (function () {
     });
 
     card.innerHTML = `
-      <div style="width: 100%;">
-        <div class="memory-status-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px dashed #e2e8f0;">
-          <div class="memory-status-text" style="font-size: 1.1rem; font-weight: 800; color: #334155;">
+      <div class="memory-container">
+        <div class="memory-status-bar">
+          <div class="memory-status-text">
             <span>Gefundene Paare: </span>
-            <strong id="mem-pairs-count" style="color: #7c3aed;">${task.matchedPairsCount} von ${task.totalPairs}</strong>
+            <strong id="mem-pairs-count" class="memory-status-count">${task.matchedPairsCount} von ${task.totalPairs}</strong>
           </div>
-          <div style="font-size: 0.9rem; font-weight: 700; color: #64748b;">
+          <div class="memory-hint-text">
             🃏 Finde immer 2 gleiche Tier- oder Naturkärtchen!
           </div>
         </div>
         <div class="memory-grid">
           ${gridHtml}
         </div>
-        <div class="task-actions" style="margin-top: 16px; justify-content: center; display: flex;">
+        <div class="task-actions memory-actions">
           <div class="task-feedback" id="feedback-${index}"></div>
         </div>
       </div>
@@ -1170,36 +1106,21 @@ window.Schlaufuchs.Renderers = (function () {
           <div class="task-question-title">${task.question}</div>
         </div>
         <div class="task-stage">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;">
+          <div class="input-row-center">
             <input 
               type="number" 
               inputmode="numeric" 
               pattern="[0-9]*" 
-              class="task-input" 
+              class="task-input input-width-180" 
               id="input-${index}" 
               placeholder="Antwort" 
               value="${task.userAnswer || ''}"
               autocomplete="off"
-              style="width: 180px;"
             />
-            ${task.unit ? `<span style="font-size: 1.25rem; font-weight: 800; color: var(--tinte, #1E252B);">${task.unit}</span>` : ''}
+            ${task.unit ? `<span class="input-unit-text">${task.unit}</span>` : ''}
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Tipp anzeigen')}
       </div>
     `;
 
@@ -1230,45 +1151,30 @@ window.Schlaufuchs.Renderers = (function () {
           <div class="task-question-title">${task.question}</div>
         </div>
         <div class="task-stage">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;">
+          <div class="geometry-stage-wrap">
             <svg width="${rectWidth + 40}" height="${rectHeight + 40}" viewBox="0 0 ${rectWidth + 40} ${rectHeight + 40}">
               <rect x="20" y="20" width="${rectWidth}" height="${rectHeight}" fill="var(--mathe-hell, #EFF6FF)" stroke="var(--mathe, #2255A4)" stroke-width="3" rx="4"/>
               <text x="${20 + rectWidth / 2}" y="15" text-anchor="middle" font-weight="800" font-size="12" fill="var(--mathe, #2255A4)">a = ${task.a} cm</text>
               <text x="${rectWidth + 25}" y="${20 + rectHeight / 2}" dominant-baseline="middle" font-weight="800" font-size="12" fill="var(--mathe, #2255A4)">${task.b} cm</text>
             </svg>
             <div>
-              <div style="font-weight: 800; color: var(--mathe, #2255A4); margin-bottom: 8px;">Formel: ${task.formula}</div>
-              <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="geometry-formula-badge">Formel: ${task.formula}</div>
+              <div class="geometry-input-row">
                 <input 
                   type="number" 
                   inputmode="numeric" 
                   pattern="[0-9]*" 
-                  class="task-input" 
+                  class="task-input input-width-140" 
                   id="input-${index}" 
                   placeholder="Ergebnis" 
                   value="${task.userAnswer || ''}"
-                  style="width: 140px;"
                 />
-                <span style="font-weight: 800; font-size: 1.15rem; color: var(--tinte, #1E252B);">${task.unit}</span>
+                <span class="geometry-unit-text">${task.unit}</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Geometrie-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Geometrie-Tipp anzeigen')}
       </div>
     `;
 
@@ -1291,7 +1197,7 @@ window.Schlaufuchs.Renderers = (function () {
     let seqHtml = '';
     task.displaySequence.forEach(item => {
       seqHtml += `
-        <div class="scramble-token" style="background: var(--flaeche, #F3EEDF); border-color: var(--linie-leise, #C8C2B4); font-weight: 900; font-size: 1.25rem; cursor: default; min-height: 48px; display: inline-flex; align-items: center;">
+        <div class="scramble-token pattern-token-fixed">
           ${item}
         </div>
       `;
@@ -1300,9 +1206,9 @@ window.Schlaufuchs.Renderers = (function () {
     let optionsHtml = '';
     task.options.forEach(opt => {
       const isSelected = task.userAnswer === opt.toString();
-      const selStyle = isSelected ? 'background: var(--mathe-hell, #EFF6FF); border-color: var(--mathe, #2255A4); color: var(--mathe, #2255A4); font-weight: 900;' : 'background: var(--papier, #FBF7EE); border-color: var(--linie-leise, #C8C2B4); color: var(--tinte, #1E252B);';
+      const selClass = isSelected ? ' selected' : '';
       optionsHtml += `
-        <button class="scramble-token pattern-choice-btn" data-val="${opt}" style="${selStyle} min-height: 52px; font-size: 1.15rem; padding: 10px 18px;">
+        <button class="scramble-token pattern-choice-btn${selClass}" data-val="${opt}">
           ${opt}
         </button>
       `;
@@ -1315,29 +1221,15 @@ window.Schlaufuchs.Renderers = (function () {
           <div class="task-question-title">${task.title}</div>
         </div>
         <div class="task-stage">
-          <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0 16px 0;">
+          <div class="pattern-seq-row">
             ${seqHtml}
           </div>
-          <div style="font-weight: 800; font-size: 1.05rem; color: var(--tinte, #1E252B); margin-bottom: 10px; text-align: center;">Welches Element gehört an die Stelle des Fragezeichens?</div>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+          <div class="pattern-prompt">Welches Element gehört an die Stelle des Fragezeichens?</div>
+          <div class="pattern-options-row">
             ${optionsHtml}
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Muster-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Muster-Tipp anzeigen')}
       </div>
     `;
 
@@ -1369,27 +1261,13 @@ window.Schlaufuchs.Renderers = (function () {
           <span class="task-index">${index + 1}.</span>
           <div class="task-question-title">${task.instruction}</div>
         </div>
-        <div class="task-stage" style="align-items: stretch;">
-          <div class="scramble-box" style="width: 100%;">
-            <div class="scramble-target drop-zone" id="sequence-target-${index}" style="min-height: 60px;"></div>
-            <div class="scramble-pool drop-zone" id="sequence-pool-${index}" style="min-height: 60px;"></div>
+        <div class="task-stage task-stage-stretch">
+          <div class="scramble-box">
+            <div class="scramble-target drop-zone" id="sequence-target-${index}"></div>
+            <div class="scramble-pool drop-zone" id="sequence-pool-${index}"></div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Reihen-Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Reihen-Tipp anzeigen')}
       </div>
     `;
 
@@ -1481,45 +1359,30 @@ window.Schlaufuchs.Renderers = (function () {
           </div>
         </div>
         <div class="task-stage">
-          <div class="story-box" style="background: var(--schnee, #ffffff); border-left: 4px solid var(--himmel, #38bdf8); padding: 12px 16px; border-radius: var(--radius-sm, 8px); font-weight: 700; color: var(--tinte, #1e293b); line-height: 1.6; margin-bottom: 16px; width: 100%; max-width: 600px; box-sizing: border-box;">
+          <div class="story-box text-problem-story">
             ${task.story}
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-            <span style="font-weight: 800; color: var(--tinte, #1e293b);">🧮 Deine Rechnung (Ergebnis):</span>
+          <div class="text-problem-calc-row">
+            <span class="text-problem-calc-label">🧮 Deine Rechnung (Ergebnis):</span>
             <input 
               type="number" 
               inputmode="numeric" 
               pattern="[0-9]*" 
-              class="task-input" 
+              class="task-input input-width-140" 
               id="input-${index}" 
               placeholder="Ergebnis" 
               value="${task.userAnswer || ''}"
-              style="width: 140px;"
             />
-            <span style="font-weight: 800; color: var(--tinte, #1e293b);">${task.unit || ''}</span>
+            <span class="text-problem-unit">${task.unit || ''}</span>
           </div>
-          <div id="calc-display-${index}" style="display: ${task.isCorrect ? 'block' : 'none'}; font-size: 0.95rem; font-weight: 800; color: var(--erfolg, #16a34a); margin-bottom: 6px;">
+          <div id="calc-display-${index}" class="text-problem-calc-display${task.isCorrect ? ' is-visible' : ''}">
             Lösungsweg: ${task.calculation} = ${ansFormatted} ${task.unit || ''}
           </div>
-          <div id="answer-text-${index}" style="margin-top: 4px; font-size: 0.95rem; font-weight: 700; color: var(--leise, #64748b);">
-            💬 Antwort: ${task.isCorrect ? `<strong style="color: var(--erfolg, #16a34a);">${task.answerText}</strong>` : blankAnswer}
+          <div id="answer-text-${index}" class="text-problem-ans-text">
+            💬 Antwort: ${task.isCorrect ? `<strong class="text-problem-ans-highlight">${task.answerText}</strong>` : blankAnswer}
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Rechen-Tipp anzeigen')}
       </div>
     `;
 
@@ -1561,41 +1424,26 @@ window.Schlaufuchs.Renderers = (function () {
         </div>
         <div class="task-stage">
           <!-- Zwanzigerfeld Visualisierung -->
-          <div class="twenty-field-box" style="margin: 12px 0;">
+          <div class="twenty-field-box">
             <div class="twenty-field-row">${buildDotsRow(1, 10)}</div>
             <div class="twenty-field-row">${buildDotsRow(11, 20)}</div>
           </div>
-          <div style="font-size: 0.95rem; font-weight: 700; color: var(--tinte, #1e293b); margin-bottom: 12px;">
+          <div class="twenty-field-instruction">
             🔵 Blaue Punkte: <strong>${task.a}</strong> &nbsp;|&nbsp; 🔴 Rote Punkte: <strong>${task.b}</strong>
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <div class="twenty-field-input-row">
             <input 
               type="number" 
               inputmode="numeric" 
               pattern="[0-9]*" 
-              class="task-input" 
+              class="task-input input-width-140" 
               id="input-${index}" 
               placeholder="Summe" 
               value="${task.userAnswer || ''}"
-              style="width: 140px;"
             />
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Zwanzigerfeld-Tipp anzeigen')}
       </div>
     `;
 
@@ -1681,7 +1529,7 @@ window.Schlaufuchs.Renderers = (function () {
         <div class="task-stage">
           <div class="written-calc-card">
             <div class="written-calc-box">
-              <table class="written-calc-table" aria-label="Schriftliche Rechnung untereinander" style="border-collapse: collapse; margin: 0 auto; text-align: center;">
+              <table class="written-calc-table" aria-label="Schriftliche Rechnung untereinander">
                 <thead>
                   <tr class="written-header-row">${headerThs}</tr>
                 </thead>
@@ -1695,21 +1543,7 @@ window.Schlaufuchs.Renderers = (function () {
             </div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Rechen-Tipp anzeigen')}
       </div>
     `;
 
@@ -1797,7 +1631,7 @@ window.Schlaufuchs.Renderers = (function () {
           <div class="reading-options-list">
             ${optionsHtml}
           </div>
-          <div class="reading-question-hint" id="reading-q-hint-${index}-${qIdx}" style="display: none;"></div>
+          <div class="reading-question-hint" id="reading-q-hint-${index}-${qIdx}"></div>
         </div>
       `;
     });
@@ -1821,7 +1655,7 @@ window.Schlaufuchs.Renderers = (function () {
 
             <!-- Rechte Spalte: Fragen -->
             <div class="reading-right-pane">
-              <div class="reading-questions-heading" style="margin-bottom: 12px; font-weight: 900; font-size: 1.1rem; color: var(--tinte, #1e293b); display: flex; align-items: center; gap: 6px;">
+              <div class="reading-questions-heading">
                 <span>❓</span> <span>Fragen zum Text:</span>
               </div>
               <div class="reading-questions-container">
@@ -1830,21 +1664,7 @@ window.Schlaufuchs.Renderers = (function () {
             </div>
           </div>
         </div>
-        <div class="scaffolding-box" id="scaffolding-${index}" style="display: none;"></div>
-        <div class="task-bottom-bar">
-          <div class="task-tools-group">
-            <div id="spk-container-${index}"></div>
-            <button type="button" class="btn btn-hint-scaffold" id="btn-scaffold-${index}" title="Tipp anzeigen">
-              💡 Tipp
-            </button>
-          </div>
-          <div class="task-feedback" id="feedback-${index}"></div>
-          <div class="task-submit-group">
-            <button class="btn btn-check" id="btn-check-${index}">
-              <span>Antworten prüfen</span>
-            </button>
-          </div>
-        </div>
+        ${renderBottomBarHtml(index, 'Lese-Tipp anzeigen', 'Antworten prüfen')}
       </div>
     `;
 

@@ -21,7 +21,9 @@ window.Schlaufuchs.State = (function () {
   const DEFAULT_SETTINGS = {
     activeGrades: [1, 2, 3], // standardmäßig 1., 2. und 3. Schulstufe aktiv
     soundEffects: true,
-    parentPin: '' // leer = kein PIN gesetzt, stattdessen anspruchsvolle Rechenaufgabe
+    parentPin: '', // leer = kein PIN gesetzt, stattdessen anspruchsvolle Rechenaufgabe
+    printSolutionMode: 'knick', // 'knick' (1 Blatt mit Faltstreifen) | 'two-page' (2 Blätter) | 'none'
+    printSecretWord: true // Schlaufuchs-Geheimwort & Rätselmechanik für Schatzkiste
   };
 
   // Standard-Profil
@@ -89,6 +91,24 @@ window.Schlaufuchs.State = (function () {
     const clean = (typeof pin === 'string' ? pin : String(pin || '')).trim();
     saveSettings({ parentPin: clean });
     return clean;
+  }
+
+  function getPrintSettings() {
+    const s = loadSettings();
+    return {
+      solutionMode: s.printSolutionMode || 'knick',
+      secretWord: s.printSecretWord !== false
+    };
+  }
+
+  function savePrintSettings(printSettings) {
+    const current = loadSettings();
+    const updated = {
+      ...current,
+      printSolutionMode: printSettings.solutionMode || current.printSolutionMode || 'knick',
+      printSecretWord: printSettings.secretWord !== false
+    };
+    return saveSettings(updated);
   }
 
   // --- USER-PROFILE & SCHULSTUFEN AM KIND ---
@@ -299,6 +319,8 @@ window.Schlaufuchs.State = (function () {
     isGradeActive: isGradeActive,
     getParentPin: getParentPin,
     setParentPin: setParentPin,
+    getPrintSettings: getPrintSettings,
+    savePrintSettings: savePrintSettings,
     // Profile & Schulstufen am Kind
     loadAllProfiles: loadAllProfiles,
     saveAllProfiles: saveAllProfiles,

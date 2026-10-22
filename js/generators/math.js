@@ -16,14 +16,15 @@ window.Schlaufuchs.Generators.Math = (function () {
   const formatAustrianNumber = (window.Schlaufuchs && window.Schlaufuchs.formatZahl) || (num => String(num));
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
-  // 1. ADDITION (➕ 1. bis 4. Klasse – adaptiv gemappt)
+  // 1. ADDITION (➕ 1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   function buildAdditionTasks(seed) {
     const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
     const grades = getEffectiveGrades([1, 2, 3, 4]);
+    const targetGrade = grades[rand(0, grades.length - 1)] || 2;
     const tasks = [];
 
     for (let i = 0; i < 6; i++) {
-      const g = grades[rand(0, grades.length - 1)] || 2;
+      const g = targetGrade;
       let a, b;
 
       if (g === 1) {
@@ -92,14 +93,15 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 2. SUBTRAKTION (➖ 1. bis 4. Klasse – adaptiv gemappt)
+  // 2. SUBTRAKTION (➖ 1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   function buildSubtractionTasks(seed) {
     const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
     const grades = getEffectiveGrades([1, 2, 3, 4]);
+    const targetGrade = grades[rand(0, grades.length - 1)] || 2;
     const tasks = [];
 
     for (let i = 0; i < 6; i++) {
-      const g = grades[rand(0, grades.length - 1)] || 2;
+      const g = targetGrade;
       let a, b;
 
       if (g === 1) {
@@ -169,14 +171,15 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 3. MULTIPLIKATION (✖️ 2. bis 4. Klasse – KEINE 1. Klasse!)
+  // 3. MULTIPLIKATION (✖️ 2. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   // Kind mit 2. Schulstufe erhält ausschließlich Kernaufgaben und kleines 1×1 bis 100!
   function buildMultiplicationTasks() {
     const useGrades = getEffectiveGrades([2, 3, 4]);
+    const targetGrade = useGrades[rand(0, useGrades.length - 1)] || 2;
     const tasks = [];
 
     for (let i = 0; i < 6; i++) {
-      const g = useGrades[rand(0, useGrades.length - 1)];
+      const g = targetGrade;
       let a, b;
 
       if (g === 2) {
@@ -244,16 +247,17 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 4. DIVISION (: 2. bis 4. Klasse – KEINE 1. Klasse!)
+  // 4. DIVISION (: 2. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   // Kind mit 2. Schulstufe erhält nur 1×1-Umkehrung ohne Rest!
   // Kind mit 4. Schulstufe erhält altersgerechte halbschriftliche Divisionen!
   function buildDivisionTasks(seed) {
     const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
     const useGrades = getEffectiveGrades([2, 3, 4]);
+    const targetGrade = useGrades[rand(0, useGrades.length - 1)] || 2;
     const tasks = [];
 
     for (let i = 0; i < 6; i++) {
-      const g = useGrades[rand(0, useGrades.length - 1)];
+      const g = targetGrade;
       let a, b, answer;
 
       if (g === 2) {

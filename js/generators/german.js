@@ -496,6 +496,10 @@ window.Schlaufuchs.Generators.German = (function () {
       lehrplanRef: 'D-1-Rechtschreiben-Silben',
       type: 'multiple-choice',
       icon: '👏',
+      targetWord: item.word,
+      syllables: item.syllables,
+      syllableCount: item.count,
+      vowels: item.vowels,
       question: `Wie viele Silben (Silbenbögen) hat das Wort:\n„${item.word}“?`,
       options: options,
       correctIndex: item.count - 1,
@@ -506,7 +510,7 @@ window.Schlaufuchs.Generators.German = (function () {
     }));
   }
 
-  // 7. LESEVERSTÄNDNIS (PIRLS-Sachtexte für 3. & 4. Klasse)
+  // 7. LESEVERSTÄNDNIS (Sachtexte für 3. & 4. Klasse)
   function buildReadingTasks() {
     const textsPool = [
       {

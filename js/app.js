@@ -33,6 +33,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     if (window.Schlaufuchs.Admin) window.Schlaufuchs.Admin.init();
     if (window.Schlaufuchs.Scratchpad) window.Schlaufuchs.Scratchpad.init();
     if (window.Schlaufuchs.Stickers) window.Schlaufuchs.Stickers.init();
+    if (window.Schlaufuchs.Worksheets) window.Schlaufuchs.Worksheets.init();
 
     setupAudioControls();
     setupCertificatePrint();
@@ -254,21 +255,32 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       });
     }
 
-    const btnPrint = document.getElementById('btn-print-worksheet');
-    if (btnPrint) {
-      btnPrint.addEventListener('click', () => {
-        if (!currentTopicId || currentTasks.length === 0) {
-          const Dialog = window.Schlaufuchs.Dialog;
-          if (Dialog) Dialog.alert('Bitte wähle zuerst ein Thema aus, um ein Arbeitsblatt zu drucken.');
-          else alert('Bitte wähle zuerst ein Thema aus, um ein Arbeitsblatt zu drucken.');
-          return;
+    const btnExerciseRegenerate = document.getElementById('btn-exercise-regenerate');
+    if (btnExerciseRegenerate) {
+      btnExerciseRegenerate.addEventListener('click', () => {
+        if (currentTopicId) loadTopic(currentTopicId);
+      });
+    }
+
+    // Umschalter zwischen Online-Üben und Arbeitsblätter-Zentrum
+    const tabBtnOnline = document.getElementById('tab-btn-online');
+    const tabBtnWorksheets = document.getElementById('tab-btn-worksheets');
+    const btnHeaderWorksheets = document.getElementById('btn-header-worksheets');
+
+    if (tabBtnOnline) {
+      tabBtnOnline.addEventListener('click', () => showMenuView());
+    }
+    if (tabBtnWorksheets) {
+      tabBtnWorksheets.addEventListener('click', () => {
+        if (window.Schlaufuchs.Worksheets) {
+          window.Schlaufuchs.Worksheets.showWorksheetsView();
         }
-        const titleEl = document.getElementById('exercise-topic-title') || document.getElementById('exercise-title');
-        const badgeEl = document.getElementById('exercise-badge');
-        const topicTitle = titleEl ? titleEl.textContent : 'Übungsblatt';
-        const gradeText = badgeEl ? badgeEl.textContent : '1.–4. Klasse';
-        if (window.Schlaufuchs.Print) {
-          window.Schlaufuchs.Print.generateAndPrintWorksheet(topicTitle, gradeText, currentTasks);
+      });
+    }
+    if (btnHeaderWorksheets) {
+      btnHeaderWorksheets.addEventListener('click', () => {
+        if (window.Schlaufuchs.Worksheets) {
+          window.Schlaufuchs.Worksheets.showWorksheetsView();
         }
       });
     }
@@ -282,33 +294,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     if (btnExerciseScratchpad && window.Schlaufuchs.Scratchpad) {
       btnExerciseScratchpad.addEventListener('click', () => {
         window.Schlaufuchs.Scratchpad.toggle();
-      });
-    }
-
-    // Mehr-Optionen Dropdown für Lehrkräfte & Eltern
-    const btnExerciseMore = document.getElementById('btn-exercise-more');
-    const exerciseMoreDropdown = document.getElementById('exercise-more-dropdown');
-    if (btnExerciseMore && exerciseMoreDropdown) {
-      btnExerciseMore.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = exerciseMoreDropdown.style.display === 'flex';
-        exerciseMoreDropdown.style.display = isOpen ? 'none' : 'flex';
-        btnExerciseMore.setAttribute('aria-expanded', !isOpen);
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!btnExerciseMore.contains(e.target) && !exerciseMoreDropdown.contains(e.target)) {
-          exerciseMoreDropdown.style.display = 'none';
-          btnExerciseMore.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      const dropdownBtns = exerciseMoreDropdown.querySelectorAll('button');
-      dropdownBtns.forEach(b => {
-        b.addEventListener('click', () => {
-          exerciseMoreDropdown.style.display = 'none';
-          btnExerciseMore.setAttribute('aria-expanded', 'false');
-        });
       });
     }
   }
@@ -334,13 +319,19 @@ window.Schlaufuchs = window.Schlaufuchs || {};
   function showMenuView() {
     document.body.classList.remove('in-exercise');
     viewExercise.classList.remove('active');
+    const viewWorksheets = document.getElementById('view-worksheets');
+    if (viewWorksheets) viewWorksheets.classList.remove('active');
     viewMenu.classList.add('active');
+
+    const tabOnline = document.getElementById('tab-btn-online');
+    const tabWorksheets = document.getElementById('tab-btn-worksheets');
+    if (tabOnline) tabOnline.classList.add('active');
+    if (tabWorksheets) tabWorksheets.classList.remove('active');
+
     currentTopicId = null;
     currentTasks = [];
     const numpad = document.getElementById('child-numpad');
     if (numpad) numpad.style.display = 'none';
-    const moreDropdown = document.getElementById('exercise-more-dropdown');
-    if (moreDropdown) moreDropdown.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     updateTopicStarsDisplay();
     updateProfileDisplay();
@@ -349,9 +340,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
   function showExerciseView() {
     document.body.classList.add('in-exercise');
     viewMenu.classList.remove('active');
+    const viewWorksheets = document.getElementById('view-worksheets');
+    if (viewWorksheets) viewWorksheets.classList.remove('active');
     viewExercise.classList.add('active');
-    const moreDropdown = document.getElementById('exercise-more-dropdown');
-    if (moreDropdown) moreDropdown.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -909,7 +900,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         const ansEl = card.querySelector(`#answer-text-${index}`);
         const calcEl = card.querySelector(`#calc-display-${index}`);
         if (ansEl && isCorrect) {
-          ansEl.innerHTML = `💬 Antwort: <strong style="color: #16a34a;">${task.answerText}</strong> ✅`;
+          ansEl.innerHTML = `💬 Antwort: <strong class="text-problem-ans-highlight">${task.answerText}</strong> ✅`;
         }
         if (calcEl && isCorrect) {
           calcEl.style.display = 'block';

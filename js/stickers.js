@@ -51,8 +51,9 @@ window.Schlaufuchs.Stickers = (function () {
     if (!profile) return 0;
     const totalStars = Object.values(profile.stars || {}).reduce((a, b) => a + (b || 0), 0);
     const opened = profile.openedPacks || 0;
-    // 1 Starter-Päckchen zum Start + je 5 gesammelte Sterne ein weiteres Päckchen
-    const earnedPacks = 1 + Math.floor(totalStars / STARS_PER_PACK);
+    const bonus = profile.bonusTreasurePacks || 0;
+    // 1 Starter-Päckchen zum Start + je 5 gesammelte Sterne ein weiteres Päckchen + Bonus aus Offline-Schatzkiste
+    const earnedPacks = 1 + Math.floor(totalStars / STARS_PER_PACK) + bonus;
     return Math.max(0, earnedPacks - opened);
   }
 
@@ -282,11 +283,81 @@ window.Schlaufuchs.Stickers = (function () {
     }
   }
 
+  const VALID_SECRET_WORDS = [
+    'FUCHS', 'SCHLAU', 'WALD', 'BIBER', 'IGEL', 'EULE', 'SONNE', 'BLUME',
+    'WIESE', 'STERN', 'RAKETE', 'KOBEL', 'WINTER', 'SOMMER', 'HERBST',
+    'SCHNEE', 'SCHULE', 'PAPIER', 'FREUNDE', 'SCHATZ', 'BÜCHER', 'WALDKAUZ',
+    'FUCHSBAU', 'ZEBRA', 'TAUSEND', 'MEISTER', 'KÖNIG', 'HERZ'
+  ];
+
+  function redeemTreasureWord(inputWord) {
+    if (!inputWord) return { success: false, msg: 'Bitte gib ein Geheimwort ein.' };
+    const State = window.Schlaufuchs.State;
+    if (!State) return { success: false, msg: 'System nicht bereit.' };
+    const profile = State.getActiveProfile();
+    if (!profile) return { success: false, msg: 'Kein Profil gefunden.' };
+
+    const clean = inputWord.trim().toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE');
+
+    // Gültige Wörter prüfen
+    const normalizedValid = VALID_SECRET_WORDS.map(w => w.replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE'));
+
+    let dynamicWords = [];
+    try {
+      const Storage = window.Schlaufuchs.Storage;
+      dynamicWords = (Storage ? Storage.lesen('valid_secret_words') : []) || [];
+    } catch (e) {}
+    const normalizedDynamic = dynamicWords.map(w => String(w).trim().toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE'));
+
+    const isValid = normalizedValid.includes(clean) || normalizedDynamic.includes(clean);
+    if (!isValid) {
+      return {
+        success: false,
+        msg: 'Dieses Geheimwort ist leider nicht bekannt. Prüfe die Buchstaben auf deinem Arbeitsblatt noch einmal!'
+      };
+    }
+
+    profile.redeemedTreasureWords = profile.redeemedTreasureWords || [];
+    if (profile.redeemedTreasureWords.includes(clean)) {
+      return {
+        success: false,
+        msg: 'Du hast dieses Geheimwort bereits eingelöst! Löse ein neues Arbeitsblatt für den nächsten Schatz.'
+      };
+    }
+
+    // Einlösen & Belohnen
+    profile.redeemedTreasureWords.push(clean);
+    profile.bonusTreasurePacks = (profile.bonusTreasurePacks || 0) + 1;
+
+    // Profil sichern
+    const allProfiles = State.loadAllProfiles();
+    const idx = allProfiles.findIndex(p => p.id === profile.id);
+    if (idx !== -1) {
+      allProfiles[idx] = profile;
+      State.saveAllProfiles(allProfiles);
+    }
+
+    // Audio & Konfetti
+    if (window.Schlaufuchs.Confetti) window.Schlaufuchs.Confetti.trigger();
+    if (window.Schlaufuchs.Audio) window.Schlaufuchs.Audio.playFanfare();
+
+    State.notify('stickers-changed');
+    updateHeaderBadge();
+
+    return {
+      success: true,
+      msg: `🎉 Fantastisch! Du hast das Geheimwort „${inputWord.trim().toUpperCase()}“ richtig gelöst! Als Belohnung für deinen Fleiß hast du 1 neues Sammelpäckchen erhalten!`
+    };
+  }
+
   function init() {
     const openBtn = document.getElementById('btn-open-stickers');
     const closeBtn = document.getElementById('btn-close-stickers-modal');
     const boosterBtn = document.getElementById('btn-open-booster');
     const modal = document.getElementById('stickers-modal');
+    const treasureForm = document.getElementById('treasure-code-form');
+    const treasureInput = document.getElementById('input-treasure-code');
+    const treasureFeedback = document.getElementById('treasure-feedback-msg');
 
     if (openBtn) {
       openBtn.addEventListener('click', renderAlbumModal);
@@ -304,6 +375,23 @@ window.Schlaufuchs.Stickers = (function () {
         const result = openBoosterPack();
         if (result && result.sticker) {
           showBoosterCelebration(result.sticker, result.isNew);
+          renderAlbumModal();
+        }
+      });
+    }
+
+    if (treasureForm && treasureInput) {
+      treasureForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const word = treasureInput.value.trim();
+        const res = redeemTreasureWord(word);
+        if (treasureFeedback) {
+          treasureFeedback.style.display = 'block';
+          treasureFeedback.className = res.success ? 'treasure-feedback-msg success' : 'treasure-feedback-msg error';
+          treasureFeedback.textContent = res.msg;
+        }
+        if (res.success) {
+          treasureInput.value = '';
           renderAlbumModal();
         }
       });

@@ -406,10 +406,36 @@ window.Schlaufuchs.Admin = (function () {
   }
 
   function populateSettings() {
-    // Profile & Diagnose anzeigen
+    // Profile, Diagnose, PIN & Druckeinstellungen anzeigen
     renderProfileManagement();
     renderDiagnosisDashboard();
     setupPinControls();
+    setupPrintSettings();
+  }
+
+  function setupPrintSettings() {
+    const solutionModeSelect = document.getElementById('admin-print-solution-mode');
+    const secretWordCheck = document.getElementById('admin-print-secret-word');
+    const State = window.Schlaufuchs.State;
+    if (!solutionModeSelect || !secretWordCheck || !State) return;
+
+    const printSettings = State.getPrintSettings ? State.getPrintSettings() : { solutionMode: 'knick', secretWord: true };
+    solutionModeSelect.value = printSettings.solutionMode;
+    secretWordCheck.checked = printSettings.secretWord;
+
+    solutionModeSelect.addEventListener('change', () => {
+      State.savePrintSettings({
+        solutionMode: solutionModeSelect.value,
+        secretWord: secretWordCheck.checked
+      });
+    });
+
+    secretWordCheck.addEventListener('change', () => {
+      State.savePrintSettings({
+        solutionMode: solutionModeSelect.value,
+        secretWord: secretWordCheck.checked
+      });
+    });
   }
 
   function setupAdminTabs() {

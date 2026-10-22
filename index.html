@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Schlaufuchs">
   <link rel="stylesheet" href="css/tokens.css?v=2.8">
-  <link rel="stylesheet" href="style.css?v=2.8">
+  <link rel="stylesheet" href="style.css?v=2.9">
 </head>
 <body>
   <div class="app-container">
@@ -49,6 +49,9 @@
           <img src="assets/icons/buch.svg" class="header-icon-svg" alt="Sammelbuch">
           <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
         </button>
+        <button class="header-tool-btn" id="btn-header-worksheets" title="Arbeitsblätter-Zentrum zum Drucken">
+          <img src="assets/icons/drucken.svg" class="header-icon-svg" alt="Arbeitsblätter">
+        </button>
         <button class="header-tool-btn" id="btn-admin-settings" title="Admin-Einstellungen für Eltern & Lehrkräfte">
           <img src="assets/icons/einstellungen.svg" class="header-icon-svg" alt="Einstellungen">
         </button>
@@ -57,6 +60,18 @@
 
     <!-- ANSICHT 1: HAUPTMENÜ / THEMENAUSWAHL -->
     <section id="view-menu" class="view-section active">
+      <!-- Haupt-Modus-Umschalter: Online üben vs. Arbeitsblätter -->
+      <div class="main-mode-switcher">
+        <button type="button" class="mode-tab-btn active" id="tab-btn-online" title="Interaktives Üben am Bildschirm">
+          <img src="assets/icons/fuchs.svg" class="tab-icon-svg" alt="">
+          <span>Online üben</span>
+        </button>
+        <button type="button" class="mode-tab-btn" id="tab-btn-worksheets" title="Vollwertige A4-Arbeitsblätter zum Ausdrucken">
+          <img src="assets/icons/drucken.svg" class="tab-icon-svg" alt="">
+          <span>Arbeitsblätter drucken</span>
+        </button>
+      </div>
+
       <!-- Klassenfilter -->
       <nav class="grade-segmented-control class-filter-bar" aria-label="Schulstufe auswählen">
         <button class="filter-btn active" data-grade="all">Alle Klassen</button>
@@ -524,6 +539,112 @@
       </div>
     </section>
 
+    <!-- ANSICHT 3: ARBEITSBLÄTTER-ZENTRUM (FÜR LEHRKRÄFTE & ELTERN) -->
+    <section id="view-worksheets" class="view-section">
+      <div class="worksheets-hub-header">
+        <div class="hub-header-top">
+          <div class="hub-title-group">
+            <div class="hub-badge-pill">
+              <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+              <span>Druckzentrum</span>
+            </div>
+            <h2>Arbeitsblätter Volksschule</h2>
+            <p class="hub-subtext">
+              Vollwertige A4-Übungsblätter nach österreichischem Lehrplan (BMBWF 2025). Mit Montessori-Knick-Lösung und Schatzkisten-Geheimwort.
+            </p>
+          </div>
+          <div class="hub-quick-actions">
+            <button type="button" class="btn-hub-primary" id="btn-batch-print" title="Alle angezeigten Arbeitsblätter in einem Durchgang drucken">
+              <img src="assets/icons/drucken.svg" class="btn-icon-svg" alt="">
+              <span>Alle angezeigten Blätter drucken</span>
+            </button>
+            <button type="button" class="btn-hub-secondary" id="btn-back-from-worksheets" title="Zurück zum Online-Üben">
+              <img src="assets/icons/zurueck.svg" class="btn-icon-svg" alt="">
+              <span>Zurück zum Online-Üben</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter nach Schulstufe -->
+        <nav class="grade-segmented-control worksheets-grade-filter" aria-label="Schulstufe für Arbeitsblätter auswählen">
+          <button class="filter-btn-ws active" data-grade="all">Alle Klassen</button>
+          <button class="filter-btn-ws" data-grade="1">1. Klasse</button>
+          <button class="filter-btn-ws" data-grade="2">2. Klasse</button>
+          <button class="filter-btn-ws" data-grade="3">3. Klasse</button>
+          <button class="filter-btn-ws" data-grade="4">4. Klasse</button>
+        </nav>
+
+        <!-- Filter nach Fach -->
+        <nav class="subject-segmented-control worksheets-subject-filter" aria-label="Fach für Arbeitsblätter auswählen">
+          <button class="filter-subj-ws active" data-subject="all">Alle Fächer</button>
+          <button class="filter-subj-ws" data-subject="math">
+            <img src="assets/icons/fach-mathe.svg" class="filter-icon-svg" alt="">
+            <span>Mathematik</span>
+          </button>
+          <button class="filter-subj-ws" data-subject="german">
+            <img src="assets/icons/fach-deutsch.svg" class="filter-icon-svg" alt="">
+            <span>Deutsch</span>
+          </button>
+          <button class="filter-subj-ws" data-subject="general">
+            <img src="assets/icons/fach-sach.svg" class="filter-icon-svg" alt="">
+            <span>Sachunterricht</span>
+          </button>
+          <button class="filter-subj-ws" data-subject="brain">
+            <img src="assets/icons/fach-denken.svg" class="filter-icon-svg" alt="">
+            <span>Gehirntraining</span>
+          </button>
+        </nav>
+
+        <!-- Druckeinstellungen-Leiste vor Ort -->
+        <div class="hub-settings-bar">
+          <div class="hub-setting-item">
+            <span class="hub-setting-label">Lösungsformat:</span>
+            <select id="hub-solution-mode" class="hub-select">
+              <option value="knick">Knick-Lösung (1 Seite, Montessori)</option>
+              <option value="two-page">Separates Lösungsblatt (2 Seiten)</option>
+              <option value="none">Nur Aufgabenblatt (ohne Lösung)</option>
+            </select>
+          </div>
+          <div class="hub-setting-item">
+            <label class="hub-toggle-label">
+              <input type="checkbox" id="hub-secret-word" checked>
+              <span>Schlaufuchs-Geheimwort (für Schatzkiste im Sticker-Album)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raster aller Arbeitsblätter -->
+      <div class="worksheets-grid" id="worksheets-cards-container">
+        <!-- Dynamisch gefüllt durch js/worksheets.js -->
+      </div>
+    </section>
+
+    <!-- VORSCHAU-MODAL FÜR ARBEITSBLÄTTER -->
+    <div id="worksheet-preview-modal" class="modal-overlay" style="display: none;">
+      <div class="worksheet-preview-dialog">
+        <div class="preview-header">
+          <div class="preview-title-wrap">
+            <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+            <h3 id="preview-sheet-title">Arbeitsblatt-Vorschau</h3>
+          </div>
+          <button type="button" id="btn-preview-close" class="modal-close-btn" title="Vorschau schließen">
+            <img src="assets/icons/schliessen.svg" class="modal-icon-svg" alt="Schließen">
+          </button>
+        </div>
+        <div class="preview-body" id="preview-sheet-content">
+          <!-- A4 Vorschau-Inhalt -->
+        </div>
+        <div class="preview-footer">
+          <button type="button" class="btn-hub-secondary" id="btn-preview-dismiss">Schließen</button>
+          <button type="button" class="btn-hub-primary" id="btn-preview-print">
+            <img src="assets/icons/drucken.svg" class="btn-icon-svg" alt="">
+            <span>Dieses Blatt jetzt drucken</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- ANSICHT 2: INTERAKTIVE ÜBUNGS-ANSICHT (SINGLE-TASK FOCUS MODE) -->
     <section id="view-exercise" class="view-section">
       <!-- Schlanke 56px Fokus-Leiste (EINE einzige Kontrollleiste oben) -->
@@ -552,22 +673,9 @@
             <img src="assets/icons/numpad.svg" class="focus-icon-svg" alt="Zahlenfeld">
           </button>
 
-          <!-- Sekundäres Menü für Eltern & Lehrkräfte -->
-          <div class="focus-options-menu-wrapper">
-            <button type="button" id="btn-exercise-more" class="focus-tool-btn" title="Optionen für Eltern & Lehrkräfte" aria-haspopup="true" aria-expanded="false">
-              <span style="font-size: 1.15rem; font-weight: 900; line-height: 1; letter-spacing: 1px; color: #475569;">•••</span>
-            </button>
-            <div id="exercise-more-dropdown" class="focus-options-dropdown" style="display: none;">
-              <button type="button" id="btn-print-worksheet" class="focus-dropdown-btn" title="Als A4-Arbeitsblatt drucken">
-                <img src="assets/icons/drucken.svg" class="dropdown-icon-svg" alt="">
-                <span>Arbeitsblatt drucken</span>
-              </button>
-              <button type="button" id="btn-exercise-regenerate" class="focus-dropdown-btn" title="Neue Aufgaben laden">
-                <img src="assets/icons/neuladen.svg" class="dropdown-icon-svg" alt="">
-                <span>Neue Aufgaben</span>
-              </button>
-            </div>
-          </div>
+          <button type="button" id="btn-exercise-regenerate" class="focus-tool-btn" title="Neue Aufgaben laden">
+            <img src="assets/icons/neuladen.svg" class="focus-icon-svg" alt="Neue Aufgaben">
+          </button>
         </div>
       </div>
 
@@ -698,8 +806,25 @@
             <!-- TAB 3: SICHERUNG & WERKZEUGE -->
             <div id="tab-tools" class="admin-tab-pane">
               <div class="admin-tool-box">
-                <h4><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Druckzentrum (Volksschul-Vorlagen)</h4>
-                <p>Drucke offline druckfertige Arbeitsblätter oder die offizielle Urkunde:</p>
+                <h4><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Druckzentrum & Offline-Lernen</h4>
+                <p>Passe die Erstellung der A4-Arbeitsblätter an die Bedürfnisse deines Kindes an:</p>
+                <div style="display: flex; flex-direction: column; gap: 12px; margin: 12px 0 16px 0;">
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label for="admin-print-solution-mode" style="font-weight: 700; font-size: 0.95rem;">Lösungs-Format für Arbeitsblätter:</label>
+                    <select id="admin-print-solution-mode" class="select-input" style="max-width: 440px;">
+                      <option value="knick">Knick-Lösungsstreifen (1 Blatt, Montessori-Selbstkontrolle) – Empfohlen</option>
+                      <option value="two-page">Separates Lösungsblatt (2 Blätter für Eltern & Lehrkräfte)</option>
+                      <option value="none">Keine Lösungen drucken (nur reines Aufgabenblatt)</option>
+                    </select>
+                    <small style="color: var(--tinte-leise, #475569);">Beim Knick-Streifen knickt das Kind die rechte Spalte vor dem Lösen nach hinten und kontrolliert danach selbstständig. Spart 50 % Papier!</small>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="admin-print-secret-word" style="width: 20px; height: 20px; cursor: pointer;" checked />
+                    <label for="admin-print-secret-word" style="font-weight: 700; font-size: 0.95rem; cursor: pointer;">
+                      Schlaufuchs-Geheimwort & Rätsel aktivieren (belohnt Offline-Fleiß in der Schatzkiste)
+                    </label>
+                  </div>
+                </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                   <button id="btn-admin-print-cert" class="btn btn-secondary">
                     <span><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Schlaufuchs-Urkunde drucken</span>
@@ -794,6 +919,21 @@
             </button>
           </div>
 
+          <!-- SCHLAUFUCHS-SCHATZKISTE (OFFLINE-LERN-BELOHNUNG) -->
+          <div class="stickers-treasure-banner">
+            <div class="treasure-info">
+              <h4>🦊 Schlaufuchs-Schatzkiste (Arbeitsblatt-Geheimwort)</h4>
+              <p>Hast du ein Arbeitsblatt offline mit Stift gelöst? Gib hier dein Geheimwort ein!</p>
+            </div>
+            <form id="treasure-code-form" class="treasure-form" autocomplete="off">
+              <input type="text" id="input-treasure-code" class="task-input treasure-input" placeholder="GEHEIMWORT" maxlength="15" autocorrect="off" autocapitalize="characters" spellcheck="false" required />
+              <button type="submit" id="btn-submit-treasure-code" class="btn btn-primary btn-treasure">
+                <span>Öffnen</span>
+              </button>
+            </form>
+          </div>
+          <div id="treasure-feedback-msg" class="treasure-feedback-msg" style="display: none;"></div>
+
           <div class="stickers-collection-header">
             <div class="stickers-collection-title-wrap">
               <h4 id="stickers-collection-title" class="stickers-collection-title"><img src="assets/icons/buch.svg" class="icon-inline-svg" alt=""> Mein Sammelheft</h4>
@@ -821,11 +961,12 @@
   <!-- A4-Druckbereich für Arbeitsblätter & Urkunden -->
   <div id="print-area"></div>
 
-  <!-- Core-Module (Format, Storage, Random, Texte) -->
+  <!-- Core-Module (Format, Storage, Random, Texte, Topics) -->
   <script src="js/core/format.js"></script>
   <script src="js/core/storage.js"></script>
   <script src="js/core/random.js"></script>
   <script src="js/core/texte.js"></script>
+  <script src="js/core/topics.js"></script>
 
   <!-- Modulare Schlaufuchs-Skripte (100% Offline- & Webserver-fähig) -->
   <script src="js/dialog.js"></script>
@@ -834,7 +975,9 @@
   <script src="js/audio.js"></script>
   <script src="js/dragdrop.js"></script>
   <script src="js/confetti.js"></script>
+  <script src="js/print-engine.js"></script>
   <script src="js/print.js"></script>
+  <script src="js/worksheets.js"></script>
   <script src="js/scratchpad.js"></script>
   <script src="js/stickers.js"></script>
   <script src="js/validators/index.js"></script>
@@ -842,7 +985,7 @@
   <script src="js/generators/german.js"></script>
   <script src="js/generators/general.js"></script>
   <script src="js/generators/brain.js"></script>
-  <script src="js/renderers.js"></script>
+  <script src="js/renderers.js?v=2.9"></script>
   <script src="js/admin.js"></script>
   <script src="js/app.js"></script>
 
