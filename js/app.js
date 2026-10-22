@@ -255,13 +255,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       });
     }
 
-    const btnExerciseRegenerate = document.getElementById('btn-exercise-regenerate');
-    if (btnExerciseRegenerate) {
-      btnExerciseRegenerate.addEventListener('click', () => {
-        if (currentTopicId) loadTopic(currentTopicId);
-      });
-    }
-
     // Umschalter zwischen Online-Üben und Arbeitsblätter-Zentrum
     const tabBtnOnline = document.getElementById('tab-btn-online');
     const tabBtnWorksheets = document.getElementById('tab-btn-worksheets');
