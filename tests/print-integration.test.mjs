@@ -11,6 +11,7 @@ import vm from 'node:vm';
 
 const formatCode = readFileSync('js/core/format.js', 'utf8');
 const signsCode = readFileSync('js/signs.js', 'utf8');
+const clockCode = readFileSync('js/clock.js', 'utf8');
 const storageCode = readFileSync('js/core/storage.js', 'utf8');
 const topicsCode = readFileSync('js/core/topics.js', 'utf8');
 const printEngineCode = readFileSync('js/print-engine.js', 'utf8');
@@ -33,6 +34,7 @@ function setupIntegrationSandbox() {
 
   vm.runInNewContext(formatCode, sandbox);
   vm.runInNewContext(signsCode, sandbox);
+  vm.runInNewContext(clockCode, sandbox);
   vm.runInNewContext(storageCode, sandbox);
   vm.runInNewContext(topicsCode, sandbox);
   vm.runInNewContext(printEngineCode, sandbox);
@@ -46,9 +48,9 @@ function setupIntegrationSandbox() {
 
 const { Schlaufuchs: { Topics, PrintEngine, Print, Signs } } = setupIntegrationSandbox();
 
-test('Integration: Alle 27 Themen erzeugen fehlerfreies A4-HTML ohne Exceptions', () => {
+test('Integration: Alle 28 Themen erzeugen fehlerfreies A4-HTML ohne Exceptions', () => {
   const all = Topics.getAllTopics();
-  assert.equal(all.length, 27, 'Genau 27 didaktische Themen');
+  assert.equal(all.length, 28, 'Genau 28 didaktische Themen');
 
   all.forEach(topic => {
     const grade = topic.grades[0];
@@ -78,7 +80,7 @@ test('Integration: Alle 27 Themen erzeugen fehlerfreies A4-HTML ohne Exceptions'
   });
 });
 
-test('Integration: Lösungsstreifen-Vollständigkeit für alle 27 Themen (Aufgaben = Lösungen im Knickstreifen)', () => {
+test('Integration: Lösungsstreifen-Vollständigkeit für alle 28 Themen (Aufgaben = Lösungen im Knickstreifen)', () => {
   const all = Topics.getAllTopics();
 
   all.forEach(topic => {

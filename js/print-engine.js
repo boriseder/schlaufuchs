@@ -432,12 +432,12 @@ window.Schlaufuchs.PrintEngine = (function () {
           answer: d.answer
         });
       });
-    } else if (topicId === 'math-time-money') {
-      // 3 Aufgaben zu Geld & Zeit
+    } else if (topicId === 'math-money' || topicId === 'math-time-money') {
+      // 3 Aufgaben zu Geld & Euro
       tasks.push({
         type: 'text-problem',
         schulstufe: grade,
-        lehrplanRef: 'M-2/3-Geld-Zeit',
+        lehrplanRef: 'M-1/4-Groessen-Geld',
         story: 'Ein Kinoticket kostet 8 € und 50 Cent. Ein Popcorn kostet 4 € und 20 Cent. Wie viel bezahlt Maximilian an der Kassa?',
         question: 'Wie viel kosten Ticket und Popcorn zusammen?',
         calculation: '8,50 € + 4,20 €',
@@ -446,20 +446,20 @@ window.Schlaufuchs.PrintEngine = (function () {
       tasks.push({
         type: 'text-problem',
         schulstufe: grade,
-        lehrplanRef: 'M-2/3-Geld-Zeit',
-        story: 'Der Schulbus fährt um 07:15 Uhr an der Haltestelle ab. Die Fahrt zur Volksschule dauert genau 25 Minuten. Wann kommt der Bus an der Schule an?',
-        question: 'Um wie viel Uhr kommt der Bus an?',
-        calculation: '07:15 Uhr + 25 min',
-        answer: '07:40 Uhr'
-      });
-      tasks.push({
-        type: 'text-problem',
-        schulstufe: grade,
-        lehrplanRef: 'M-2/3-Geld-Zeit',
+        lehrplanRef: 'M-1/4-Groessen-Geld',
         story: 'Sophie kauft am Naschmarkt Äpfel um 3 € und Trauben um 4 €. Sie bezahlt mit einem 20-€-Schein. Wie viel Retourgeld bekommt sie?',
         question: 'Wie viel Wechselgeld erhält Sophie?',
         calculation: '20 € − 7 €',
         answer: '13 €'
+      });
+      tasks.push({
+        type: 'text-problem',
+        schulstufe: grade,
+        lehrplanRef: 'M-1/4-Groessen-Geld',
+        story: 'Felix spart für ein neues Buch um 15 €. In seiner Spardose hat er bereits 9 €. Wie viel Euro fehlen ihm noch?',
+        question: 'Wie viel Euro muss Felix noch sparen?',
+        calculation: '15 € − 9 €',
+        answer: '6 €'
       });
     } else if (topicId === 'math-geometry') {
       // 3 Aufgaben zu Geometrie (4. Klasse)
@@ -781,7 +781,7 @@ window.Schlaufuchs.PrintEngine = (function () {
         schulstufe: grade,
         lehrplanRef: 'SU-1/3-Verkehr-StVO',
         signId: 'schutzweg',
-        question: 'Wie verhältst du dich am Zebrastreifen (Schutzweg)?',
+        question: 'Wie verhältst du dich am Schutzweg (Zebrastreifen)?',
         options: ['Blickkontakt zum Fahrer suchen und zügig queren', 'Ohne zu schauen hinüberlaufen', 'Auf der Straße stehenbleiben'],
         correctIndex: 0
       });
@@ -789,18 +789,18 @@ window.Schlaufuchs.PrintEngine = (function () {
         type: 'multiple-choice',
         schulstufe: grade,
         lehrplanRef: 'SU-1/3-Verkehr-StVO',
-        signId: 'stop',
-        question: 'Was bedeutet das achteckige rote Stopp-Schild an einer Kreuzung?',
-        options: ['Unbedingt anhalten und Vorrang geben', 'Schnell weiterfahren', 'Nur für Radfahrer'],
+        signId: 'achtung-kinder',
+        question: 'Was bedeutet das dreieckige Schild mit den Kindern?',
+        options: ['Achtung Kinder! Autofahrer müssen bremsbereit sein', 'Hier dürfen Kinder mit dem Auto fahren', 'Fußballplatz voraus'],
         correctIndex: 0
       });
       tasks.push({
         type: 'multiple-choice',
         schulstufe: grade,
         lehrplanRef: 'SU-1/3-Verkehr-StVO',
-        signId: 'vorrang-geben',
-        question: 'Was bedeutet das auf der Spitze stehende weiße Dreieck mit rotem Rand?',
-        options: ['Vorrang geben', 'Hier habe ich immer Vorrang', 'Sackgasse'],
+        signId: 'wohnstrasse',
+        question: 'Was gilt in einer blau beschilderten Wohnstraße?',
+        options: ['Kinderspiel auf der Straße erlaubt, Autos fahren Schritttempo', 'Autos dürfen hier 50 km/h fahren', 'Radfahren ist verboten'],
         correctIndex: 0
       });
       tasks.push({
@@ -808,8 +808,8 @@ window.Schlaufuchs.PrintEngine = (function () {
         schulstufe: grade,
         lehrplanRef: 'SU-1/3-Verkehr-StVO',
         signId: 'geh-radweg',
-        question: 'Wer darf diesen blau markierten Weg benützen?',
-        options: ['Fußgänger und Radfahrer', 'Nur Autos und Mopeds', 'Nur Traktoren'],
+        question: 'Wer darf diesen Weg mit weißer Trennlinie benützen?',
+        options: ['Fußgänger und Radfahrer auf getrennten Bahnen', 'Nur Lastkraftwagen', 'Nur Traktoren'],
         correctIndex: 0
       });
     } else if (topicId === 'general-bike-test') {
@@ -921,6 +921,163 @@ window.Schlaufuchs.PrintEngine = (function () {
     }];
   }
 
+  // --- ARCHETYP 7: UHRZEIT (6 analoge Uhren mit Lösungsfeld) ---
+  function buildClockWorksheet(topicId, grade) {
+    const tasks = [];
+    const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+    const formatTime = Clock ? Clock.formatTime : (h, m) => `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} Uhr`;
+    const describe = Clock ? Clock.describeTimeText : (h, m) => `${h}:${m}`;
+
+    if (grade === 1) {
+      // 3 Uhren ablesen (volle Stunden) + 3 Uhren Zeiger selbst einzeichnen (hands: false)
+      const hoursPool = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5).slice(0, 6);
+      
+      // 1–3: Ablesen
+      for (let i = 0; i < 3; i++) {
+        const h = hoursPool[i];
+        tasks.push({
+          type: 'clock',
+          schulstufe: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          hours: h,
+          minutes: 0,
+          promptType: 'hour-only',
+          question: 'Wie viel Uhr ist es?',
+          answer: `${h} Uhr`,
+          solutionText: `${h} Uhr`
+        });
+      }
+      // 4–6: Einzeichnen
+      for (let i = 3; i < 6; i++) {
+        const h = hoursPool[i];
+        tasks.push({
+          type: 'clock-set',
+          schulstufe: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          targetHours: h,
+          targetMinutes: 0,
+          promptType: 'draw-hands',
+          prompt: `${h}:00 Uhr`,
+          targetText: `${h} Uhr`,
+          question: `Zeichne die Zeiger ein: <strong>${h} Uhr</strong>`,
+          answer: `${h} Uhr`,
+          solutionText: `${h}:00 Uhr (kurzer Zeiger auf ${h}, langer auf 12)`
+        });
+      }
+    } else if (grade === 2) {
+      // 3 Uhren digital ablesen (halbe / viertel) + 3 Uhren Zeiger einzeichnen (hands: false)
+      const timesRead = [
+        { h: rand(1, 5), m: 30 },
+        { h: rand(6, 11), m: 15 },
+        { h: rand(1, 11), m: 45 }
+      ];
+      timesRead.forEach(t => {
+        const textDesc = describe(t.h, t.m);
+        tasks.push({
+          type: 'clock',
+          schulstufe: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          hours: t.h,
+          minutes: t.m,
+          promptType: 'digital',
+          question: 'Wie viel Uhr ist es?',
+          answer: formatTime(t.h, t.m),
+          solutionText: `${formatTime(t.h, t.m)} (${textDesc})`
+        });
+      });
+
+      const timesDraw = [
+        { h: rand(1, 5), m: 30 },
+        { h: rand(6, 11), m: 15 },
+        { h: rand(1, 11), m: 45 }
+      ];
+      timesDraw.forEach(t => {
+        const textDesc = describe(t.h, t.m);
+        tasks.push({
+          type: 'clock-set',
+          schulstufe: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          targetHours: t.h,
+          targetMinutes: t.m,
+          promptType: 'draw-hands',
+          prompt: textDesc,
+          targetText: textDesc,
+          question: `Zeichne die Zeiger ein: <strong>${textDesc}</strong>`,
+          answer: textDesc,
+          solutionText: `${formatTime(t.h, t.m)} (${textDesc})`
+        });
+      });
+    } else if (grade === 3) {
+      // 3 Uhren digital ablesen (Vormittag / Nachmittag) + 3 Uhren Zeiger einzeichnen (hands: false)
+      const mPool = [5, 10, 20, 25, 35, 40, 50, 55].sort(() => Math.random() - 0.5);
+      for (let i = 0; i < 3; i++) {
+        const h12 = rand(1, 11);
+        const m = mPool[i];
+        const isPm = i % 2 === 1;
+        const actualH = isPm ? h12 + 12 : h12;
+        tasks.push({
+          type: 'clock',
+          schulstufe: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          hours: h12,
+          minutes: m,
+          promptType: 'digital',
+          isAfternoon: isPm,
+          question: isPm ? `Nachmittag (${actualH} Uhr):` : `Vormittag (${actualH} Uhr):`,
+          answer: formatTime(actualH, m),
+          solutionText: formatTime(actualH, m)
+        });
+      }
+
+      for (let i = 3; i < 6; i++) {
+        const h12 = rand(1, 11);
+        const m = mPool[i];
+        const isPm = i % 2 === 1;
+        const actualH = isPm ? h12 + 12 : h12;
+        tasks.push({
+          type: 'clock-set',
+          schulstufe: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          targetHours: h12,
+          targetMinutes: m,
+          promptType: 'draw-hands',
+          targetText: `${actualH}:${String(m).padStart(2, '0')} Uhr`,
+          question: `Zeichne die Zeiger ein: <strong>${actualH}:${String(m).padStart(2, '0')} Uhr</strong>`,
+          answer: `${actualH}:${String(m).padStart(2, '0')} Uhr`,
+          solutionText: `${actualH}:${String(m).padStart(2, '0')} Uhr`
+        });
+      }
+    } else {
+      // 4. Klasse: 6 Aufgaben zu Zeitspannen & Uhren
+      for (let i = 0; i < 6; i++) {
+        const startH = rand(8, 13);
+        const startM = rand(0, 3) * 15;
+        const durMin = (i + 2) * 15; // 30, 45, 60, 75, 90, 105 min
+        const totalStartMin = startH * 60 + startM;
+        const totalEndMin = totalStartMin + durMin;
+        const endH = Math.floor(totalEndMin / 60);
+        const endM = totalEndMin % 60;
+
+        tasks.push({
+          type: 'clock',
+          schulstufe: 4,
+          lehrplanRef: 'M-4-Groessen-Uhrzeit',
+          hours: startH % 12 || 12,
+          minutes: startM,
+          clockStart: { hours: startH % 12 || 12, minutes: startM },
+          clockEnd: { hours: endH % 12 || 12, minutes: endM },
+          isPair: true,
+          promptType: 'interval',
+          question: `Von ${formatTime(startH, startM)} bis ${formatTime(endH, endM)}: Wie viele Minuten?`,
+          answer: `${durMin} min`,
+          solutionText: `${durMin} min`
+        });
+      }
+    }
+
+    return tasks;
+  }
+
   // =============================================================
   // 3. HAUPT-DISPATCHER FÜR DIE WORKSHEET-ENGINE
   // =============================================================
@@ -945,6 +1102,8 @@ window.Schlaufuchs.PrintEngine = (function () {
         return buildStructureCalcWorksheet(topicId, grade);
       case 'story-problem':
         return buildStoryProblemWorksheet(topicId, grade);
+      case 'clock':
+        return buildClockWorksheet(topicId, grade);
       case 'language-writing':
         return buildLanguageWritingWorksheet(topicId, grade);
       case 'reading-knowledge':

@@ -62,14 +62,24 @@ window.Schlaufuchs.Topics = (function () {
       icon: 'assets/icons/themen/math/zahlenmauer.svg'
     },
     {
-      id: 'math-time-money',
+      id: 'math-clock',
       subject: 'math',
-      title: 'Uhrzeit & Geld',
-      subtitle: 'Stunden, Minuten, Euro und Cent',
-      grades: [2, 3],
-      lehrplanRef: 'M-2/3-Groessen-Geld-Zeit',
+      title: 'Uhrzeit & Zeiger',
+      subtitle: 'Volle Stunden, halbe Stunden, Viertel und Minuten',
+      grades: [1, 2, 3, 4],
+      lehrplanRef: 'M-1/4-Groessen-Uhrzeit',
+      archetype: 'clock',
+      icon: 'assets/icons/themen/math/uhr.svg'
+    },
+    {
+      id: 'math-money',
+      subject: 'math',
+      title: 'Geld & Euro',
+      subtitle: 'Euro, Cent, Münzen und Wechselgeld',
+      grades: [1, 2, 3, 4],
+      lehrplanRef: 'M-1/4-Groessen-Geld',
       archetype: 'story-problem',
-      icon: 'assets/icons/themen/math/uhr-geld.svg'
+      icon: 'assets/icons/themen/math/geld.svg'
     },
     {
       id: 'math-million',
@@ -294,6 +304,9 @@ window.Schlaufuchs.Topics = (function () {
   }
 
   function getTopicById(id) {
+    if (id === 'math-time-money') {
+      return TOPIC_CATALOG.find(t => t.id === 'math-clock') || null;
+    }
     return TOPIC_CATALOG.find(t => t.id === id) || null;
   }
 
@@ -323,6 +336,7 @@ window.Schlaufuchs.Topics = (function () {
       case 'compact-calc': return '12 Aufgaben (2 Spalten)';
       case 'structure-calc': return 'Struktur- & Rechentürme';
       case 'story-problem': return 'Sachaufgaben (F-R-A)';
+      case 'clock': return 'Analoge & digitale Uhren';
       case 'language-writing': return 'Sprache (4-Linien-System)';
       case 'reading-knowledge': return 'Lesetext & Fragen';
       case 'craft-sheet': return 'Ausschneide-Bastelbogen';

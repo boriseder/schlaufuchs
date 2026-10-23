@@ -2,7 +2,7 @@
 // SCHLAUFUCHS – sw.js (Service Worker für 100% Offline-Betrieb)
 // =============================================================
 
-const CACHE_NAME = 'schlaufuchs-v2.10';
+const CACHE_NAME = 'schlaufuchs-v2.13';
 
 const PRECACHE_ASSETS = [
   './',
@@ -17,6 +17,7 @@ const PRECACHE_ASSETS = [
   'js/core/topics.js',
   'js/dialog.js',
   'js/signs.js',
+  'js/clock.js',
   'js/state.js',
   'js/audio.js',
   'js/dragdrop.js',
@@ -55,6 +56,8 @@ const PRECACHE_ASSETS = [
   'assets/icons/themen/math/division.svg',
   'assets/icons/themen/math/zahlenmauer.svg',
   'assets/icons/themen/math/zwanzigerfeld.svg',
+  'assets/icons/themen/math/uhr.svg',
+  'assets/icons/themen/math/geld.svg',
   'assets/icons/themen/math/uhr-geld.svg',
   'assets/icons/themen/math/tausender.svg',
   'assets/icons/themen/math/schriftlich.svg',

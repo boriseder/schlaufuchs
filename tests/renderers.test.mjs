@@ -50,6 +50,7 @@ function createRenderersSandbox() {
   vm.runInNewContext(readFileSync('js/core/random.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/core/format.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/signs.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/clock.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/audio.js', 'utf8'), sandbox);
   sandbox.window.Schlaufuchs.Generators = { Math: { formatAustrianNumber: (n) => String(n) } };
   vm.runInNewContext(readFileSync('js/renderers.js', 'utf8'), sandbox);
@@ -223,3 +224,84 @@ test('Renderer: Lesetext-Aufgabe (Reading) rendert Textabschnitt und getrennte F
   assert.ok(card.innerHTML.includes('Der kleine Igel im Garten'), 'Titel muss enthalten sein');
   assert.ok(card.innerHTML.includes('reading-question-card'), 'Fragenkarte muss gerendert werden');
 });
+
+test('Renderer: Analoge Uhr (Clock) rendert SVG-Zifferblatt und barrierefreie Zeiger', () => {
+  const { Renderers, createMockNode } = createRenderersSandbox();
+  const card = createMockNode('card-clock');
+
+  const task = {
+    type: 'clock',
+    fach: 'mathe',
+    schulstufe: 1,
+    hours: 8,
+    minutes: 0,
+    question: 'Wie viel Uhr zeigt die Uhr?',
+    answer: 8,
+    unit: 'Uhr',
+    hint: 'Schau auf den kurzen roten Zeiger.'
+  };
+
+  Renderers.renderClock(card, task, 0, () => {});
+  assert.ok(card.innerHTML.includes('analog-clock-svg'), 'SVG-Zifferblatt muss gerendert sein');
+  assert.ok(card.innerHTML.includes('clock-hand-hour'), 'Stundenzeiger muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('clock-hand-minute'), 'Minutenzeiger muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('input-0'), 'Eingabefeld für Antwort muss vorhanden sein');
+});
+
+test('Renderer: Interaktives Uhr stellen (renderClockSet) rendert Steuerungsbuttons und Zifferblatt', () => {
+  const { Renderers, createMockNode } = createRenderersSandbox();
+  const card = createMockNode('card-clock-set');
+
+  const task = {
+    type: 'clock-set',
+    fach: 'mathe',
+    schulstufe: 2,
+    targetHours: 3,
+    targetMinutes: 15,
+    userHours: 12,
+    userMinutes: 0,
+    prompt: '3:15 Uhr (viertel nach 3)',
+    question: 'Stelle die Zeiger der Uhr auf die angegebene Uhrzeit:'
+  };
+
+  Renderers.renderClockSet(card, task, 0, () => {});
+  assert.ok(card.innerHTML.includes('clock-set-controls'), 'Steuerelemente für Zeigereinstellung müssen vorhanden sein');
+  assert.ok(card.innerHTML.includes('clock-target-time-badge'), 'Zielzeit-Badge muss gerendert werden');
+  assert.ok(card.innerHTML.includes('3:15 Uhr'), 'Zielzeit muss im Badge sichtbar sein');
+  assert.ok(card.innerHTML.includes('data-hour="1"'), 'Stunden-Button für 1 Uhr muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('data-hour="12"'), 'Stunden-Button für 12 Uhr muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('data-min="15"'), 'Minuten-Button :15 muss für 2. Schulstufe vorhanden sein');
+});
+
+test('Renderer: 4-Uhren Auswahl (renderClockChoice) rendert 4 Zifferblätter und Barrierefreiheit', () => {
+  const { Renderers, createMockNode } = createRenderersSandbox();
+  const card = createMockNode('card-clock-choice');
+
+  const task = {
+    type: 'clock-choice',
+    fach: 'mathe',
+    schulstufe: 1,
+    targetHours: 8,
+    targetMinutes: 0,
+    prompt: '8:00 Uhr',
+    targetText: '8:00 Uhr',
+    question: 'Welche Uhr zeigt diese Uhrzeit?',
+    options: [
+      { hours: 8, minutes: 0, isCorrect: true },
+      { hours: 12, minutes: 40, isCorrect: false },
+      { hours: 9, minutes: 0, isCorrect: false },
+      { hours: 8, minutes: 30, isCorrect: false }
+    ],
+    correctIndex: 0,
+    userSelected: null
+  };
+
+  Renderers.renderClockChoice(card, task, 0, () => {});
+  assert.ok(card.innerHTML.includes('clock-choice-grid'), '2x2 Raster für Uhrenauswahl muss gerendert werden');
+  assert.ok(card.innerHTML.includes('data-choice-idx="0"'), 'Option 0 muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('data-choice-idx="3"'), 'Option 3 muss vorhanden sein');
+  assert.ok(card.innerHTML.includes('clock-target-time-badge'), 'Zielzeit-Badge muss gerendert werden');
+  assert.ok(card.innerHTML.includes('role="radiogroup"'), 'Barrierefreie Radiogroup-Rolle');
+});
+
+

@@ -424,7 +424,83 @@ window.Schlaufuchs.Print = (function () {
       `;
     }
 
-    // C. ALLGEMEINE AUFGABEN (STANDARDFALL)
+    // C. ANALOGE UHREN (UHRZEIT)
+    // Schulbuch-Layout: 2 Spalten im A4-Raster mit Uhren & Schreiblinien
+    const allClocks = tasks.every(t => t.type === 'clock' || t.type === 'clock-set');
+    if (allClocks) {
+      let clockGridHtml = '';
+      const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+
+      tasks.forEach((t, idx) => {
+        let clockSvgHtml = '';
+        const isClockSet = t.type === 'clock-set';
+
+        if (isClockSet) {
+          clockSvgHtml = Clock ? Clock.createClockSvg(0, 0, { size: 105, hands: false }) : '';
+        } else if (t.isPair && t.clockStart && t.clockEnd) {
+          const s1 = Clock ? Clock.createClockSvg(t.clockStart.hours, t.clockStart.minutes, { size: 90 }) : '';
+          const s2 = Clock ? Clock.createClockSvg(t.clockEnd.hours, t.clockEnd.minutes, { size: 90 }) : '';
+          clockSvgHtml = `
+            <div class="print-clock-pair">
+              <div><div class="print-clock-sublabel">Start</div>${s1}</div>
+              <div class="print-clock-arrow">➔</div>
+              <div><div class="print-clock-sublabel">Ziel</div>${s2}</div>
+            </div>
+          `;
+        } else {
+          const h = t.hours !== undefined ? t.hours : 12;
+          const m = t.minutes !== undefined ? t.minutes : 0;
+          clockSvgHtml = Clock ? Clock.createClockSvg(h, m, { size: 105 }) : '';
+        }
+
+        const qText = (isClockSet || t.promptType === 'draw-hands')
+          ? `Zeichne die Zeiger ein: <strong>${t.targetText || t.prompt}</strong>`
+          : (t.question || 'Wie viel Uhr ist es?');
+
+        let lineRow = '';
+        if (isClockSet || t.promptType === 'draw-hands') {
+          lineRow = `<div class="print-clock-line-row print-clock-draw-cue"><span class="print-clock-draw-tip">✏️ Zeichne den kurzen (roten) und langen (blauen) Zeiger ein.</span></div>`;
+        } else if (t.promptType === 'hour-only') {
+          lineRow = `<div class="print-clock-line-row"><span class="print-clock-label">Es ist:</span><span class="print-clock-num-box"></span><span class="print-clock-unit">Uhr</span></div>`;
+        } else if (t.promptType === 'digital') {
+          lineRow = `<div class="print-clock-line-row"><span class="print-clock-label">Digital:</span><span class="print-clock-digit-box"></span><span class="print-clock-colon">:</span><span class="print-clock-digit-box"></span><span class="print-clock-unit">Uhr</span></div>`;
+        } else if (t.promptType === 'interval') {
+          lineRow = `<div class="print-clock-line-row"><span class="print-clock-label">Dauer:</span><span class="print-answer-line" style="min-width: 60px;"></span><span class="print-clock-unit">Minuten</span></div>`;
+        } else {
+          lineRow = `<div class="print-clock-line-row"><span class="print-clock-label">Uhrzeit:</span><span class="print-answer-line" style="min-width: 90px;"></span></div>`;
+        }
+
+        clockGridHtml += `
+          <div class="print-clock-grid-item">
+            <div class="print-clock-item-header">
+              <span class="print-task-idx">${idx + 1}.</span>
+              <span class="print-clock-q-text">${qText}</span>
+            </div>
+            <div class="print-clock-dial-box">
+              ${clockSvgHtml}
+            </div>
+            ${lineRow}
+          </div>
+        `;
+      });
+
+      const hasDrawTasks = tasks.some(t => t.type === 'clock-set' || t.promptType === 'draw-hands');
+      const hasInterval = tasks.some(t => t.promptType === 'interval');
+      const sectionPrompt = hasInterval
+        ? '1. Berechne die vergangene Zeit zwischen Start und Ziel:'
+        : (hasDrawTasks 
+            ? '1. Lies die Uhren ab (1–3) und zeichne die Zeiger passend ein (4–6):'
+            : '1. Lies die Uhrzeiten auf den Zifferblättern ab und trage sie ein:');
+
+      return `
+        <div class="print-section-prompt">${sectionPrompt}</div>
+        <div class="print-clock-columns-grid">
+          ${clockGridHtml}
+        </div>
+      `;
+    }
+
+    // D. ALLGEMEINE AUFGABEN (STANDARDFALL)
     let generalHtml = '';
     tasks.forEach((task, idx) => {
       generalHtml += renderSingleTask(task, idx);
@@ -435,8 +511,41 @@ window.Schlaufuchs.Print = (function () {
   function renderSingleTask(task, idx) {
     let body = '';
 
+    // Analoge Uhr (Uhrzeit)
+    if (task.type === 'clock') {
+      const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+      let clockSvgHtml = '';
+      if (task.isPair && task.clockStart && task.clockEnd) {
+        const s1 = Clock ? Clock.createClockSvg(task.clockStart.hours, task.clockStart.minutes, { size: 85 }) : '';
+        const s2 = Clock ? Clock.createClockSvg(task.clockEnd.hours, task.clockEnd.minutes, { size: 85 }) : '';
+        clockSvgHtml = `
+          <div class="print-clock-pair" style="display:flex; align-items:center; gap:8px;">
+            <div><div style="font-size:8pt; text-align:center;">Start</div>${s1}</div>
+            <div>➔</div>
+            <div><div style="font-size:8pt; text-align:center;">Ziel</div>${s2}</div>
+          </div>
+        `;
+      } else {
+        const h = task.hours !== undefined ? task.hours : 12;
+        const m = task.minutes !== undefined ? task.minutes : 0;
+        clockSvgHtml = Clock ? Clock.createClockSvg(h, m, { size: 95 }) : '';
+      }
+
+      body = `
+        <div class="print-clock-single-wrap" style="display:flex; align-items:center; gap:16px;">
+          <div class="print-clock-dial-box">${clockSvgHtml}</div>
+          <div style="flex:1;">
+            <div class="print-task-prompt-inline">${task.question || 'Wie viel Uhr ist es?'}</div>
+            <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:700; font-size:10pt;">Uhrzeit:</span>
+              <span class="print-answer-line" style="min-width: 120px;"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
     // Silbenschwingen & Könige
-    if (task.question && (task.question.includes('Silben') || task.question.includes('Silbenbögen'))) {
+    else if (task.question && (task.question.includes('Silben') || task.question.includes('Silbenbögen'))) {
       const match = task.question.match(/„([^“]+)“/);
       const targetWord = task.targetWord || (match ? match[1] : '');
       const spacedWord = targetWord.split('').join('  ');
@@ -759,6 +868,15 @@ window.Schlaufuchs.Print = (function () {
     }
     if (task.type === 'text-problem') {
       return `R: ${task.calculation} = ${task.answer} ${task.unit || ''}`;
+    }
+    if (task.type === 'clock' || task.type === 'clock-set') {
+      const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+      if (task.type === 'clock-set') {
+        const h = task.targetHours;
+        const m = task.targetMinutes || 0;
+        return task.solutionText || (Clock ? `${Clock.formatTime(h, m)} (${Clock.describeTimeText(h, m)})` : `${h}:${m} Uhr`);
+      }
+      return task.solutionText || task.answerText || String(task.answer || 'gelöst');
     }
     if (task.type === 'sequence') {
       return `${task.answer}`;

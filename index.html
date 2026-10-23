@@ -15,43 +15,53 @@
 <body>
   <div class="app-container">
     
-    <!-- Hauptkopfzeile (Ruhend & Kognitiv entlastet) -->
-    <header class="main-header">
-      <div class="brand" id="brand-home" title="Zurück zum Hauptmenü">
-        <span class="brand-icon"><img src="assets/icons/fuchs.svg" class="brand-icon-svg" alt="Schlaufuchs"></span>
+    <!-- Hauptkopfzeile (Ruhend, didaktisch gegliedert & kognitiv entlastet) -->
+    <header class="main-header" role="banner">
+      <div class="brand" id="brand-home" title="Zurück zum Hauptmenü" role="button" tabindex="0" aria-label="Schlaufuchs – Zurück zum Hauptmenü">
+        <span class="brand-icon"><img src="assets/icons/fuchs.svg" class="brand-icon-svg" alt=""></span>
         <div class="brand-text">
           <h1>Schlaufuchs</h1>
           <span class="brand-sub">Lernplattform Volksschule</span>
         </div>
       </div>
 
-      <!-- Kind-Profil & Sterne (Zentral im Blickfeld) -->
+      <!-- Kind-Profil & Sterne (Zentral im Blickfeld, 8px-Radius) -->
       <div class="header-center-identity">
-        <button class="header-child-pill" id="header-profile-btn" title="Kind-Profil wechseln">
+        <button class="header-child-pill" id="header-profile-btn" title="Kind-Profil wechseln" aria-label="Kind-Profil wechseln">
           <span class="user-avatar" id="header-user-avatar"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt=""></span>
           <span class="user-name" id="header-user-name">Nils</span>
-          <span class="pill-divider">·</span>
-          <span class="star-icon"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Sterne:"></span>
-          <span id="global-stars-count">0</span>
-          <span class="profile-caret">▾</span>
+          <span class="pill-divider" aria-hidden="true">·</span>
+          <span class="star-icon"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt=""></span>
+          <span id="global-stars-count" aria-label="Sterne">0</span>
+          <span class="profile-caret" aria-hidden="true">▾</span>
         </button>
       </div>
 
-      <!-- Werkzeuge & Aktionen (Dezent rechts gruppiert) -->
-      <div class="header-tools-group">
-        <button class="header-tool-btn" id="btn-toggle-sound" title="Ton ein-/ausschalten (Klassenzimmer-Modus)">
-          <span id="sound-icon"><img src="assets/icons/ton-an.svg" class="header-icon-svg" alt="Ton"></span>
-        </button>
-        <button class="header-tool-btn" id="btn-open-stickers" title="Mein Sticker-Album & Trophäen">
-          <img src="assets/icons/buch.svg" class="header-icon-svg" alt="Sammelbuch">
-          <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
-        </button>
-        <button class="header-tool-btn" id="btn-header-worksheets" title="Arbeitsblätter-Zentrum zum Drucken">
-          <img src="assets/icons/drucken.svg" class="header-icon-svg" alt="Arbeitsblätter">
-        </button>
-        <button class="header-tool-btn" id="btn-admin-settings" title="Admin-Einstellungen für Eltern & Lehrkräfte">
-          <img src="assets/icons/einstellungen.svg" class="header-icon-svg" alt="Einstellungen">
-        </button>
+      <!-- Werkzeuge & Aktionen (Klar getrennt in Kind-Bereich und Erwachsenen-Bereich) -->
+      <div class="header-tools-group" role="toolbar" aria-label="Werkzeuge und Einstellungen">
+        <!-- Kind-Werkzeuge (Ton & Sticker-Album) -->
+        <div class="header-tools-subgroup header-tools-child" aria-label="Kind-Werkzeuge">
+          <button class="header-tool-btn" id="btn-toggle-sound" title="Ton ein-/ausschalten (Klassenzimmer-Modus)" aria-label="Ton umschalten">
+            <span id="sound-icon"><img src="assets/icons/ton-an.svg" class="header-icon-svg" alt="Ton"></span>
+          </button>
+          <button class="header-tool-btn" id="btn-open-stickers" title="Mein Sticker-Album & Trophäen" aria-label="Mein Sticker-Album und Trophäen öffnen">
+            <img src="assets/icons/album.svg" class="header-icon-svg" alt="Sammelheft">
+            <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
+          </button>
+        </div>
+
+        <!-- Feine vertikale Trennlinie zwischen Kind- und Erwachsenen-Tools -->
+        <span class="header-tools-divider" aria-hidden="true"></span>
+
+        <!-- Lehrkraft- & Eltern-Bereich (Arbeitsblätter & Einstellungen) -->
+        <div class="header-tools-subgroup header-tools-adult" aria-label="Lehrkraft- und Eltern-Bereich">
+          <button class="header-tool-btn" id="btn-header-worksheets" title="Arbeitsblätter zum Ausdrucken (für Lehrkräfte & Eltern)" aria-label="Arbeitsblätter-Zentrum zum Drucken">
+            <img src="assets/icons/drucken.svg" class="header-icon-svg" alt="Arbeitsblätter">
+          </button>
+          <button class="header-tool-btn" id="btn-admin-settings" title="Admin-Einstellungen & Kindersicherung (für Eltern & Lehrkräfte)" aria-label="Einstellungen und Kindersicherung">
+            <img src="assets/icons/einstellungen.svg" class="header-icon-svg" alt="Einstellungen">
+          </button>
+        </div>
       </div>
     </header>
 
@@ -152,18 +162,33 @@
               </div>
             </div>
 
-            <div class="topic-card" data-topic-id="math-time-money" data-grade="2,3">
+            <div class="topic-card" data-topic-id="math-clock" data-grade="1,2,3,4">
               <div class="topic-header">
                 <div class="topic-icon-badge">
-                  <img src="assets/icons/themen/math/uhr-geld.svg" class="topic-icon-svg" alt="Uhrzeit & Geld">
+                  <img src="assets/icons/themen/math/uhr.svg" class="topic-icon-svg" alt="Uhrzeit & Zeiger">
                 </div>
-                <span class="grade-pill">2. – 3. Klasse</span>
+                <span class="grade-pill">1. – 4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Uhrzeit & Geld</h3>
+                <h3>Uhrzeit & Zeiger</h3>
               </div>
               <div class="topic-footer">
-                <span class="topic-stars" id="stars-math-time-money"></span>
+                <span class="topic-stars" id="stars-math-clock"></span>
+              </div>
+            </div>
+
+            <div class="topic-card" data-topic-id="math-money" data-grade="1,2,3,4">
+              <div class="topic-header">
+                <div class="topic-icon-badge">
+                  <img src="assets/icons/themen/math/geld.svg" class="topic-icon-svg" alt="Geld & Euro">
+                </div>
+                <span class="grade-pill">1. – 4. Klasse</span>
+              </div>
+              <div class="topic-body">
+                <h3>Geld & Euro</h3>
+              </div>
+              <div class="topic-footer">
+                <span class="topic-stars" id="stars-math-money"></span>
               </div>
             </div>
 
@@ -526,31 +551,24 @@
 
     <!-- ANSICHT 3: ARBEITSBLÄTTER-ZENTRUM (FÜR LEHRKRÄFTE & ELTERN) -->
     <section id="view-worksheets" class="view-section">
-      <!-- Ruhige Kopfzeile direkt auf dem Seitenhintergrund (keine Karten-in-Karten) -->
-      <div class="worksheets-page-intro">
-        <div class="ws-intro-text">
-          <h2>Arbeitsblätter zum Ausdrucken</h2>
-          <p class="ws-intro-sub">
-            Vollwertige A4-Übungsblätter nach österreichischem Lehrplan (BMBWF 2025) mit Montessori-Knick-Lösung zur Selbstkontrolle.
-            (<span id="worksheets-count">27 Arbeitsblätter</span>)
-          </p>
-        </div>
+      <span id="worksheets-count" style="display: none;"></span>
+
+      <!-- Einheitliche Werkzeugleiste: Klassenfilter + Sammeldruck-Aktion in einer gemeinsamen Zeile -->
+      <div class="worksheets-control-toolbar">
+        <nav class="grade-segmented-control class-filter-bar worksheets-grade-filter" aria-label="Schulstufe für Arbeitsblätter auswählen">
+          <button class="filter-btn filter-btn-ws active" data-grade="all">Alle Klassen</button>
+          <button class="filter-btn filter-btn-ws" data-grade="1">1. Klasse</button>
+          <button class="filter-btn filter-btn-ws" data-grade="2">2. Klasse</button>
+          <button class="filter-btn filter-btn-ws" data-grade="3">3. Klasse</button>
+          <button class="filter-btn filter-btn-ws" data-grade="4">4. Klasse</button>
+        </nav>
         <div class="ws-intro-actions">
           <button type="button" class="btn-batch-print" id="btn-batch-print" title="Alle angezeigten Arbeitsblätter in einem Durchgang drucken">
             <img src="assets/icons/drucken.svg" class="btn-icon-svg" alt="">
-            <span id="batch-print-text">Alle 27 Blätter drucken</span>
+            <span id="batch-print-text">Alle 28 Blätter drucken</span>
           </button>
         </div>
       </div>
-
-      <!-- Klassenfilter (Gleiche Filterleiste wie im Hauptmenü) -->
-      <nav class="grade-segmented-control class-filter-bar worksheets-grade-filter" aria-label="Schulstufe für Arbeitsblätter auswählen">
-        <button class="filter-btn filter-btn-ws active" data-grade="all">Alle Klassen</button>
-        <button class="filter-btn filter-btn-ws" data-grade="1">1. Klasse</button>
-        <button class="filter-btn filter-btn-ws" data-grade="2">2. Klasse</button>
-        <button class="filter-btn filter-btn-ws" data-grade="3">3. Klasse</button>
-        <button class="filter-btn filter-btn-ws" data-grade="4">4. Klasse</button>
-      </nav>
 
       <!-- Fächer & Arbeitsblätter Raster (Strukturiert nach den 4 Fächern wie im Hauptmenü) -->
       <div class="subjects-container" id="worksheets-cards-container">
@@ -815,7 +833,7 @@
     <div id="stickers-modal" class="modal-overlay">
       <div class="modal-card modal-card-lg">
         <div class="modal-header">
-          <h3><img src="assets/icons/buch.svg" class="icon-inline-svg" alt=""> Mein Sticker-Album & Trophäen</h3>
+          <h3><img src="assets/icons/album.svg" class="icon-inline-svg" alt=""> Mein Sticker-Album & Trophäen</h3>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="btn-print-certificate" class="btn btn-secondary btn-sm" title="Offizielle Schlaufuchs-Urkunde drucken">
               <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> <span>Urkunde drucken</span>
@@ -851,7 +869,7 @@
 
           <div class="stickers-collection-header">
             <div class="stickers-collection-title-wrap">
-              <h4 id="stickers-collection-title" class="stickers-collection-title"><img src="assets/icons/buch.svg" class="icon-inline-svg" alt=""> Mein Sammelheft</h4>
+              <h4 id="stickers-collection-title" class="stickers-collection-title"><img src="assets/icons/album.svg" class="icon-inline-svg" alt=""> Mein Sammelheft</h4>
               <span id="stickers-collection-stats" class="stickers-collection-stats">1 von 16 eingeklebt</span>
             </div>
             <div class="stickers-progress-bar-bg">
@@ -886,6 +904,7 @@
   <!-- Modulare Schlaufuchs-Skripte (100% Offline- & Webserver-fähig) -->
   <script src="js/dialog.js"></script>
   <script src="js/signs.js"></script>
+  <script src="js/clock.js"></script>
   <script src="js/state.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/dragdrop.js"></script>

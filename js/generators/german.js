@@ -15,7 +15,7 @@ window.Schlaufuchs.Generators.German = (function () {
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. WORTARTEN (Namenwort 🔵, Tunwort 🔴, Wiewort 🟢 – 25+ Sätze Pool)
-  function buildWordTypesTasks() {
+  function buildWordTypesTasks(opts) {
     const grades = getEffectiveGrades([2, 3]);
     const isOnlyGrade2 = !grades.includes(3) && !grades.includes(4);
 
@@ -47,7 +47,7 @@ window.Schlaufuchs.Generators.German = (function () {
       { text: 'Der bunte Regenbogen überspannt das ganze Tal.', types: { Regenbogen: 'nomen', überspannt: 'verb', ganze: 'adjektiv', Tal: 'nomen', bunte: 'adjektiv' } }
     ];
 
-    const selectedSentences = shuffle(pool).slice(0, 5);
+    const selectedSentences = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return selectedSentences.map(item => {
       const cleanWords = item.text.replace(/[.,]/g, '').split(' ');
       const sentenceTokens = cleanWords.map(word => {
@@ -78,7 +78,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 2. GROSS & KLEIN (Namenwörter großschreiben – 25+ Sätze Pool)
-  function buildCapitalizationTasks() {
+  function buildCapitalizationTasks(opts) {
     const pool = [
       {
         words: [
@@ -240,7 +240,7 @@ window.Schlaufuchs.Generators.German = (function () {
       }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => ({
       fach: 'deutsch',
       schulstufe: 2,
@@ -254,7 +254,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 3. SCHÜTTELSÄTZE (Reihenfolge ordnen – 25+ Sätze Pool)
-  function buildScrambleTasks() {
+  function buildScrambleTasks(opts) {
     const pool = [
       'Der fleißige Biber fällt einen Baum',
       'Die kluge Eule fliegt durch die Nacht',
@@ -278,7 +278,7 @@ window.Schlaufuchs.Generators.German = (function () {
       'In der Pause jausnen die Schüler einen knackigen Apfel'
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(sentence => {
       const tokens = sentence.split(' ');
       const shuffledTokens = shuffle(tokens);
@@ -297,7 +297,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 4. DIE 4 FÄLLE DES NOMENS (4. Klasse – Wer-Fall, Wessen-Fall, Wem-Fall, Wen-Fall – 25+ Pool)
-  function buildCasesTasks() {
+  function buildCasesTasks(opts) {
     const pool = [
       {
         question: 'In welchem Fall steht das unterstrichene Namenwort?\n„_Der Hund_ bellt den Postboten an.“',
@@ -361,7 +361,7 @@ window.Schlaufuchs.Generators.German = (function () {
       }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => ({
       fach: 'deutsch',
       schulstufe: 4,
@@ -380,7 +380,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 5. ZEITFORMEN (Gegenwart / Mitvergangenheit / Vergangenheit / Zukunft – 25+ Pool)
-  function buildTensesTasks() {
+  function buildTensesTasks(opts) {
     const grades = getEffectiveGrades([3, 4]);
     const isOnlyGrade3 = !grades.includes(4);
 
@@ -452,7 +452,7 @@ window.Schlaufuchs.Generators.German = (function () {
       pool = pool.filter(p => allTenses.includes(p.tense));
     }
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     const effectiveGrade = isOnlyGrade3 ? 3 : 4;
     return chosen.map(item => ({
       fach: 'deutsch',
@@ -472,7 +472,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 6. SILBENSCHWINGEN & SILBENKÖNIGE (1. & 2. Klasse)
-  function buildSyllableTasks() {
+  function buildSyllableTasks(opts) {
     const pool = [
       { word: 'Schule', syllables: 'Schu - le', count: 2, vowels: 'u, e', hint: '💡 Sprich das Wort langsam und klatsche bei jedem Silbenbogen in die Hände!' },
       { word: 'Schmetterling', syllables: 'Schmet - ter - ling', count: 3, vowels: 'e, e, i', hint: '💡 Lege deine Hand unters Kinn: Wie oft geht dein Kinn beim Sprechen nach unten?' },
@@ -486,7 +486,7 @@ window.Schlaufuchs.Generators.German = (function () {
       { word: 'Frosch', syllables: 'Frosch', count: 1, vowels: 'o', hint: '💡 Kannst du dieses kurze Wort zerlegen oder sprichst du es mit einem einzigen Atemzug?' }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     const options = ['1 Silbe', '2 Silben', '3 Silben', '4 Silben'];
 
     return chosen.map(item => ({
@@ -511,7 +511,7 @@ window.Schlaufuchs.Generators.German = (function () {
   }
 
   // 7. LESEVERSTÄNDNIS (Sachtexte für 3. & 4. Klasse)
-  function buildReadingTasks() {
+  function buildReadingTasks(opts) {
     const textsPool = [
       {
         id: 'eichhoernchen',
@@ -679,7 +679,7 @@ window.Schlaufuchs.Generators.German = (function () {
       }
     ];
 
-    const chosen = shuffle(textsPool).slice(0, 1); // 1 vollständiger Sachtext mit 3 gezielten Verständnisfragen
+    const chosen = (opts && opts.all) ? textsPool : shuffle(textsPool).slice(0, 1); // 1 vollständiger Sachtext mit 3 gezielten Verständnisfragen (oder alle für QS)
     return chosen.map(item => {
       // Fragen durchmischen und Optionen durchmischen
       const questionsData = item.questions.map(qObj => {

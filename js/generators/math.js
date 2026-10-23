@@ -403,78 +403,604 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 6. UHRZEIT & GELD (💶 2. – 4. Klasse adaptiv)
-  function buildTimeMoneyTasks() {
-    const grades = getEffectiveGrades([2, 3, 4]);
+  // 6. UHRZEIT (⏰ 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
+  function buildClockTasks() {
+    const grades = getEffectiveGrades([1, 2, 3, 4]);
     const tasks = [];
 
-    const poolGrade2 = [
+    // --- 1. SCHULSTUFE: Volle Stunden (1:00 bis 12:00 Uhr) [RIS, S. 82] ---
+    const poolGrade1 = [
       () => {
-        const euro1 = rand(2, 10);
-        const euro2 = rand(3, 15);
+        const h = rand(1, 12);
         return {
           fach: 'mathe',
-          schulstufe: 2,
-          grade: 2,
-          lehrplanRef: 'M-2-Groessen',
-          question: `Wie viel Euro sind ${euro1}\u00A0€ und ${euro2}\u00A0€ zusammen?`,
-          unit: '€',
-          answer: euro1 + euro2,
-          hint: '💡 Überlege: Mit welcher Rechenart zählst du die beiden Euro-Beträge zusammen?'
-        };
-      },
-      () => {
-        const h = rand(1, 10);
-        return {
-          fach: 'mathe',
-          schulstufe: 2,
-          grade: 2,
-          lehrplanRef: 'M-2-Groessen',
-          question: `Es ist ${h}:00 Uhr. Wie viel Uhr ist es in 2 Stunden?`,
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 0,
+          question: 'Wie viel Uhr zeigt die Uhr?',
+          answer: h,
+          answerText: `${h}:00 Uhr`,
           unit: 'Uhr',
-          answer: h + 2,
-          hint: '💡 Zähle auf dem Zifferblatt um 2 Stunden weiter.'
+          hint: '💡 Schau auf den kurzen roten Zeiger: Er zeigt genau auf die Stundenzahl!'
         };
       },
       () => {
+        const h = rand(1, 11);
+        const nextH = h + 1;
+        const swappedMin = (h % 12) * 5;
+        const rawOptions = [
+          { hours: h, minutes: 0, isCorrect: true },
+          { hours: 12, minutes: swappedMin, isCorrect: false },
+          { hours: nextH, minutes: 0, isCorrect: false },
+          { hours: h, minutes: 30, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
         return {
           fach: 'mathe',
-          schulstufe: 2,
-          grade: 2,
-          lehrplanRef: 'M-2-Groessen',
-          question: 'Eine Schulstunde dauert 50 Minuten. Wie viele Minuten fehlen noch auf eine volle Stunde (60 Min.)?',
-          unit: 'Minuten',
-          answer: 10,
-          hint: '💡 Wie viele Minuten hat eine volle Stunde?'
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: h,
+          targetMinutes: 0,
+          prompt: `${h}:00 Uhr`,
+          targetText: `${h}:00 Uhr`,
+          question: 'Welche Uhr zeigt diese Uhrzeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Suche die Uhr, bei der der kurze rote Zeiger auf die ${h} und der lange blaue Zeiger auf die 12 zeigt.`
         };
       },
       () => {
+        const h = rand(1, 12);
         return {
           fach: 'mathe',
-          schulstufe: 2,
-          grade: 2,
-          lehrplanRef: 'M-2-Groessen',
-          question: 'Du kaufst einen Apfel um 50 Cent und eine Semmel um 50 Cent. Wie viel Euro (€) sind das zusammen?',
-          unit: '€',
-          answer: 1,
-          hint: '💡 100 Cent = 1 Euro.'
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 0,
+          question: 'Der lange blaue Zeiger steht auf der 12. Welche volle Stunde ist es?',
+          answer: h,
+          answerText: `${h}:00 Uhr`,
+          unit: 'Uhr',
+          hint: '💡 Wenn der lange blaue Zeiger auf der 12 steht, ist es eine volle Stunde.'
+        };
+      },
+      () => {
+        const h = rand(7, 10);
+        const nextH = h + 1;
+        const prevH = h - 1;
+        const swappedMin = (h % 12) * 5;
+        const rawOptions = [
+          { hours: h, minutes: 0, isCorrect: true },
+          { hours: 12, minutes: swappedMin, isCorrect: false },
+          { hours: nextH, minutes: 0, isCorrect: false },
+          { hours: prevH, minutes: 0, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
+        return {
+          fach: 'mathe',
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: h,
+          targetMinutes: 0,
+          prompt: `${h}:00 Uhr`,
+          targetText: `${h}:00 Uhr morgens`,
+          question: 'Welche Uhr zeigt diese Uhrzeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Der kurze rote Zeiger muss genau auf die ${h} zeigen und der lange blaue Zeiger auf die 12.`
         };
       }
     ];
 
+    // --- 2. SCHULSTUFE: Halbe Stunden & Viertelstunden [RIS, S. 82] ---
+    const poolGrade2 = [
+      () => {
+        const h = rand(1, 11);
+        const nextH = h + 1;
+        const options = [
+          `halb ${nextH}`,
+          `halb ${h}`,
+          `viertel nach ${h}`,
+          `viertel vor ${nextH}`
+        ];
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 30,
+          question: 'Wie spät ist es auf dieser Uhr?',
+          options: options,
+          correctText: `halb ${nextH}`,
+          answer: `halb ${nextH}`,
+          answerText: `${String(h).padStart(2, '0')}:30 Uhr (halb ${nextH})`,
+          hint: `💡 Der lange blaue Zeiger steht unten auf der 6 (30 Minuten = eine halbe Stunde). Der rote Zeiger ist auf dem Weg zur ${nextH}.`
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        const nextH = h + 1;
+        const rawOptions = [
+          { hours: h, minutes: 30, isCorrect: true },
+          { hours: 6, minutes: (h % 12) * 5, isCorrect: false },
+          { hours: nextH, minutes: 0, isCorrect: false },
+          { hours: h, minutes: 15, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: h,
+          targetMinutes: 30,
+          prompt: `halb ${nextH}`,
+          targetText: `halb ${nextH} (${String(h).padStart(2, '0')}:30 Uhr)`,
+          question: 'Welche Uhr zeigt diese Uhrzeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Bei „halb ${nextH}“ muss der lange blaue Zeiger nach unten auf die 6 zeigen, der kurze rote Zeiger liegt zwischen ${h} und ${nextH}.`
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        const options = [
+          `viertel nach ${h}`,
+          `viertel vor ${h + 1}`,
+          `halb ${h + 1}`,
+          `${h} Uhr`
+        ];
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 15,
+          question: 'Welche Uhrzeit zeigt das Zifferblatt?',
+          options: options,
+          correctText: `viertel nach ${h}`,
+          answer: `viertel nach ${h}`,
+          answerText: `${String(h).padStart(2, '0')}:15 Uhr (viertel nach ${h})`,
+          hint: '💡 Der lange Minutenzeiger steht auf der 3: Es ist eine Viertelstunde (15 Minuten) nach der vollen Stunde.'
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        const rawOptions = [
+          { hours: h, minutes: 15, isCorrect: true },
+          { hours: 3, minutes: (h % 12) * 5, isCorrect: false },
+          { hours: h, minutes: 45, isCorrect: false },
+          { hours: h, minutes: 30, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: h,
+          targetMinutes: 15,
+          prompt: `viertel nach ${h}`,
+          targetText: `viertel nach ${h} (${String(h).padStart(2, '0')}:15 Uhr)`,
+          question: 'Welche Uhr zeigt diese Uhrzeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Bei „viertel nach ${h}“ steht der lange blaue Zeiger auf der 3 (15 Minuten vergangen).`
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        const nextH = h + 1;
+        const options = [
+          `viertel vor ${nextH}`,
+          `viertel nach ${h}`,
+          `halb ${nextH}`,
+          `${nextH} Uhr`
+        ];
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 45,
+          question: 'Welche Uhrzeit ist hier abgebildet?',
+          options: options,
+          correctText: `viertel vor ${nextH}`,
+          answer: `viertel vor ${nextH}`,
+          answerText: `${String(h).padStart(2, '0')}:45 Uhr (viertel vor ${nextH})`,
+          hint: `💡 Der Minutenzeiger steht auf der 9: Es fehlt noch eine Viertelstunde auf ${nextH} Uhr.`
+        };
+      },
+      () => {
+        const h = rand(7, 10);
+        const nextH = h + 1;
+        const minPast = [15, 30, 45, 20, 40][rand(0, 4)];
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: minPast,
+          question: `Auf der Uhr ist es ${h}:${minPast} Uhr. Wie viele Minuten fehlen noch bis ${nextH}:00 Uhr?`,
+          unit: 'Minuten',
+          answer: 60 - minPast,
+          hint: `💡 Eine volle Stunde hat 60 Minuten. Der blaue Zeiger steht bei ${minPast} Minuten. Rechne: 60 − ${minPast}.`
+        };
+      }
+    ];
+
+    // --- 3. SCHULSTUFE: Minutengenau & 24h-Format (Vormittag / Nachmittag) [RIS, S. 83] ---
     const poolGrade3 = [
       () => {
-        const euro1 = rand(1, 4);
+        const h = rand(1, 11);
+        const m = rand(1, 11) * 5;
+        const mStr = String(m).padStart(2, '0');
+        const hStr = String(h).padStart(2, '0');
+        return {
+          fach: 'mathe',
+          schulstufe: 3,
+          grade: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: m,
+          question: `Lies die Uhrzeit ab (Vormittag): Wie viele Minuten nach ${h} Uhr ist es?`,
+          answer: m,
+          answerText: `${hStr}:${mStr} Uhr`,
+          unit: 'Minuten',
+          hint: '💡 Zähle die 5-Minuten-Schritte auf dem Zifferblatt: 5, 10, 15, 20...'
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        const m = [10, 20, 25, 35, 40, 50][rand(0, 5)];
+        const mStr = String(m).padStart(2, '0');
+        const rawOptions = [
+          { hours: h, minutes: m, isCorrect: true },
+          { hours: Math.floor(m / 5) || 12, minutes: (h % 12) * 5, isCorrect: false },
+          { hours: (h % 12) + 1, minutes: m, isCorrect: false },
+          { hours: h, minutes: (m + 30) % 60, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
+        return {
+          fach: 'mathe',
+          schulstufe: 3,
+          grade: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: h,
+          targetMinutes: m,
+          prompt: `${h}:${mStr} Uhr`,
+          targetText: `${h}:${mStr} Uhr`,
+          question: 'Welche Uhr zeigt diese Uhrzeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Schau zuerst auf den kurzen roten Zeiger (Stunde ${h}) und zähle dann die 5er-Schritte für den blauen Zeiger (${m} Minuten).`
+        };
+      },
+      () => {
+        const h12 = rand(1, 11);
+        const h24 = h12 + 12;
+        const m = rand(0, 3) * 15;
+        const mStr = String(m).padStart(2, '0');
+        return {
+          fach: 'mathe',
+          schulstufe: 3,
+          grade: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h12,
+          minutes: m,
+          isAfternoon: true,
+          question: `Es ist Nachmittag. Der Zeiger zeigt auf ${h12}. Welche Nachmittags-Stunde ist das?`,
+          answer: h24,
+          answerText: `${h24}:${mStr} Uhr`,
+          unit: 'Uhr',
+          hint: `💡 Nach 12 Uhr mittags zählen wir weiter: 12 + ${h12} = ${h24} Uhr.`
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        return {
+          fach: 'mathe',
+          schulstufe: 3,
+          grade: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 45,
+          question: `Die Uhr zeigt eine Dreiviertelstunde nach ${h} Uhr. Wie viele Minuten sind das?`,
+          unit: 'Minuten',
+          answer: 45,
+          hint: '💡 Eine halbe Stunde (30 min) plus eine Viertelstunde (15 min) = 45 Minuten.'
+        };
+      },
+      () => {
+        const h = rand(1, 11);
+        return {
+          fach: 'mathe',
+          schulstufe: 3,
+          grade: 3,
+          lehrplanRef: 'M-3-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: h,
+          minutes: 30,
+          question: 'Der Zeiger ist eine halbe Minute gewandert. Wie viele Sekunden hat eine halbe Minute?',
+          unit: 'Sekunden',
+          answer: 30,
+          hint: '💡 1 Minute = 60 Sekunden. Die Hälfte davon sind 30 Sekunden.'
+        };
+      }
+    ];
+
+    // --- 4. SCHULSTUFE: Zeitspannen (Zwei Uhren: Start & Ende) [RIS, S. 83–84] ---
+    const poolGrade4 = [
+      () => {
+        const startH = rand(7, 10);
+        const startM = rand(0, 3) * 15;
+        const durMin = rand(2, 6) * 15;
+        const totalStartMin = startH * 60 + startM;
+        const totalEndMin = totalStartMin + durMin;
+        const endH = Math.floor(totalEndMin / 60);
+        const endM = totalEndMin % 60;
+
+        return {
+          fach: 'mathe',
+          schulstufe: 4,
+          grade: 4,
+          lehrplanRef: 'M-4-Groessen-Uhrzeit',
+          type: 'clock',
+          clockStart: { hours: startH, minutes: startM },
+          clockEnd: { hours: endH, minutes: endM },
+          isPair: true,
+          question: `Eine Wanderung beginnt bei Uhr 1 und endet bei Uhr 2. Wie viele Minuten dauerte sie?`,
+          answer: durMin,
+          answerText: `${durMin} Minuten`,
+          unit: 'Minuten',
+          hint: `💡 Zähle von ${startH}:${String(startM).padStart(2, '0')} bis zur nächsten vollen Stunde und dann weiter bis ${endH}:${String(endM).padStart(2, '0')}.`
+        };
+      },
+      () => {
+        const startH = rand(8, 11);
+        const durMin = [15, 30, 45, 60][rand(0, 3)];
+        const totalEndMin = startH * 60 + durMin;
+        const endH = Math.floor(totalEndMin / 60);
+        const endM = totalEndMin % 60;
+        const mStr = String(endM).padStart(2, '0');
+
+        const rawOptions = [
+          { hours: endH, minutes: endM, isCorrect: true },
+          { hours: startH, minutes: 0, isCorrect: false },
+          { hours: (endH % 12) + 1, minutes: endM, isCorrect: false },
+          { hours: endH, minutes: (endM + 30) % 60, isCorrect: false }
+        ];
+        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const correctIndex = shuffled.findIndex(o => o.isCorrect);
+
+        return {
+          fach: 'mathe',
+          schulstufe: 4,
+          grade: 4,
+          lehrplanRef: 'M-4-Groessen-Uhrzeit',
+          type: 'clock-choice',
+          targetHours: endH,
+          targetMinutes: endM,
+          prompt: `Abfahrt: ${startH}:00 Uhr, Dauer: ${durMin} min`,
+          targetText: `${startH}:00 Uhr + ${durMin} min`,
+          question: 'Welche Uhr zeigt die richtige Ankunftszeit?',
+          options: shuffled,
+          correctIndex: correctIndex,
+          hint: `💡 Rechne zur Abfahrtszeit (${startH}:00 Uhr) die ${durMin} Minuten Fahrtzeit hinzu: ${endH}:${mStr} Uhr.`
+        };
+      },
+      () => {
+        const stunden = rand(2, 5);
+        return {
+          fach: 'mathe',
+          schulstufe: 4,
+          grade: 4,
+          lehrplanRef: 'M-4-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: stunden,
+          minutes: 0,
+          question: `Wie viele Minuten haben ${stunden}\u00A0Stunden?`,
+          unit: 'Minuten',
+          answer: stunden * 60,
+          hint: '💡 1\u00A0Stunde = 60\u00A0Minuten. Multipliziere mit 60.'
+        };
+      },
+      () => {
+        return {
+          fach: 'mathe',
+          schulstufe: 4,
+          grade: 4,
+          lehrplanRef: 'M-4-Groessen-Uhrzeit',
+          type: 'clock',
+          hours: 12,
+          minutes: 0,
+          question: 'Wie viele Stunden hat ein ganzer Tag?',
+          unit: 'Stunden',
+          answer: 24,
+          hint: '💡 Ein Tag hat 24 Stunden (von 0:00 bis 24:00 Uhr).'
+        };
+      }
+    ];
+
+    let activePool = [];
+    if (grades.includes(1)) activePool.push(...poolGrade1);
+    if (grades.includes(2)) activePool.push(...poolGrade2);
+    if (grades.includes(3)) activePool.push(...poolGrade3);
+    if (grades.includes(4)) activePool.push(...poolGrade4);
+    if (activePool.length === 0) activePool = poolGrade2;
+
+    const shuffled = activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    shuffled.forEach(fn => {
+      const t = fn();
+      tasks.push({
+        fach: t.fach,
+        schulstufe: t.schulstufe,
+        grade: t.grade,
+        lehrplanRef: t.lehrplanRef,
+        type: t.type,
+        hours: t.hours,
+        minutes: t.minutes,
+        clockStart: t.clockStart,
+        clockEnd: t.clockEnd,
+        isPair: t.isPair,
+        targetHours: t.targetHours,
+        targetMinutes: t.targetMinutes,
+        initialHours: t.initialHours,
+        initialMinutes: t.initialMinutes,
+        userHours: t.userHours !== undefined ? t.userHours : (t.initialHours || 12),
+        userMinutes: t.userMinutes !== undefined ? t.userMinutes : (t.initialMinutes || 0),
+        targetText: t.targetText,
+        prompt: t.prompt,
+        options: t.options,
+        correctIndex: t.correctIndex,
+        userSelected: null,
+        correctText: t.correctText,
+        question: t.question,
+        unit: t.unit,
+        answer: t.answer,
+        answerText: t.answerText,
+        hint: t.hint,
+        userAnswer: '',
+        isCorrect: null
+      });
+    });
+
+    return tasks;
+  }
+
+  // 7. GELD & EURO (💶 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
+  function buildMoneyTasks() {
+    const grades = getEffectiveGrades([1, 2, 3, 4]);
+    const tasks = [];
+
+    // --- 1. SCHULSTUFE: Euro und Cent im ZR 20 [RIS, S. 81, 82] ---
+    const poolGrade1 = [
+      () => {
+        const e1 = rand(1, 8);
+        const e2 = rand(1, 10);
+        return {
+          fach: 'mathe',
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Geld',
+          type: 'direct-input',
+          question: `In deiner Spardose liegen ${e1}\u00A0€ und ${e2}\u00A0€. Wie viel Euro sind das zusammen?`,
+          unit: '€',
+          answer: e1 + e2,
+          hint: '💡 Zähle die beiden Euro-Beträge zusammen: ' + e1 + ' + ' + e2 + '.'
+        };
+      },
+      () => {
+        const kosten = rand(2, 8);
+        const gegeben = 10;
+        return {
+          fach: 'mathe',
+          schulstufe: 1,
+          grade: 1,
+          lehrplanRef: 'M-1-Groessen-Geld',
+          type: 'direct-input',
+          question: `Ein Buch kostet ${kosten}\u00A0€. Du zahlst mit einem 10-€-Schein. Wie viel Euro Rückgeld bekommst du?`,
+          unit: '€',
+          answer: gegeben - kosten,
+          hint: '💡 Rechne: 10 − ' + kosten + ' = ?'
+        };
+      }
+    ];
+
+    // --- 2. SCHULSTUFE: Euro und Cent im ZR 100 [RIS, S. 82] ---
+    const poolGrade2 = [
+      () => {
+        const euro1 = rand(12, 35);
+        const euro2 = rand(10, 45);
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Geld',
+          type: 'direct-input',
+          question: `Wie viel Euro sind ${euro1}\u00A0€ und ${euro2}\u00A0€ zusammen?`,
+          unit: '€',
+          answer: euro1 + euro2,
+          hint: '💡 Rechne: ' + euro1 + ' + ' + euro2 + '.'
+        };
+      },
+      () => {
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Geld',
+          type: 'direct-input',
+          question: 'Du kaufst einen Apfel um 50 Cent und eine Semmel um 50 Cent. Wie viel Euro (€) sind das zusammen?',
+          unit: '€',
+          answer: 1,
+          hint: '💡 50 Cent + 50 Cent = 100 Cent. 100 Cent entsprechen genau 1 Euro.'
+        };
+      },
+      () => {
+        const kosten = rand(3, 8) * 10;
+        return {
+          fach: 'mathe',
+          schulstufe: 2,
+          grade: 2,
+          lehrplanRef: 'M-2-Groessen-Geld',
+          type: 'direct-input',
+          question: `Ein Malblock kostet ${kosten}\u00A0Cent. Wie viele Cent fehlen noch auf 1\u00A0Euro (100 Cent)?`,
+          unit: 'Cent',
+          answer: 100 - kosten,
+          hint: '💡 1\u00A0Euro hat 100 Cent. Rechne: 100 − ' + kosten + '.'
+        };
+      }
+    ];
+
+    // --- 3. SCHULSTUFE: Geldbeträge im ZR 1 000 & Kommaschreibweise [RIS, S. 81, 83] ---
+    const poolGrade3 = [
+      () => {
+        const euro1 = rand(2, 8);
         const cent1 = rand(1, 4) * 20;
         return {
           fach: 'mathe',
           schulstufe: 3,
           grade: 3,
-          lehrplanRef: 'M-3-Groessen',
+          lehrplanRef: 'M-3-Groessen-Geld',
+          type: 'direct-input',
           question: `Wie viel Cent sind ${euro1}\u00A0€ und ${cent1}\u00A0c zusammen?`,
           unit: 'Cent',
           answer: euro1 * 100 + cent1,
-          hint: '💡 Tipp: 1\u00A0Euro = 100\u00A0Cent.'
+          hint: '💡 1\u00A0Euro = 100\u00A0Cent. Rechne: ' + euro1 + ' · 100 + ' + cent1 + '.'
         };
       },
       () => {
@@ -485,93 +1011,52 @@ window.Schlaufuchs.Generators.Math = (function () {
           fach: 'mathe',
           schulstufe: 3,
           grade: 3,
-          lehrplanRef: 'M-3-Groessen',
+          lehrplanRef: 'M-3-Groessen-Geld',
+          type: 'direct-input',
           question: `Ein Heft kostet ${kostenCents}\u00A0Cent. Du zahlst mit einer 2-Euro-Münze. Wie viel Cent Rückgeld bekommst du?`,
           unit: 'Cent',
           answer: rueckgeld,
-          hint: '💡 Wie viele Cent hat eine 2-Euro-Münze? Wie viel fehlt von den Kosten auf 2\u00A0Euro?'
-        };
-      },
-      () => {
-        return {
-          fach: 'mathe',
-          schulstufe: 3,
-          grade: 3,
-          lehrplanRef: 'M-3-Groessen',
-          question: `Wie viele Minuten hat eine Dreiviertelstunde?`,
-          unit: 'Minuten',
-          answer: 45,
-          hint: '💡 Tipp: Eine Dreiviertelstunde ist eine halbe Stunde (30 Min.) plus eine Viertelstunde (15 Min.).'
-        };
-      },
-      () => {
-        return {
-          fach: 'mathe',
-          schulstufe: 3,
-          grade: 3,
-          lehrplanRef: 'M-3-Groessen',
-          question: 'Wie viele Sekunden hat eine halbe Minute?',
-          unit: 'Sekunden',
-          answer: 30,
-          hint: '💡 1 Minute = 60 Sekunden.'
+          hint: '💡 Eine 2-Euro-Münze hat 200 Cent. Rechne: 200 − ' + kostenCents + '.'
         };
       }
     ];
 
+    // --- 4. SCHULSTUFE: Sachrechnen mit Geld & Kommazahlen [RIS, S. 83–84] ---
     const poolGrade4 = [
       () => {
-        const stunden = rand(2, 5);
+        const e1 = rand(15, 45);
+        const e2 = rand(20, 50);
         return {
           fach: 'mathe',
           schulstufe: 4,
           grade: 4,
-          lehrplanRef: 'M-4-Groessen',
-          question: `Wie viele Minuten haben ${stunden}\u00A0Stunden?`,
-          unit: 'Minuten',
-          answer: stunden * 60,
-          hint: '💡 1\u00A0Stunde = 60\u00A0Minuten.'
+          lehrplanRef: 'M-4-Groessen-Geld',
+          type: 'direct-input',
+          question: `Für die Schulbibliothek werden Bücher um ${e1}\u00A0€ und Spiele um ${e2}\u00A0€ gekauft. Wie viel Euro kostet das insgesamt?`,
+          unit: '€',
+          answer: e1 + e2,
+          hint: '💡 Addiere die beiden Beträge: ' + e1 + ' + ' + e2 + '.'
         };
       },
       () => {
-        const min = rand(2, 4);
+        const preis1 = rand(12, 25);
+        const menge = rand(3, 5);
         return {
           fach: 'mathe',
           schulstufe: 4,
           grade: 4,
-          lehrplanRef: 'M-4-Groessen',
-          question: `Wie viele Sekunden sind ${min}\u00A0Minuten?`,
-          unit: 'Sekunden',
-          answer: min * 60,
-          hint: '💡 1\u00A0Minute = 60\u00A0Sekunden.'
-        };
-      },
-      () => {
-        return {
-          fach: 'mathe',
-          schulstufe: 4,
-          grade: 4,
-          lehrplanRef: 'M-4-Groessen',
-          question: 'Ein Zug fährt um 08:15 Uhr ab und kommt um 09:45 Uhr an. Wie viele Minuten dauerte die Fahrt?',
-          unit: 'Minuten',
-          answer: 90,
-          hint: '💡 Rechne: von 08:15 bis 09:15 ist 1 Stunde (60 Min.), plus 30 Minuten bis 09:45.'
-        };
-      },
-      () => {
-        return {
-          fach: 'mathe',
-          schulstufe: 4,
-          grade: 4,
-          lehrplanRef: 'M-4-Groessen',
-          question: 'Wie viele Stunden hat ein ganzer Tag (24-Stunden-Tag)?',
-          unit: 'Stunden',
-          answer: 24,
-          hint: '💡 Ein Kalendertag hat 24 Stunden.'
+          lehrplanRef: 'M-4-Groessen-Geld',
+          type: 'direct-input',
+          question: `Ein T-Shirt für den Schulsport kostet ${preis1}\u00A0€. Wie viel Euro kosten ${menge} solche T-Shirts?`,
+          unit: '€',
+          answer: preis1 * menge,
+          hint: '💡 Rechne: ' + menge + ' · ' + preis1 + '\u00A0€.'
         };
       }
     ];
 
     let activePool = [];
+    if (grades.includes(1)) activePool.push(...poolGrade1);
     if (grades.includes(2)) activePool.push(...poolGrade2);
     if (grades.includes(3)) activePool.push(...poolGrade3);
     if (grades.includes(4)) activePool.push(...poolGrade4);
@@ -585,7 +1070,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         schulstufe: t.schulstufe,
         grade: t.grade,
         lehrplanRef: t.lehrplanRef,
-        type: 'direct-input',
+        type: t.type,
         question: t.question,
         unit: t.unit,
         answer: t.answer,
@@ -596,6 +1081,11 @@ window.Schlaufuchs.Generators.Math = (function () {
     });
 
     return tasks;
+  }
+
+  // Fallback-Funktion für Altsystem-Aufrufe
+  function buildTimeMoneyTasks() {
+    return buildClockTasks();
   }
 
   // 7. ZAHLENRAUM 1 000 000 & STELLENWERTTAFEL (💎 4. Klasse)
@@ -1241,6 +1731,8 @@ window.Schlaufuchs.Generators.Math = (function () {
     buildMultiplicationTasks: buildMultiplicationTasks,
     buildDivisionTasks: buildDivisionTasks,
     buildPyramidTasks: buildPyramidTasks,
+    buildClockTasks: buildClockTasks,
+    buildMoneyTasks: buildMoneyTasks,
     buildTimeMoneyTasks: buildTimeMoneyTasks,
     buildMillionTasks: buildMillionTasks,
     buildUnitsTasks: buildUnitsTasks,

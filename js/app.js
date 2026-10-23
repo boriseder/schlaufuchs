@@ -221,6 +221,15 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       if (btn) btn.addEventListener('click', () => showMenuView());
     });
 
+    if (brandHome) {
+      brandHome.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showMenuView();
+        }
+      });
+    }
+
     [btnExerciseRegenerate, btnRegenerate].forEach(btn => {
       if (btn) btn.addEventListener('click', () => {
         if (currentTopicId) loadTopic(currentTopicId);
@@ -478,8 +487,12 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       // Weitere Mathe-Themen
       case 'math-pyramid':
         return MathGen.buildPyramidTasks();
+      case 'math-clock':
+        return MathGen.buildClockTasks();
+      case 'math-money':
+        return MathGen.buildMoneyTasks();
       case 'math-time-money':
-        return MathGen.buildTimeMoneyTasks();
+        return MathGen.buildClockTasks();
       case 'math-million':
         return MathGen.buildMillionTasks();
       case 'math-units':
@@ -716,6 +729,12 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       Renderers.renderMemory(card, task, index, checkTask);
     } else if (task.type === 'direct-input') {
       Renderers.renderDirectInput(card, task, index, checkTask);
+    } else if (task.type === 'clock') {
+      Renderers.renderClock(card, task, index, checkTask);
+    } else if (task.type === 'clock-set') {
+      Renderers.renderClockSet(card, task, index, checkTask);
+    } else if (task.type === 'clock-choice') {
+      Renderers.renderClockChoice(card, task, index, checkTask);
     } else if (task.type === 'geometry') {
       Renderers.renderGeometry(card, task, index, checkTask);
     } else if (task.type === 'pattern') {
@@ -855,6 +874,52 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       } else {
         isCorrect = task.selectedText === task.correctText;
       }
+    } else if (task.type === 'clock') {
+      if (task.options && task.options.length > 0) {
+        if (!task.selectedText) return;
+        if (V && V.pruefeAuswahl) {
+          const res = V.pruefeAuswahl(task.selectedText, task.correctText);
+          if (!res.gueltig) return;
+          isCorrect = res.richtig;
+        } else {
+          isCorrect = task.selectedText === task.correctText;
+        }
+      } else {
+        const input = card.querySelector(`#input-${index}`);
+        if (!input || input.value.trim() === '') return;
+        const val = input.value.trim();
+        const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+        const parsedTime = Clock ? Clock.parseTimeInput(val) : null;
+
+        if (typeof task.answer === 'number') {
+          if (V && V.pruefeZahl) {
+            const res = V.pruefeZahl(val, task.answer);
+            if (res.gueltig && res.richtig) {
+              isCorrect = true;
+            } else if (parsedTime && parsedTime.hours === task.answer && parsedTime.minutes === 0) {
+              isCorrect = true;
+            }
+          } else {
+            isCorrect = parseInt(val, 10) === task.answer || (parsedTime && parsedTime.hours === task.answer && parsedTime.minutes === 0);
+          }
+        } else if (parsedTime && task.hours !== undefined) {
+          isCorrect = parsedTime.hours === task.hours && parsedTime.minutes === (task.minutes || 0);
+        } else {
+          isCorrect = val.toLowerCase() === String(task.answer).toLowerCase();
+        }
+      }
+    } else if (task.type === 'clock-set') {
+      const userH = task.userHours % 12 === 0 ? 12 : task.userHours % 12;
+      const targetH = task.targetHours % 12 === 0 ? 12 : task.targetHours % 12;
+      const userM = task.userMinutes !== undefined ? task.userMinutes : 0;
+      const targetM = task.targetMinutes !== undefined ? task.targetMinutes : 0;
+      isCorrect = (userH === targetH) && (userM === targetM);
+    } else if (task.type === 'clock-choice') {
+      if (task.userSelected === null || task.userSelected === undefined) {
+        showFeedback(card, index, false, 'Bitte tippe auf eine der vier Uhren.', task.hint);
+        return;
+      }
+      isCorrect = task.userSelected === task.correctIndex;
     } else if (task.type === 'memory') {
       isCorrect = task.matchedPairsCount === task.totalPairs;
     } else if (task.type === 'direct-input' || task.type === 'geometry' || task.type === 'text-problem' || task.type === 'twenty-field') {

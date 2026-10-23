@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
 const formatCode = readFileSync('js/core/format.js', 'utf8');
+const clockCode = readFileSync('js/clock.js', 'utf8');
 const storageCode = readFileSync('js/core/storage.js', 'utf8');
 const topicsCode = readFileSync('js/core/topics.js', 'utf8');
 const printEngineCode = readFileSync('js/print-engine.js', 'utf8');
@@ -27,6 +28,7 @@ const sandbox = {
 sandbox.window = sandbox;
 
 vm.runInNewContext(formatCode, sandbox);
+vm.runInNewContext(clockCode, sandbox);
 vm.runInNewContext(storageCode, sandbox);
 vm.runInNewContext(topicsCode, sandbox);
 vm.runInNewContext(printEngineCode, sandbox);
@@ -34,9 +36,9 @@ vm.runInNewContext(printCode, sandbox);
 
 const { Topics, PrintEngine, Print } = sandbox.window.Schlaufuchs;
 
-test('Topics: Alle 27 Lehrplan-Themen sind vollständig mit Metadaten hinterlegt', () => {
+test('Topics: Alle 28 Lehrplan-Themen sind vollständig mit Metadaten hinterlegt', () => {
   const all = Topics.getAllTopics();
-  assert.equal(all.length, 27, 'Es müssen genau 27 didaktische Themen registriert sein');
+  assert.equal(all.length, 28, 'Es müssen genau 28 didaktische Themen registriert sein');
 
   all.forEach(t => {
     assert.ok(t.id, 'Jedes Thema muss eine ID haben');
@@ -84,7 +86,7 @@ test('PrintEngine: Hohe Entropie & 10 aufeinanderfolgende Drucke ohne Duplikate 
   assert.equal(seenSignatures.size, 120, 'Alle 120 Rechnungen müssen einzigartig sein');
 });
 
-test('PrintEngine: Deckt alle 27 Themen fehlerfrei ab', () => {
+test('PrintEngine: Deckt alle 28 Themen fehlerfrei ab', () => {
   const all = Topics.getAllTopics();
   all.forEach(topic => {
     const grade = topic.grades[0];

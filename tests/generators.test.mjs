@@ -18,7 +18,8 @@ function createSandbox(activeGrades = [1, 2, 3, 4]) {
 
   vm.runInNewContext(readFileSync('js/core/random.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/core/format.js', 'utf8'), sandbox);
-  vm.runInNewContext('window.Schlaufuchs.Signs = { getSignSvg: () => "<svg></svg>" };', sandbox);
+  vm.runInNewContext(readFileSync('js/clock.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/signs.js', 'utf8'), sandbox);
   vm.runInNewContext(`window.Schlaufuchs.State = { getActiveGrades: () => ${JSON.stringify(activeGrades)} };`, sandbox);
   vm.runInNewContext(readFileSync('js/generators/math.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/generators/german.js', 'utf8'), sandbox);
@@ -113,6 +114,29 @@ test('Sachunterricht: Multiple-Choice Optionen sind vollständig, korrekt gemapp
     // Optionen müssen durchmischt sein (nicht nur Index 0)
     assert.ok(indicesSeen.size > 1, `${name}: Optionen müssen variieren und dürfen nicht starr auf Index 0 stehen`);
   }
+});
+
+test('Sachunterricht: Sicherer Schulweg hat großen Fragenpool (>= 20 Fragen) und NIEMALS ein Emoji als Icon', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  const questionsSeen = new Set();
+  const EMOJI_REGEX = /(?![©®™])\p{Extended_Pictographic}/u;
+
+  for (let r = 0; r < 50; r++) {
+    const tasks = G.General.buildSchoolWalkTasks();
+    assert.equal(tasks.length, 5, 'Jeder Durchlauf muss genau 5 Aufgaben liefern');
+    for (const t of tasks) {
+      assert.equal(t.icon, null, 'Schulweg-Aufgaben dürfen kein Emoji-Icon besitzen (Regel 4 & 5)');
+      assert.ok(!EMOJI_REGEX.test(t.question), 'Fragetext darf keine Emojis enthalten');
+      questionsSeen.add(t.question);
+      if (t.customVisualHtml) {
+        assert.ok(t.customVisualHtml.includes('class="stvo-sign"'), 'Verkehrszeichen müssen stvo-sign Klasse haben');
+        assert.ok(!EMOJI_REGEX.test(t.customVisualHtml), 'Verkehrszeichen-SVG darf keine Emojis enthalten');
+      }
+    }
+  }
+
+  // Bei 25 Pool-Fragen müssen in 50 Ziehungen à 5 Fragen mindestens 20 verschiedene Fragen vorkommen
+  assert.ok(questionsSeen.size >= 20, `Schulweg-Pool muss mindestens 20 unterschiedliche Fragen liefern (gesehen: ${questionsSeen.size})`);
 });
 
 test('Sachunterricht: Alle 10 Wintertiere haben valide Verhaltensweisen und Standvögel sind enthalten', () => {

@@ -131,7 +131,7 @@ test('Worksheets: Modul existiert und initialisiert Event-Handling fehlerfrei', 
 
   const countEl = getElem('worksheets-count');
   assert.ok(countEl.textContent.includes('Arbeitsblätter'), 'Zähler muss initialisiert werden');
-  assert.equal(countEl.textContent, '27 Arbeitsblätter', 'Standardmäßig alle 27 Blätter angezeigt');
+  assert.equal(countEl.textContent, '28 Arbeitsblätter', 'Standardmäßig alle 28 Blätter angezeigt');
 
   const container = getElem('worksheets-cards-container');
   assert.ok(container.innerHTML.includes('worksheet-card'), 'Karten müssen gerendert sein');
@@ -168,7 +168,7 @@ test('Worksheets: Verhaltensprüfung beim Sammeldruck (echter Klick-Flow)', () =
   const callAll = getLastBatchCall();
   assert.ok(callAll, 'Sammeldruck-Methode muss aufgerufen worden sein');
   assert.equal(callAll.grade, null, 'Bei "all" darf kein festes Grade übergeben werden (muss null sein)');
-  assert.equal(callAll.topics.length, 27, 'Alle 27 Themen müssen übergeben werden');
+  assert.equal(callAll.topics.length, 28, 'Alle 28 Themen müssen übergeben werden');
 
   // 2. Klick bei "2. Klasse" -> targetGrade muss 2 sein und nur Stufe-2-kompatible Themen enthalten
   gradeBtns[1].click(); // Stufe 2

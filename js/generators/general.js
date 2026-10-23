@@ -15,7 +15,7 @@ window.Schlaufuchs.Generators.General = (function () {
   const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
 
   // 1. JAHRESKREIS & KALENDER (1. – 2. Klasse, inkl. Jänner!)
-  function buildCalendarTasks() {
+  function buildCalendarTasks(opts) {
     const pool = [
       {
         question: 'Wie heißt der erste Monat des Kalenderjahres in Österreich?',
@@ -67,7 +67,7 @@ window.Schlaufuchs.Generators.General = (function () {
       }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => {
       const correctText = item.options[item.correct];
       const shuffledOptions = shuffle([...item.options]);
@@ -90,7 +90,7 @@ window.Schlaufuchs.Generators.General = (function () {
   }
 
   // 2. HEIMISCHE TIERE IM WINTER (3. Klasse – Winterschlaf, Winterruhe, Winterstarre, Zugvögel)
-  function buildWinterTasks() {
+  function buildWinterTasks(opts) {
     const pool = [
       {
         animal: 'Igel',
@@ -152,7 +152,7 @@ window.Schlaufuchs.Generators.General = (function () {
       'Standvogel (bleibt den ganzen Winter bei uns)'
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => {
       const wrongBehaviors = allBehaviors.filter(b => b !== item.behavior);
       const options = shuffle([item.behavior, ...shuffle(wrongBehaviors).slice(0, 3)]);
@@ -176,7 +176,7 @@ window.Schlaufuchs.Generators.General = (function () {
   }
 
   // 3. ÖSTERREICH & HAUPTSTÄDTE (4. Klasse – 9 Bundesländer, Flüsse, Berge, Nachbarn)
-  function buildAustriaTasks() {
+  function buildAustriaTasks(opts) {
     const states = [
       { state: 'Wien', capital: 'Wien' },
       { state: 'Niederösterreich', capital: 'St. Pölten' },
@@ -224,8 +224,8 @@ window.Schlaufuchs.Generators.General = (function () {
 
     const tasks = [];
 
-    // 3 Fragen zu Bundesländern
-    const chosenStates = shuffle(states).slice(0, 3);
+    // 3 Fragen zu Bundesländern (oder alle 9 für QS)
+    const chosenStates = (opts && opts.all) ? states : shuffle(states).slice(0, 3);
     chosenStates.forEach(item => {
       const wrongCapitals = states.filter(s => s.capital !== item.capital).map(s => s.capital);
       const options = shuffle([item.capital, ...shuffle(wrongCapitals).slice(0, 3)]);
@@ -246,8 +246,8 @@ window.Schlaufuchs.Generators.General = (function () {
       });
     });
 
-    // 2 geografische Fragen
-    const chosenGeo = shuffle(geographyPool).slice(0, 2);
+    // 2 geografische Fragen (oder alle für QS)
+    const chosenGeo = (opts && opts.all) ? geographyPool : shuffle(geographyPool).slice(0, 2);
     chosenGeo.forEach(geoItem => {
       tasks.push({
         fach: 'sachunterricht',
@@ -270,7 +270,7 @@ window.Schlaufuchs.Generators.General = (function () {
   }
 
   // 4. FREIWILLIGE RADFAHRPRÜFUNG (4. Klasse – STRENG MIT ECHTEN STVO-SVGs!)
-  function buildTrafficTasks() {
+  function buildTrafficTasks(opts) {
     const signs = window.Schlaufuchs.Signs;
 
     const pool = [
@@ -408,7 +408,7 @@ window.Schlaufuchs.Generators.General = (function () {
       }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => {
       let customHtml = '';
       if (item.signId && signs) {
@@ -423,7 +423,7 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 4,
         lehrplanRef: 'SU-4-Verkehr-Radfahrpruefung',
         type: 'multiple-choice',
-        icon: item.signId ? null : '🚲',
+        icon: null,
         customVisualHtml: customHtml,
         question: item.question,
         options: shuffledOptions,
@@ -436,11 +436,12 @@ window.Schlaufuchs.Generators.General = (function () {
     });
   }
 
-  // 5. SICHERER SCHULWEG & VERKEHR (1. bis 3. Klasse)
-  function buildSchoolWalkTasks() {
+  // 5. SICHERER SCHULWEG & VERKEHR (1. bis 3. Klasse – BMBWF Lehrplan, StVO Österreich)
+  function buildSchoolWalkTasks(opts) {
     const signs = window.Schlaufuchs.Signs;
 
     const pool = [
+      // SÄULE 1: SCHUTZWEG & STRASSE QUEREN
       {
         signId: 'schutzweg',
         question: 'Was zeigt dieses blaue Verkehrszeichen an?',
@@ -465,16 +466,40 @@ window.Schlaufuchs.Generators.General = (function () {
         hint: 'Halt an der Kante, schau nach links, rechts und wieder links!'
       },
       {
-        question: 'Was musst du bei einer Fußgängerampel beachten, wenn das rote Männchen leuchtet?',
+        question: 'Was bedeutet die Stopp-Formel beim Queren einer Straße vor dem Betreten der Fahrbahn?',
         options: [
-          'Stehen bleiben und warten, bis die Ampel auf Grün schaltet',
-          'Schnell noch hinüberhuschen',
-          'Den Autofahrern die Zunge herausstrecken',
-          'Im Kreis hüpfen'
+          'Stehen bleiben, links schauen, rechts schauen, nochmals links schauen',
+          'Augen schließen und schnell loslaufen',
+          'Nur nach rechts schauen',
+          'Sofort losgehen, wenn kein lautes Geräusch zu hören ist'
         ],
         correct: 0,
-        hint: 'Rot heißt Stopp! Bei Rot darfst du niemals die Straße betreten.'
+        hint: 'Bleib am Randstein stehen und schau immer links, rechts und nochmals links.'
       },
+      {
+        question: 'Ein Auto nähert sich dem Zebrastreifen und bremst ab. Wann darfst du losgehen?',
+        options: [
+          'Erst wenn das Auto wirklich ganz stillsteht und du Blickkontakt mit dem Lenker hast',
+          'Sobald das Auto langsamer wird, auch wenn es noch rollt',
+          'Sofort loslaufen, ohne auf den Fahrer zu achten',
+          'Wenn das Auto hupt'
+        ],
+        correct: 0,
+        hint: 'Warte immer, bis die Räder des Autos komplett stillstehen!'
+      },
+      {
+        question: 'Warum darfst du niemals zwischen zwei parkenden Autos auf die Fahrbahn treten?',
+        options: [
+          'Weil dich herannahende Autofahrer hinter den Autos erst viel zu spät sehen können',
+          'Weil die parkenden Autos schmutzig sind',
+          'Weil man dort nicht schnell rennen kann',
+          'Weil die Schultasche hängen bleiben könnte'
+        ],
+        correct: 0,
+        hint: 'Parkende Fahrzeuge verdecken die Sicht. Suche immer eine freie Stelle mit gutem Überblick!'
+      },
+
+      // SÄULE 2: GEHSTEIG & STRASSEN OHNE GEHSTEIG
       {
         question: 'Auf welcher Seite des Gehsteigs gehst du am sichersten zur Schule?',
         options: [
@@ -487,15 +512,190 @@ window.Schlaufuchs.Generators.General = (function () {
         hint: 'Gehe immer auf der Hausseite, um vor Autos geschützt zu sein.'
       },
       {
+        question: 'Du gehst auf einer Straße im Ortsgebiet oder am Land, die KEINEN Gehsteig hat. Auf welcher Seite musst du gehen?',
+        options: [
+          'Auf der linken Straßenseite, damit du den entgegenkommenden Autos ins Gesicht schaust',
+          'Auf der rechten Straßenseite mit dem Rücken zum Verkehr',
+          'Mitten auf der Fahrbahn',
+          'Es ist völlig egal, auf welcher Seite man geht'
+        ],
+        correct: 0,
+        hint: 'Ohne Gehsteig immer links gehen! So siehst du herannahende Autos rechtzeitig.'
+      },
+      {
+        question: 'Darfst du auf dem Randstein direkt an der Straßenkante balancieren?',
+        options: [
+          'Nein, das ist gefährlich, weil man leicht vor ein vorbeifahrendes Auto stolpern kann',
+          'Ja, das schult das Gleichgewicht auf dem Schulweg',
+          'Ja, aber nur wenn man schnell rennt',
+          'Ja, wenn man die Arme ausbreitet'
+        ],
+        correct: 0,
+        hint: 'Der Randstein ist die Grenze zur Fahrbahn. Halte immer Abstand!'
+      },
+      {
+        question: 'Ein Ball rollt beim Spielen plötzlich auf die Fahrbahn. Wie verhältst du dich richtig?',
+        options: [
+          'Sofort am Randstein anhalten, erst die Straße prüfen und Erwachsene um Hilfe bitten',
+          'Sofort hinterherrennen, bevor ein Auto drüberfährt',
+          'Blind auf die Straße springen',
+          'Dem Ball nachschreien und weinen'
+        ],
+        correct: 0,
+        hint: 'Ein Ball kann ersetzt werden – dein Leben nicht! Bleib immer sofort stehen.'
+      },
+
+      // SÄULE 3: AMPEL, SCHÜLERLOTSEN & EXEKUTIVE
+      {
+        question: 'Was musst du bei einer Fußgängerampel beachten, wenn das rote Männchen leuchtet?',
+        options: [
+          'Stehen bleiben und warten, bis das grüne Männchen aufleuchtet',
+          'Schnell noch hinüberhuschen',
+          'Den Autofahrern die Zunge herausstrecken',
+          'Im Kreis hüpfen'
+        ],
+        correct: 0,
+        hint: 'Rot heißt Stopp! Bei Rot darfst du niemals die Straße betreten.'
+      },
+      {
+        question: 'Du bist mitten auf der Straße und die Fußgängerampel schaltet auf Rot. Was tust du?',
+        options: [
+          'Ruhig und zügig weitergehen bis zum anderen Gehsteig (nicht umdrehen)',
+          'Sofort erschrocken umdrehen und zurückrennen',
+          'Mitten auf der Straße stehen bleiben',
+          'Dich auf den Boden setzen'
+        ],
+        correct: 0,
+        hint: 'Keine Panik: Die Räumphase reicht aus. Gehe zügig und sicher weiter zur anderen Straßenseite.'
+      },
+      {
+        question: 'Was bedeutet es, wenn ein Schülerlotse mit einer Kelle an der Straße steht?',
+        options: [
+          'Er sichert den Schulweg – alle Kinder und Autos müssen seine Anweisungen beachten',
+          'Er macht Straßenmusik',
+          'Er verkauft Eis an Schulkinder',
+          'Er möchte mit den Kindern Fangen spielen'
+        ],
+        correct: 0,
+        hint: 'Schülerlotsen helfen Schülern beim sicheren Überqueren der Straße.'
+      },
+      {
+        question: 'Wie verhältst du dich, wenn ein Polizist an der Kreuzung den Verkehr mit Handzeichen regelt?',
+        options: [
+          'Die Handzeichen der Polizei gelten vor allen Ampeln und Schildern – ich folge den Zeichen des Polizisten',
+          'Ich achte nur auf die Ampel, egal was der Polizist anzeigt',
+          'Ich laufe einfach quer über die Kreuzung',
+          'Ich warte, bis der Polizist weggeht'
+        ],
+        correct: 0,
+        hint: 'Polizeizeichen stehen an erster Stelle und haben Vorrang vor Ampeln und Schildern!'
+      },
+
+      // SÄULE 4: SICHTBARKEIT & VERHALTEN ALS MITFAHRER
+      {
         question: 'Warum sind im Herbst und Winter Reflektoren an der Schultasche und helle Kleidung so wichtig?',
         options: [
-          'Weil dich Autofahrer in der Dämmerung und bei Nebel viel früher erkennen',
+          'Weil dich Autofahrer im Scheinwerferlicht schon aus über 140 Metern Entfernung erkennen',
           'Weil dunkle Farben an der Schule verboten sind',
           'Damit man schneller laufen kann',
           'Weil die Schultasche sonst zu schwer wird'
         ],
         correct: 0,
-        hint: 'Reflektoren leuchten das Scheinwerferlicht zurück und schützen dich!'
+        hint: 'Reflektoren leuchten das Scheinwerferlicht zurück und schützen dich in der Dunkelheit!'
+      },
+      {
+        question: 'Aus welcher Autotür solltest du vor der Schule immer aussteigen?',
+        options: [
+          'Immer zur Gehsteigseite (rechts), geschützt vor dem fließenden Verkehr',
+          'Immer zur Straßenseite (links), damit man direkt auf die Fahrbahn kommt',
+          'Aus dem Kofferraum',
+          'Aus dem Schiebedach'
+        ],
+        correct: 0,
+        hint: 'Steige immer zur sicheren Gehsteigseite aus, niemals zur Fahrbahn!'
+      },
+      {
+        question: 'Bis zu welchem Alter oder welcher Körpergröße müssen Kinder im Auto einen Kindersitz verwenden?',
+        options: [
+          'Bis 14 Jahre oder bis sie mindestens 135 cm groß sind',
+          'Nur bis zum 3. Geburtstag',
+          'Nur wenn die Polizei zuschaut',
+          'Kinder brauchen ab der 1. Klasse nie wieder einen Kindersitz'
+        ],
+        correct: 0,
+        hint: 'In Österreich gilt die Kindersitzpflicht bis 14 Jahre bzw. 135 cm Körpergröße.'
+      },
+      {
+        question: 'Was versteht man unter dem „toten Winkel“ bei einem großen LKW oder Bus?',
+        options: [
+          'Einen Bereich rund um das Fahrzeug, den der Fahrer trotz Spiegeln nicht einsehen kann',
+          'Einen kaputten Blinker am LKW',
+          'Eine Ecke im Schulhof',
+          'Einen besonders spitzen Straßenrand'
+        ],
+        correct: 0,
+        hint: 'Halte großen Abstand zu LKW und Bussen – der Fahrer kann dich im toten Winkel nicht sehen!'
+      },
+      {
+        question: 'Warum ist es gefährlich, auf dem Schulweg Kopfhörer mit lauter Musik zu tragen oder aufs Handy zu schauen?',
+        options: [
+          'Weil man herannahende Fahrzeuge, Klingeln und Warnsignale nicht rechtzeitig wahrnimmt',
+          'Weil Kopfhörer am Gehsteig verboten sind',
+          'Weil der Akku vom Smartphone leer wird',
+          'Weil die Kopfhörer nass werden könnten'
+        ],
+        correct: 0,
+        hint: 'Sehen und Hören sind überlebenswichtig im Straßenverkehr. Sei immer aufmerksam!'
+      },
+
+      // SÄULE 5: VERKEHRSZEICHEN NACH STVO
+      {
+        signId: 'achtung-kinder',
+        question: 'Was signalisiert dieses dreieckige Verkehrszeichen mit dem roten Rand und den beiden Kindern?',
+        options: [
+          'Achtung Kinder! Autofahrer müssen besonders aufmerksam und bremsbereit fahren',
+          'Hier dürfen Kinder mit dem Moped fahren',
+          'Hier ist Rennen auf der Fahrbahn Pflicht',
+          'Ende der Schule'
+        ],
+        correct: 0,
+        hint: 'Dreieck mit Spitze oben und rotem Rand: Achtung Kinder kreuzen oder sind in der Nähe!'
+      },
+      {
+        signId: 'wohnstrasse',
+        question: 'Was gilt in einer mit diesem blauen Verkehrszeichen gekennzeichneten Wohnstraße?',
+        options: [
+          'Kinder dürfen auf der Straße spielen und Autos dürfen nur im Schritttempo fahren',
+          'Hier dürfen Autos mit 50 km/h durchfahren',
+          'Radfahren ist streng verboten',
+          'Fußgänger müssen Autos immer sofort Platz machen'
+        ],
+        correct: 0,
+        hint: 'In der Wohnstraße dürfen Kinder spielen, Lenker müssen im Schritttempo fahren!'
+      },
+      {
+        signId: 'begegnungszone',
+        question: 'Was bedeutet dieses blaue Verkehrszeichen mit der Zahl 20 (Begegnungszone)?',
+        options: [
+          'Fußgänger dürfen die gesamte Fahrbahn nützen, Höchstgeschwindigkeit beträgt 20 km/h',
+          'Hier dürfen nur 20 Autos am Tag fahren',
+          'Nur für Kinder ab 20 Jahren erlaubt',
+          'Hier darf man 100 km/h schnell fahren'
+        ],
+        correct: 0,
+        hint: 'In der Begegnungszone teilen sich alle Verkehrsteilnehmer die Straße bei maximal 20 km/h.'
+      },
+      {
+        signId: 'gehweg',
+        question: 'Was bedeutet dieses runde blaue Verkehrszeichen mit den weißen Fußgängern?',
+        options: [
+          'Reiner Gehweg (dieser Weg ist ausschließlich für Fußgänger reserviert)',
+          'Autobahnauffahrt',
+          'Parkplatz für LKWs',
+          'Hier dürfen alle Fahrzeuge schnell fahren'
+        ],
+        correct: 0,
+        hint: 'Rundes blaues Schild: Gebot! Dieser Weg ist allein für Fußgänger bestimmt.'
       },
       {
         signId: 'geh-radweg',
@@ -508,10 +708,34 @@ window.Schlaufuchs.Generators.General = (function () {
         ],
         correct: 0,
         hint: 'Die weiße Trennlinie trennt die Bahn für Fußgänger von der für Radfahrer.'
+      },
+      {
+        signId: 'fussgaengerzone',
+        question: 'Was gilt in einer Fußgängerzone mit diesem blauen Schild?',
+        options: [
+          'Die Straße gehört den Fußgängern, normaler Autoverkehr ist nicht erlaubt',
+          'Autos haben hier immer Vorfahrt',
+          'Fußgänger dürfen den Gehsteig nicht verlassen',
+          'Hier ist das Gehen verboten'
+        ],
+        correct: 0,
+        hint: 'In der Fußgängerzone können sich Fußgänger frei und sicher über die ganze Straße bewegen.'
+      },
+      {
+        signId: 'haltestelle',
+        question: 'Du steigst an einer Bushaltestelle aus dem Schulbus aus. Wie überquerst du die Straße?',
+        options: [
+          'Ich warte, bis der Bus abgefahren ist und die Straße in beide Richtungen frei einsehbar ist',
+          'Ich renne sofort direkt vor dem stehenden Bus über die Straße',
+          'Ich krieche unter dem Bus durch',
+          'Ich laufe knapp hinter dem Bus über die Fahrbahn'
+        ],
+        correct: 0,
+        hint: 'Der stehende Bus verdeckt die Sicht! Warte immer, bis der Bus wegfährt, bevor du querst.'
       }
     ];
 
-    const chosen = shuffle(pool).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
     return chosen.map(item => {
       let customHtml = null;
       if (item.signId && signs) {
@@ -526,7 +750,7 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 1,
         lehrplanRef: 'SU-1-Verkehr-Schulweg',
         type: 'multiple-choice',
-        icon: item.signId ? null : '🚶',
+        icon: null,
         customVisualHtml: customHtml,
         question: item.question,
         options: shuffledOptions,

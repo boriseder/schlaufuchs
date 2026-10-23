@@ -159,10 +159,12 @@ body.in-exercise .app-container {
   max-width: 960px;
 }
 
-/* Header & Top Bar (Ruhend & Geordnet) */
+/* ========================================================
+   HEADER & TOP BAR (Sanfte, ruhige Kachel-Ästhetik)
+   ======================================================== */
 .main-header {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
+  background: var(--card-bg, #ffffff);
+  border-radius: var(--border-radius, 16px);
   padding: 12px 20px;
   box-shadow: var(--shadow-sm);
   border: 1.5px solid #e2e8f0;
@@ -179,12 +181,21 @@ body.in-exercise .app-container {
   gap: 10px;
   cursor: pointer;
   user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.brand:hover {
+  opacity: 0.85;
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
 }
 
 .brand-icon {
   font-size: 2rem;
   line-height: 1;
-  /* Zero Ambient Loops: keine Daueranimation */
 }
 
 .brand-text h1 {
@@ -197,14 +208,14 @@ body.in-exercise .app-container {
 .brand-sub {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--text-muted, #64748b);
 }
 
-/* Zentrierte Kind-Identität (Vereinte Identitäts-Pill) */
+/* Zentrierte Kind-Identität (Sanfte Kachel-Ästhetik) */
 .header-center-identity {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 }
 
 .header-child-pill,
@@ -222,13 +233,19 @@ body.in-exercise .app-container {
   color: #1e293b;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 48px;
+  min-height: 44px;
 }
 
 .header-child-pill:hover,
 .header-profile-btn:hover {
   background: #f1f5f9;
   border-color: #94a3b8;
+}
+
+.header-child-pill:focus-visible,
+.header-profile-btn:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
 }
 
 .pill-divider {
@@ -240,6 +257,8 @@ body.in-exercise .app-container {
 .user-avatar {
   font-size: 1.3rem;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .profile-caret {
@@ -260,19 +279,35 @@ body.in-exercise .app-container {
   font-weight: 800;
   font-size: 0.95rem;
   box-shadow: var(--shadow-sm);
-  min-height: 48px;
+  min-height: 44px;
 }
 
 .star-icon {
-  color: var(--star-gold);
+  color: var(--star-gold, #F2C14E);
   font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* Werkzeuge & Aktionen (Rechts dezent gruppiert) */
+/* Werkzeuge & Aktionen (Luftige freie Icons ohne Boxen-Flut) */
 .header-tools-group {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.header-tools-subgroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-tools-divider {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: #cbd5e1;
+  margin: 0 4px;
 }
 
 .header-tool-btn {
@@ -298,14 +333,18 @@ body.in-exercise .app-container {
   color: #0f172a;
 }
 
+.header-tool-btn:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
+}
+
 .header-tool-btn.has-packs {
   border-color: #d97706;
   background: #fffbeb;
-  /* Statisch hervorgehoben - keine Daueranimation */
 }
 
 .header-tool-btn.active {
-  background: var(--flaeche, #F3EEDF);
+  background: var(--mathe-hell, #DCE8F6);
   border-color: var(--mathe, #2255A4);
   color: var(--mathe, #2255A4);
 }
@@ -330,8 +369,8 @@ body.in-exercise .app-container {
   display: inline-flex;
   align-self: center;
   margin: 6px auto 16px auto;
-  background: var(--flaeche, #F3EEDF);
-  border: 1.5px solid var(--linie-leise, #C8C2B4);
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
   border-radius: 999px;
   padding: 4px;
   gap: 4px;
@@ -349,11 +388,11 @@ body.in-exercise .app-container {
   font-size: 0.92rem;
   font-weight: 800;
   padding: 8px 18px;
-  min-height: 42px;
+  min-height: 40px;
   border-radius: 999px;
   border: 1.5px solid transparent;
   background: transparent;
-  color: #5A626A;
+  color: #475569;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
@@ -364,15 +403,15 @@ body.in-exercise .app-container {
 }
 
 .filter-btn:hover {
-  color: #1E252B;
+  color: #0f172a;
   background: rgba(255, 255, 255, 0.6);
 }
 
 .filter-btn.active {
   background: #ffffff;
-  color: #1E252B;
-  border-color: #C8C2B4;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -421,7 +460,7 @@ body.in-exercise .app-container {
 
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 14px;
 }
 
@@ -1813,7 +1852,7 @@ body.in-exercise .app-container {
 
 .task-top-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   width: 100%;
 }
@@ -1825,7 +1864,10 @@ body.in-exercise .app-container {
   color: var(--tinte-leise, #64748B);
   min-width: 28px;
   flex-shrink: 0;
-  padding-top: 2px;
+  padding-top: 0;
+  line-height: 1.4;
+  display: inline-flex;
+  align-items: center;
 }
 
 .task-question-title {
@@ -1835,6 +1877,10 @@ body.in-exercise .app-container {
   color: var(--tinte, #1E252B);
   line-height: 1.4;
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .task-stage {
@@ -1925,6 +1971,21 @@ body.in-exercise .app-container {
 .task-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.task-input::placeholder {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--tinte-leise, #4A5560);
+  opacity: 0.45;
+}
+
+.exercise-focus-wrapper .task-input::placeholder {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--tinte-leise, #4A5560);
+  opacity: 0.45;
 }
 
 .task-input:focus {
@@ -2924,7 +2985,7 @@ body.in-exercise .app-container {
   }
 
   .topics-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
 }
 
@@ -3376,26 +3437,17 @@ body.in-exercise .app-container {
   display: flex;
 }
 
-.worksheets-page-intro {
+.worksheets-control-toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding: 4px 2px;
+  margin: 6px 0 16px 0;
 }
 
-.ws-intro-text h2 {
-  font-size: 1.45rem;
-  font-weight: 900;
-  color: var(--tinte, #1E252B);
-  margin-bottom: 4px;
-}
-
-.ws-intro-sub {
-  font-size: 0.95rem;
-  color: var(--tinte-leise, #5A626A);
-  font-weight: 500;
+.worksheets-control-toolbar .worksheets-grade-filter {
+  margin: 0;
 }
 
 .ws-intro-actions {
@@ -3408,23 +3460,26 @@ body.in-exercise .app-container {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
-  padding: 8px 18px;
-  background: var(--flaeche, #F3EEDF);
-  color: var(--tinte, #1E252B);
-  border: 1.5px solid var(--linie-leise, #C8C2B4);
+  min-height: 48px;
+  padding: 8px 20px;
+  background: var(--flaeche, #FFFFFF);
+  color: var(--mathe, #2255A4);
+  border: 1.5px solid var(--mathe, #2255A4);
   border-radius: 999px;
   font-family: inherit;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .btn-batch-print:hover {
-  background: #ffffff;
-  border-color: var(--mathe, #2255A4);
-  color: var(--mathe, #2255A4);
+  background: var(--mathe, #2255A4);
+  color: var(--flaeche, #FFFFFF);
+}
+
+.btn-batch-print:hover .btn-icon-svg {
+  filter: brightness(0) invert(1);
 }
 
 .btn-batch-print .btn-icon-svg {
@@ -3553,6 +3608,64 @@ body.in-exercise .app-container {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  background: var(--papier, #FBF7EE);
+}
+
+.btn-hub-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 22px;
+  background: var(--mathe, #2255A4);
+  color: var(--flaeche, #FFFFFF);
+  border: 2px solid var(--mathe-dunkel, #1A4480);
+  border-radius: var(--radius, 8px);
+  font-family: var(--schrift-titel, inherit);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-hub-primary:hover {
+  background: var(--mathe-dunkel, #1A4480);
+}
+
+.btn-hub-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-hub-primary .btn-icon-svg {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.btn-hub-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 20px;
+  background: var(--flaeche, #FFFFFF);
+  color: var(--tinte, #1E252B);
+  border: 2px solid var(--linie, #3B4651);
+  border-radius: var(--radius, 8px);
+  font-family: var(--schrift-text, inherit);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-hub-secondary:hover {
+  background: var(--papier-hell, #F5EFE0);
+}
+
+.btn-hub-secondary:active {
+  transform: scale(0.98);
 }
 
 /* ========================================================
@@ -3857,6 +3970,131 @@ body.in-exercise .app-container {
   display: inline-block;
   width: 100%;
   height: 100%;
+}
+
+/* Analoge Uhren im Arbeitsblatt-Druck */
+.print-clock-columns-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 28px;
+  margin: 8px 0 14px 0;
+}
+
+.print-clock-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1pt solid #000000;
+  border-radius: 4px;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.print-clock-item-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.print-clock-q-text {
+  font-weight: 700;
+  font-size: 9.5pt;
+  color: #000000;
+}
+
+.print-clock-dial-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.print-clock-dial-box svg {
+  max-width: 105px;
+  height: auto;
+}
+
+.print-clock-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.print-clock-pair svg {
+  max-width: 80px;
+  height: auto;
+}
+
+.print-clock-sublabel {
+  font-size: 8pt;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.print-clock-arrow {
+  font-size: 14pt;
+  font-weight: 900;
+}
+
+.print-clock-line-row {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.print-clock-label {
+  font-weight: 800;
+  font-size: 9pt;
+  white-space: nowrap;
+}
+
+.print-clock-num-box {
+  display: inline-block;
+  min-width: 44px;
+  height: 22px;
+  border: 1.5pt solid #000000;
+  border-radius: 3px;
+  background: #FFFFFF;
+}
+
+.print-clock-digit-box {
+  display: inline-block;
+  min-width: 32px;
+  height: 22px;
+  border: 1.5pt solid #000000;
+  border-radius: 3px;
+  background: #FFFFFF;
+}
+
+.print-clock-colon {
+  font-weight: 900;
+  font-size: 11pt;
+  padding: 0 2px;
+}
+
+.print-clock-unit {
+  font-weight: 700;
+  font-size: 9.5pt;
+  margin-left: 4px;
+}
+
+.print-clock-draw-cue {
+  justify-content: center;
+}
+
+.print-clock-draw-tip {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #333333;
+  text-align: center;
 }
 
 .print-task-item {
@@ -5534,6 +5772,243 @@ body.in-exercise .app-container {
   align-items: center;
   gap: 6px;
 }
+
+/* -------------------------------------------------------------
+   ANALOGE UHR – ONLINE ÜBUNGSANSICHT
+   ------------------------------------------------------------- */
+.clock-stage-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.clock-svg-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+.clock-svg-box svg {
+  max-width: 190px;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.clock-pair-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.clock-card-single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.clock-badge {
+  font-family: 'PrimaeText', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--tinte, #1E2A36);
+  background: var(--papier, #FBF7EE);
+  border: 1px solid var(--linie-leise, #6B6558);
+  border-radius: var(--radius, 8px);
+  padding: 2px 10px;
+}
+
+.clock-arrow-separator {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--mathe, #2D5E9E);
+}
+
+/* Interaktive Steuerung für "Uhr stellen" */
+.clock-target-time-badge {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 2px 10px;
+  background: var(--mathe-hell, #DCE8F6);
+  color: var(--mathe, #2D5E9E);
+  font-weight: 900;
+  font-size: 1.15rem;
+  border-radius: var(--radius, 8px);
+  border: 2px solid var(--mathe, #2D5E9E);
+  vertical-align: middle;
+}
+
+.clock-current-time-readout {
+  font-family: 'PrimaeText', sans-serif;
+  font-size: 1.05rem;
+  color: var(--tinte, #1E2A36);
+  background: var(--papier, #FBF7EE);
+  padding: 6px 16px;
+  border-radius: var(--radius, 8px);
+  border: 1px solid var(--linie-leise, #6B6558);
+}
+
+.clock-set-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.clock-control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.clock-control-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--tinte, #1E2A36);
+}
+
+.clock-set-hours-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.clock-set-btn-hour {
+  min-height: 48px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  background: var(--flaeche, #FFFFFF);
+  border: 2px solid var(--linie, #3B4651);
+  border-radius: var(--radius, 8px);
+  color: var(--tinte, #1E2A36);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clock-set-btn-hour:hover,
+.clock-set-btn-hour:focus {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--deutsch, #B5502B);
+}
+
+.clock-set-btn-hour.selected {
+  background: var(--deutsch, #B5502B);
+  color: #FFFFFF;
+  border-color: var(--deutsch, #B5502B);
+  font-weight: 900;
+}
+
+.clock-set-quarter-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.clock-set-btn-min {
+  flex: 1;
+  min-width: 100px;
+  min-height: 48px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: var(--flaeche, #FFFFFF);
+  border: 2px solid var(--linie, #3B4651);
+  border-radius: var(--radius, 8px);
+  color: var(--tinte, #1E2A36);
+  cursor: pointer;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.clock-set-btn-min:hover,
+.clock-set-btn-min:focus {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--mathe, #2D5E9E);
+}
+
+.clock-set-btn-min.selected {
+  background: var(--mathe, #2D5E9E);
+  color: #FFFFFF;
+  border-color: var(--mathe, #2D5E9E);
+  font-weight: 900;
+}
+
+.clock-set-step-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.clock-set-step-btn {
+  min-height: 44px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  font-weight: 800;
+  background: var(--papier, #FBF7EE);
+  border: 2px solid var(--linie-leise, #6B6558);
+  border-radius: var(--radius, 8px);
+  color: var(--tinte, #1E2A36);
+  cursor: pointer;
+}
+
+/* 4-Uhren Multiple Choice Grid (clock-choice) */
+.clock-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(130px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.clock-choice-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--flaeche, #FFFFFF);
+  border: 2px solid var(--linie, #3B4651);
+  border-radius: var(--radius, 8px);
+  padding: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+  min-height: 120px;
+}
+
+.clock-choice-card:hover {
+  border-color: var(--mathe, #2255A4);
+  background: var(--papier-hell, #F8F5EE);
+}
+
+.clock-choice-card.selected {
+  border-color: var(--mathe, #2255A4);
+  background: var(--mathe-hell, #DCE8F6);
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
+}
+
+.clock-choice-card:active {
+  transform: scale(0.97);
+}
+
+.clock-choice-dial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 
 
 

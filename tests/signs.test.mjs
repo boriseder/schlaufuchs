@@ -19,6 +19,24 @@ test('Signs: Modul existiert und stellt mindestens 10 StVO-Zeichen bereit', () =
   assert.ok(Signs, 'Signs-Modul muss vorhanden sein');
   assert.ok(Array.isArray(Signs.AVAILABLE_SIGNS), 'AVAILABLE_SIGNS muss ein Array sein');
   assert.ok(Signs.AVAILABLE_SIGNS.length >= 10, 'Mindestens 10 StVO-Zeichen müssen registriert sein');
+  
+  // Essentielle Schulweg- und Radfahrprüfungs-Zeichen nach StVO
+  const requiredSigns = [
+    'schutzweg',
+    'achtung-kinder',
+    'wohnstrasse',
+    'begegnungszone',
+    'gehweg',
+    'geh-radweg',
+    'fussgaengerzone',
+    'haltestelle',
+    'stop',
+    'vorrang-geben',
+    'radweg'
+  ];
+  requiredSigns.forEach(reqSign => {
+    assert.ok(Signs.AVAILABLE_SIGNS.includes(reqSign), `Pflichtzeichen "${reqSign}" muss in Signs registriert sein`);
+  });
 });
 
 test('Signs: Alle registrierten Zeichen liefern valides SVG ohne Emojis', () => {
