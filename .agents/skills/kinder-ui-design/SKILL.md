@@ -59,12 +59,12 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 - Öffnet gefiltert auf die **freigeschalteten Schulstufen** des aktiven Kindes. Ein flaches Segmented Control wechselt die Schulstufe.
 - Kacheln **ohne Fließtext**: Symbol, Titel, kleine Schulstufenangabe, Sterne (0 bis 3). Keine Prozentangabe.
 - Beim Tippen auf den Titel liest eine Lautsprecher-Funktion den Namen vor (Schulstufe 1 und 2).
-- Kopfzeile aufgeräumt: links Kind (Avatar und Sterne), rechts die Werkzeuge (Ton, Schmierblatt, Album, Einstellungen).
+- Kopfzeile aufgeräumt: links Kind (Avatar und Sterne), rechts die Werkzeuge (Ton, Album, Arbeitsblätter, Einstellungen).
 - Maximal ca. 8 Kacheln sichtbar, der Rest per Fach-Auswahl. Keine Wand aus 27 Kacheln.
 
 ### Übungsansicht (Fokusmodus)
 
-- **Kein globaler Header.** Eine einzige Leiste (56 px): links `Zurück` (Pfeil-Symbol und Wort), Mitte Schrittpunkte, rechts Vorlesen und Schmierblatt.
+- **Kein globaler Header.** Eine einzige Leiste (56 px): links `Zurück` (Pfeil-Symbol und Wort), Mitte Schrittpunkte, rechts Vorlesen und Aufgaben-Regeneration.
 - Die Aufgabe steht groß und zentriert. Sie ist **nicht** eine kleine Box im leeren Raum, sondern der Arbeitsplatz.
 - Drei Bereiche übereinander, durch `2px`-Linien getrennt: **Aufgabe**, **Eingabe**, **Rückmeldung**. Das ist eine Ebene, keine Schachtelung.
 - Abbrechen sichert den Zwischenstand. Der Dialog ist freundlich: „Hier weitermachen?“ mit zwei klaren Schaltflächen.

@@ -90,8 +90,7 @@ Browser
  │    ├── app.js                  (Controller: Routing, Numpad-Bridge, Focus-Mode)
  │    ├── state.js                (PubSub-Event-Bus & Profile)
  │    ├── audio.js                (Hybrid Web Audio Synthesizer + SpeechSynthesis de-AT)
- │    ├── admin.js                (Lernstand-Diagnostik, Profilverwaltung, Backup-Engine)
- │    └── scratchpad.js           (HTML5 Canvas Rechenschmierzettel)
+ │    └── admin.js                (Lernstand-Diagnostik, Profilverwaltung, Backup-Engine)
  └── sw.js                        (Service Worker: Cache-First Offline-Strategie)
 ```
 
@@ -145,7 +144,6 @@ Schlaufuchs/
 │   ├── confetti.js              # Canvas-Konfetti für Auszeichnungs-Karten
 │   ├── print.js                 # Druckausgabe für Arbeitsblätter und Urkunden
 │   ├── renderers.js             # Einheitliche 3-Zonen-Aufgabenrenderer
-│   ├── scratchpad.js            # Digitaler Rechenschmierzettel
 │   ├── state.js                 # Statusverwaltung & Profil-Handling
 │   └── stickers.js              # Sticker-Sammelalbum
 ├── scripts/

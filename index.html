@@ -42,9 +42,6 @@
         <button class="header-tool-btn" id="btn-toggle-sound" title="Ton ein-/ausschalten (Klassenzimmer-Modus)">
           <span id="sound-icon"><img src="assets/icons/ton-an.svg" class="header-icon-svg" alt="Ton"></span>
         </button>
-        <button class="header-tool-btn" id="btn-toggle-scratchpad" title="Schmierblatt zum Rechnen öffnen">
-          <img src="assets/icons/schmierblatt.svg" class="header-icon-svg" alt="Schmierblatt">
-        </button>
         <button class="header-tool-btn" id="btn-open-stickers" title="Mein Sticker-Album & Trophäen">
           <img src="assets/icons/buch.svg" class="header-icon-svg" alt="Sammelbuch">
           <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
@@ -607,9 +604,6 @@
           <button type="button" id="btn-read-aloud" class="focus-tool-btn" title="Aufgabe vorlesen lassen">
             <img src="assets/icons/ton-an.svg" class="focus-icon-svg" alt="Vorlesen">
           </button>
-          <button type="button" id="btn-exercise-scratchpad" class="focus-tool-btn" title="Schmierblatt öffnen">
-            <img src="assets/icons/schmierblatt.svg" class="focus-icon-svg" alt="Schmierblatt">
-          </button>
           <button type="button" id="btn-toggle-child-numpad" class="focus-tool-btn" title="Großtasten-Zahlenfeld ein-/ausblenden" style="display: none;">
             <img src="assets/icons/numpad.svg" class="focus-icon-svg" alt="Zahlenfeld">
           </button>
@@ -817,26 +811,6 @@
       </div>
     </div>
 
-    <!-- DIGITALES SCHMIERBLATT / NOTIZ-CANVAS -->
-    <div id="scratchpad-panel" class="scratchpad-panel">
-      <div class="scratchpad-header">
-        <div class="scratchpad-title">
-          <span><img src="assets/icons/schmierblatt.svg" class="icon-inline-svg" alt=""></span> <span>Digitales Schmierblatt (Notizen & Nebenrechnungen)</span>
-        </div>
-        <div class="scratchpad-actions">
-          <button id="btn-scratchpad-clear" class="btn btn-secondary btn-sm" title="Schmierblatt leeren">
-            <span>Löschen</span>
-          </button>
-          <button id="btn-scratchpad-close" class="btn btn-primary btn-sm" title="Schmierblatt schließen">
-            <img src="assets/icons/schliessen.svg" class="icon-inline-svg" alt=""> <span>Schließen</span>
-          </button>
-        </div>
-      </div>
-      <div class="scratchpad-body">
-        <canvas id="scratchpad-canvas"></canvas>
-      </div>
-    </div>
-
     <!-- MODAL: STICKER-ALBUM & TROPHÄEN -->
     <div id="stickers-modal" class="modal-overlay">
       <div class="modal-card modal-card-lg">
@@ -919,7 +893,6 @@
   <script src="js/print-engine.js"></script>
   <script src="js/print.js"></script>
   <script src="js/worksheets.js"></script>
-  <script src="js/scratchpad.js"></script>
   <script src="js/stickers.js"></script>
   <script src="js/validators/index.js"></script>
   <script src="js/generators/math.js"></script>

@@ -14,7 +14,6 @@
       fertig: 'Fertig',
       pruefen: 'Überprüfen',
       vorlesen: 'Vorlesen',
-      schmierblatt: 'Schmierblatt',
       zurueck: 'Zurück',
       hilfe: 'Tipp',
       abbrechenTitel: 'Übung beenden?',

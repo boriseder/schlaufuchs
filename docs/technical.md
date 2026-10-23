@@ -81,7 +81,6 @@ Das System folgt einer strikten Trennung der Zuständigkeiten (Separation of Con
 │   ├── state.js                # Globaler State & Publish-Subscribe Event-Bus
 │   ├── audio.js                # Hybrid Web Audio Synthesizer + SpeechSynthesis (de-AT)
 │   ├── admin.js                # Eltern-/Lehrkraft-Portal, Profilverwaltung & JSON-Backup
-│   ├── scratchpad.js           # Integrierter digitaler Rechenschmierzettel (HTML5 Canvas)
 │   ├── stickers.js             # Virtuelles Sticker-Sammelheft
 │   ├── print.js                # Vektoroptimierter Arbeitsblatt- & Urkundendruck
 │   └── confetti.js             # Physikalisches Canvas-Konfetti für Abschlusskarten

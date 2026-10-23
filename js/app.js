@@ -31,7 +31,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
 
     // Module initialisieren
     if (window.Schlaufuchs.Admin) window.Schlaufuchs.Admin.init();
-    if (window.Schlaufuchs.Scratchpad) window.Schlaufuchs.Scratchpad.init();
     if (window.Schlaufuchs.Stickers) window.Schlaufuchs.Stickers.init();
     if (window.Schlaufuchs.Worksheets) window.Schlaufuchs.Worksheets.init();
 
@@ -272,13 +271,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     const btnReadAloud = document.getElementById('btn-read-aloud');
     if (btnReadAloud) {
       btnReadAloud.addEventListener('click', speakCurrentTask);
-    }
-
-    const btnExerciseScratchpad = document.getElementById('btn-exercise-scratchpad');
-    if (btnExerciseScratchpad && window.Schlaufuchs.Scratchpad) {
-      btnExerciseScratchpad.addEventListener('click', () => {
-        window.Schlaufuchs.Scratchpad.toggle();
-      });
     }
   }
 
