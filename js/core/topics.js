@@ -223,7 +223,7 @@ window.Schlaufuchs.Topics = (function () {
       grades: [2, 3],
       lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
       archetype: 'reading-knowledge',
-      icon: 'assets/icons/themen/general/tiere.svg'
+      icon: 'assets/icons/themen/general/igel.svg'
     },
     {
       id: 'general-traffic',

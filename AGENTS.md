@@ -66,7 +66,9 @@ Eine Änderung ist fertig, wenn:
 
 - [ ] die passenden Skills gelesen und angewendet sind,
 - [ ] `node scripts/check-regeln.mjs` ohne Fehler läuft,
-- [ ] die Tests laufen (Generatoren und Validatoren haben Unit-Tests, siehe `technik-offline-touch`),
+- [ ] alle Tests laufen (`node --test tests/*.test.mjs` ohne Fehler),
+- [ ] die gesamte Pipeline (Thema → Generator → gerendertes HTML) durch Integrationstests auf Vollständigkeit, didaktische Lösbarkeit und Layout-Integrität geprüft ist,
+- [ ] keine stillen Fallbacks existieren (Fehlende Ressourcen oder unbekannte IDs werfen sofort Fehler statt stiller Fallback-Emojis – Fail-Fast-Prinzip),
 - [ ] die Aufgabe ohne Netz funktioniert,
 - [ ] sie auf Touch ohne Tastatur lösbar ist (Ziffernfeld in der App),
 - [ ] offene Lehrplanfragen als `TODO-LEHRPLAN` markiert und im Bericht genannt sind.

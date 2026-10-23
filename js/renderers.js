@@ -532,7 +532,7 @@ window.Schlaufuchs.Renderers = (function () {
             <span>${task.num2}</span>
             <span class="task-equals">=</span>
             <input 
-              type="number" 
+              type="text" 
               inputmode="numeric" 
               pattern="[0-9]*" 
               class="task-input" 
@@ -575,7 +575,7 @@ window.Schlaufuchs.Renderers = (function () {
         return `
           <div class="pyramid-brick pyramid-brick-input" data-brick-key="${key}">
             <input 
-              type="number" 
+              type="text" 
               inputmode="numeric" 
               pattern="[0-9]*" 
               class="pyramid-input" 
@@ -1108,7 +1108,7 @@ window.Schlaufuchs.Renderers = (function () {
         <div class="task-stage">
           <div class="input-row-center">
             <input 
-              type="number" 
+              type="text" 
               inputmode="numeric" 
               pattern="[0-9]*" 
               class="task-input input-width-180" 
@@ -1161,7 +1161,7 @@ window.Schlaufuchs.Renderers = (function () {
               <div class="geometry-formula-badge">Formel: ${task.formula}</div>
               <div class="geometry-input-row">
                 <input 
-                  type="number" 
+                  type="text" 
                   inputmode="numeric" 
                   pattern="[0-9]*" 
                   class="task-input input-width-140" 
@@ -1365,7 +1365,7 @@ window.Schlaufuchs.Renderers = (function () {
           <div class="text-problem-calc-row">
             <span class="text-problem-calc-label">🧮 Deine Rechnung (Ergebnis):</span>
             <input 
-              type="number" 
+              type="text" 
               inputmode="numeric" 
               pattern="[0-9]*" 
               class="task-input input-width-140" 
@@ -1433,7 +1433,7 @@ window.Schlaufuchs.Renderers = (function () {
           </div>
           <div class="twenty-field-input-row">
             <input 
-              type="number" 
+              type="text" 
               inputmode="numeric" 
               pattern="[0-9]*" 
               class="task-input input-width-140" 
@@ -1705,6 +1705,7 @@ window.Schlaufuchs.Renderers = (function () {
   }
 
   return {
+    getScaffoldingData: getScaffoldingData,
     renderEquation: renderEquation,
     renderPyramid: renderPyramid,
     renderWordTypes: renderWordTypes,
@@ -1720,5 +1721,7 @@ window.Schlaufuchs.Renderers = (function () {
     renderTwentyField: renderTwentyField,
     renderWrittenCalc: renderWrittenCalc,
     renderReading: renderReading,
+    getScaffoldingData: getScaffoldingData,
+    getUniversalScaffolding: getUniversalScaffolding
   };
 })();

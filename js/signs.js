@@ -148,8 +148,7 @@ window.Schlaufuchs.Signs = (function () {
 
   function getSignSvg(signId) {
     if (!SVG_DEFS[signId]) {
-      console.warn(`Verkehrszeichen ${signId} nicht gefunden.`);
-      return `<span style="font-size: 2rem;">🚸</span>`;
+      throw new Error(`Verkehrszeichen mit ID "${signId}" existiert nicht.`);
     }
     return SVG_DEFS[signId].trim();
   }

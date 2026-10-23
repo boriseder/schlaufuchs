@@ -255,24 +255,15 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       });
     }
 
-    // Umschalter zwischen Online-Üben und Arbeitsblätter-Zentrum
-    const tabBtnOnline = document.getElementById('tab-btn-online');
-    const tabBtnWorksheets = document.getElementById('tab-btn-worksheets');
+    // Arbeitsblätter-Zentrum über Header-Druckersymbol öffnen / umschalten
     const btnHeaderWorksheets = document.getElementById('btn-header-worksheets');
-
-    if (tabBtnOnline) {
-      tabBtnOnline.addEventListener('click', () => showMenuView());
-    }
-    if (tabBtnWorksheets) {
-      tabBtnWorksheets.addEventListener('click', () => {
-        if (window.Schlaufuchs.Worksheets) {
-          window.Schlaufuchs.Worksheets.showWorksheetsView();
-        }
-      });
-    }
     if (btnHeaderWorksheets) {
       btnHeaderWorksheets.addEventListener('click', () => {
-        if (window.Schlaufuchs.Worksheets) {
+        const viewWorksheets = document.getElementById('view-worksheets');
+        const isWsActive = viewWorksheets && viewWorksheets.classList.contains('active');
+        if (isWsActive) {
+          showMenuView();
+        } else if (window.Schlaufuchs.Worksheets) {
           window.Schlaufuchs.Worksheets.showWorksheetsView();
         }
       });
@@ -314,12 +305,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     viewExercise.classList.remove('active');
     const viewWorksheets = document.getElementById('view-worksheets');
     if (viewWorksheets) viewWorksheets.classList.remove('active');
+    const btnHeaderWorksheets = document.getElementById('btn-header-worksheets');
+    if (btnHeaderWorksheets) btnHeaderWorksheets.classList.remove('active');
     viewMenu.classList.add('active');
-
-    const tabOnline = document.getElementById('tab-btn-online');
-    const tabWorksheets = document.getElementById('tab-btn-worksheets');
-    if (tabOnline) tabOnline.classList.add('active');
-    if (tabWorksheets) tabWorksheets.classList.remove('active');
 
     currentTopicId = null;
     currentTasks = [];
@@ -1203,6 +1191,11 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       State.saveStarsForTopic(currentTopicId, starsEarned);
     }
   }
+
+  window.Schlaufuchs.App = {
+    showMenuView: showMenuView,
+    showExerciseView: showExerciseView
+  };
 
   // DOMContentLoaded Start
   if (document.readyState === 'loading') {

@@ -418,6 +418,8 @@ window.Schlaufuchs.Stickers = (function () {
     updateHeaderBadge: updateHeaderBadge,
     renderAlbumModal: renderAlbumModal,
     openBoosterPack: openBoosterPack,
-    getAvailablePacksCount: getAvailablePacksCount
+    getAvailablePacksCount: getAvailablePacksCount,
+    ALL_STICKERS: ALL_STICKERS,
+    TROPHIES: TROPHIES
   };
 })();

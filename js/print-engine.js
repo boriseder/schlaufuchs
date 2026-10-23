@@ -46,21 +46,24 @@ window.Schlaufuchs.PrintEngine = (function () {
     return String(n);
   };
 
-  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste
-  const SECRET_WORDS = [
-    'FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL',
-    'SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE',
-    'BUECHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN', 'MEISTER', 'KOBEL',
-    'WALD', 'IGEL', 'EULE', 'BERG', 'HERZ', 'FLUSS', 'DONAU', 'ALPEN'
-  ];
+  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste nach Wortlänge
+  const SECRET_WORDS_BY_LENGTH = {
+    3: ['UHU', 'MUT', 'BÄR', 'ROT', 'AST', 'SEE', 'TAG'],
+    4: ['WALD', 'IGEL', 'EULE', 'BERG', 'HERZ', 'WOLF', 'BAUM', 'LUFT', 'GOLD', 'BLAU', 'HAUS', 'MAUS'],
+    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL'],
+    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN'],
+    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE'],
+    8: ['FUCHSBAU', 'SCHLAUER', 'WALDKAUZ', 'TAUSENDE', 'KÖNIGIN', 'LESEFEST', 'SCHULHOF'],
+    12: ['RECHENKÖNIGE', 'ZAHLENZAUBER', 'WINTERZAUBER', 'SCHATZSUCHER', 'MEISTERSTERN', 'BÜCHERSCHATZ']
+  };
 
   function pickSecretWord(preferredLength) {
-    let pool = SECRET_WORDS;
-    if (preferredLength) {
-      const matching = SECRET_WORDS.filter(w => Math.abs(w.length - preferredLength) <= 1);
-      if (matching.length > 0) pool = matching;
+    const len = preferredLength || 5;
+    const list = SECRET_WORDS_BY_LENGTH[len] || (len >= 12 ? SECRET_WORDS_BY_LENGTH[12] : (len > 8 ? SECRET_WORDS_BY_LENGTH[8] : SECRET_WORDS_BY_LENGTH[5]));
+    let word = list[rand(0, list.length - 1)];
+    if (!word || (preferredLength && word.length !== preferredLength && SECRET_WORDS_BY_LENGTH[preferredLength])) {
+      word = SECRET_WORDS_BY_LENGTH[preferredLength][0];
     }
-    const word = pool[rand(0, pool.length - 1)];
     // Im Storage für die Schatzkiste im Sticker-Album registrieren
     try {
       if (window.Schlaufuchs && window.Schlaufuchs.Storage) {
@@ -82,14 +85,65 @@ window.Schlaufuchs.PrintEngine = (function () {
   function buildCompactCalcWorksheet(topicId, grade) {
     const tasks = [];
     const usedAnswers = new Set();
-    const targetCount = 12;
+    const targetCount = topicId === 'math-written' ? 6 : 12;
     let attempts = 0;
 
     while (tasks.length < targetCount && attempts < 500) {
       attempts++;
       let a, b, op, ans, sym;
 
-      if (topicId === 'math-addition') {
+      if (topicId === 'math-written') {
+        const isAdd = Math.random() > 0.4;
+        sym = isAdd ? '+' : '−';
+        op = isAdd ? 'add' : 'sub';
+        if (grade === 4) {
+          if (isAdd) {
+            a = rand(1200, 6800);
+            b = rand(1100, 3100);
+            ans = a + b;
+          } else {
+            a = rand(3500, 9800);
+            b = rand(1200, a - 500);
+            ans = a - b;
+          }
+        } else {
+          if (isAdd) {
+            a = rand(135, 680);
+            b = rand(120, 290);
+            ans = a + b;
+          } else {
+            a = rand(350, 950);
+            b = rand(120, a - 50);
+            ans = a - b;
+          }
+        }
+        const headers = grade === 4 ? ['T', 'H', 'Z', 'E'] : ['H', 'Z', 'E'];
+        const padLen = headers.length;
+        const d1 = String(a).padStart(padLen, ' ').split('');
+        const d2 = String(b).padStart(padLen, ' ').split('');
+        const resD = String(ans).padStart(padLen, ' ').split('');
+
+        const sig = `written:${a}${sym}${b}`;
+        if (!usedAnswers.has(ans) && !tracker.has(sig)) {
+          usedAnswers.add(ans);
+          tracker.add(sig);
+          tasks.push({
+            type: 'written-calc',
+            schulstufe: grade,
+            lehrplanRef: 'M-3/4-Schriftliche-Verfahren',
+            operation: sym,
+            headers: headers,
+            digits1: d1,
+            digits2: d2,
+            resultDigits: resD,
+            answer: ans,
+            formattedAnswer: formatNum(ans),
+            raw1: a,
+            raw2: b
+          });
+        }
+        continue;
+      } else if (topicId === 'math-addition') {
         op = 'add';
         sym = '+';
         if (grade === 1) {
@@ -168,12 +222,12 @@ window.Schlaufuchs.PrintEngine = (function () {
         op = 'div';
         sym = ':';
         const divisor = rand(2, grade === 2 ? 5 : 10);
-        const quotient = rand(2, grade === 4 ? 20 : 10);
+        const quotient = rand(1, grade === 4 ? 20 : 12);
         a = divisor * quotient;
         b = divisor;
         ans = quotient;
       } else if (topicId === 'math-million') {
-        // Stellenwert & Ergänzen bis 1 Million
+        // Stellenwert & Ergänzen bis 1 Million (stets 4. Klasse)
         sym = '+';
         const base = rand(10, 85) * 10000;
         const addPart = rand(1, 9) * 1000;
@@ -287,8 +341,26 @@ window.Schlaufuchs.PrintEngine = (function () {
           prompt: `Setze die Zahlenreihe fort (+${step}): ${seq.join(', ')}, ___, ___`
         });
       }
+    } else if (topicId === 'brain-pattern') {
+      // 4 Muster- und Logikfolgen
+      const patterns = [
+        { seq: ['▲', '■', '●', '▲', '■'], next: '●', prompt: 'Welche Form kommt als Nächstes in der Reihe?' },
+        { seq: ['★', '★', '●', '★', '★'], next: '●', prompt: 'Erkenne die logische Regel und setze das Symbol fort:' },
+        { seq: ['◆', '▲', '◆', '▲', '◆'], next: '▲', prompt: 'Welches geometrische Zeichen folgt logisch?' },
+        { seq: ['■', '■', '▲', '▲', '■'], next: '■', prompt: 'Führe das Muster folgerichtig weiter:' }
+      ];
+      patterns.forEach(p => {
+        tasks.push({
+          type: 'pattern',
+          schulstufe: grade,
+          lehrplanRef: `GT-${grade}-Muster`,
+          pattern: p.seq,
+          answer: p.next,
+          prompt: `${p.prompt} ${p.seq.join(' ')} ___`
+        });
+      });
     } else {
-      // Zwanzigerfeld oder Muster-Meister
+      // math-twenty: Zwanzigerfeld
       for (let i = 0; i < 4; i++) {
         const val = rand(7, 19);
         tasks.push({
@@ -389,25 +461,63 @@ window.Schlaufuchs.PrintEngine = (function () {
         calculation: '20 € − 7 €',
         answer: '13 €'
       });
-    } else {
-      // Geometrie / Flächen / Maßeinheiten (4. Klasse)
+    } else if (topicId === 'math-geometry') {
+      // 3 Aufgaben zu Geometrie (4. Klasse)
       tasks.push({
         type: 'text-problem',
         schulstufe: 4,
         lehrplanRef: 'M-4-Geometrie',
-        story: 'Ein rechteckiges Klassenzimmer ist 8 m lang und 6 m breit. Berechne den Umfang (u) und den Flächeninhalt (A) des Raumes.',
-        question: 'Wie groß sind Umfang und Fläche?',
-        calculation: 'u = 2·8 + 2·6 | A = 8·6',
-        answer: 'u = 28 m, A = 48 m²'
+        story: 'Ein rechteckiges Klassenzimmer ist 8 m lang und 6 m breit. Berechne den Umfang (u) des Raumes.',
+        question: 'Wie lang ist der Umfang des Klassenzimmers?',
+        calculation: 'u = 2 · 8 m + 2 · 6 m',
+        answer: 'u = 28 m'
+      });
+      tasks.push({
+        type: 'text-problem',
+        schulstufe: 4,
+        lehrplanRef: 'M-4-Geometrie',
+        story: 'Ein quadratisches Blumenbeet im Schulgarten hat eine Seitenlänge von a = 5 m. Berechne den Flächeninhalt (A).',
+        question: 'Wie groß ist der Flächeninhalt des Blumenbeets?',
+        calculation: 'A = 5 m · 5 m',
+        answer: 'A = 25 m²'
+      });
+      tasks.push({
+        type: 'text-problem',
+        schulstufe: 4,
+        lehrplanRef: 'M-4-Geometrie',
+        story: 'Der Turnsaal ist 15 m lang und 10 m breit. Wie groß ist die Bodenfläche des Turnsaals?',
+        question: 'Wie viel Quadratmeter Fläche hat der Boden?',
+        calculation: 'A = 15 m · 10 m',
+        answer: 'A = 150 m²'
+      });
+    } else {
+      // math-units: Maßeinheiten & Gewichte (4. Klasse)
+      tasks.push({
+        type: 'text-problem',
+        schulstufe: 4,
+        lehrplanRef: 'M-4-Masseinheiten',
+        story: 'In einem Wassertank sind 125 l Regenwasser. Nach einem Gewitter fließen 85 l hinein. Für den Garten werden 60 l verbraucht. Wie viel Liter verbleiben?',
+        question: 'Wie viel Liter Regenwasser sind noch im Tank?',
+        calculation: '125 l + 85 l − 60 l',
+        answer: '150 l'
       });
       tasks.push({
         type: 'text-problem',
         schulstufe: 4,
         lehrplanRef: 'M-4-Masseinheiten',
-        story: 'In einem Wassertank sind 125 l Regenwasser. Nach einem starken Gewitter fließen weitere 85 l hinein. Für den Schulgarten werden 60 l verbraucht. Wie viel Liter sind nun im Tank?',
-        question: 'Wie viel Liter Regenwasser verbleiben?',
-        calculation: '125 l + 85 l − 60 l',
-        answer: '150 l'
+        story: 'Ein Bäcker benötigt für Semmeln 4 kg Mehl. Im Vorratssack sind noch 2 500 g Mehl. Wie viel Gramm Mehl fehlen noch?',
+        question: 'Wie viel Gramm Mehl muss der Bäcker dazugeben?',
+        calculation: '4 000 g − 2 500 g',
+        answer: '1 500 g'
+      });
+      tasks.push({
+        type: 'text-problem',
+        schulstufe: 4,
+        lehrplanRef: 'M-4-Masseinheiten',
+        story: 'Ein Wanderweg von der Hütte zum Berggipfel ist genau 3 km lang. Familie Huber ist bereits 1 800 m gewandert. Wie weit ist es noch?',
+        question: 'Wie viele Meter Wanderweg verbleiben bis zum Gipfel?',
+        calculation: '3 000 m − 1 800 m',
+        answer: '1 200 m'
       });
     }
 
@@ -502,6 +612,47 @@ window.Schlaufuchs.PrintEngine = (function () {
           targetSentence: sc.target
         });
       });
+    } else if (topicId === 'german-tenses') {
+      // 4 Aufgaben zu Zeitformen (Gegenwart -> Mitvergangenheit, 4. Klasse)
+      const tenses = [
+        { pres: 'Lukas läuft schnell zur Schule.', past: 'Lukas lief schnell zur Schule.', verb: 'laufen ➔ lief' },
+        { pres: 'Wir lesen ein spannendes Buch.', past: 'Wir lasen ein spannendes Buch.', verb: 'lesen ➔ lasen' },
+        { pres: 'Die Kinder singen ein schönes Lied.', past: 'Die Kinder sangen ein schönes Lied.', verb: 'singen ➔ sangen' },
+        { pres: 'Sophie findet eine glänzende Münze.', past: 'Sophie fand eine glänzende Münze.', verb: 'finden ➔ fand' }
+      ];
+
+      tenses.forEach(t => {
+        tasks.push({
+          type: 'tenses',
+          schulstufe: 4,
+          lehrplanRef: 'D-4-Zeitformen-Mitvergangenheit',
+          presentSentence: t.pres,
+          targetSentence: t.past,
+          answer: t.past,
+          prompt: `Setze den Satz aus der Gegenwart in die Mitvergangenheit:`
+        });
+      });
+    } else if (topicId === 'german-cases') {
+      // 4 Fälle des Nomens (Werfall, Wesfall, Wemfall, Wenfall, 4. Klasse)
+      const cases = [
+        { sentence: 'Der schlaue Fuchs schleicht leise durch das Moos.', target: 'Der schlaue Fuchs', caseName: 'Werfall (1. Fall: Wer oder was?)', short: 'Werfall' },
+        { sentence: 'Die Schultasche des Schülers steht neben dem Sessel.', target: 'des Schülers', caseName: 'Wesfall (2. Fall: Wessen?)', short: 'Wesfall' },
+        { sentence: 'Wir helfen dem kleinen Kind über die Straße.', target: 'dem kleinen Kind', caseName: 'Wemfall (3. Fall: Wem?)', short: 'Wemfall' },
+        { sentence: 'Lukas zeichnet einen bunten Vogel auf das Blatt.', target: 'einen bunten Vogel', caseName: 'Wenfall (4. Fall: Wen oder was?)', short: 'Wenfall' }
+      ];
+
+      cases.forEach(c => {
+        tasks.push({
+          type: 'cases',
+          schulstufe: 4,
+          lehrplanRef: 'D-4-Grammatik-Vier-Faelle',
+          sentence: c.sentence,
+          targetPhrase: c.target,
+          answer: c.short,
+          fullCase: c.caseName,
+          prompt: `Bestimme den Fall des unterstrichenen Nomens (Werfall, Wesfall, Wemfall, Wenfall):`
+        });
+      });
     } else {
       // Groß- und Kleinschreibung (4 Sätze)
       const capSentences = [
@@ -589,22 +740,47 @@ window.Schlaufuchs.PrintEngine = (function () {
           }
         ]
       });
-    } else if (topicId === 'general-traffic' || topicId === 'general-bike-test') {
-      // Verkehrszeichen & Sicherheit
+    } else if (topicId === 'general-animals') {
+      // 4 Aufgaben zu Wintertieren in Österreich
       tasks.push({
         type: 'multiple-choice',
         schulstufe: grade,
-        lehrplanRef: 'SU-Verkehr-StVO',
-        signId: 'vz_stopp',
-        question: 'Was bedeutet dieses achteckige rote Schild an einer Kreuzung?',
-        options: ['Unbedingt anhalten und Vorrang geben', 'Schnell weiterfahren', 'Nur für Radfahrer'],
+        lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
+        question: 'Wie überwintert der Igel bei klirrender Kälte?',
+        options: ['Winterschlaf (Körpertemperatur sinkt stark ab)', 'Winterruhe (sucht regelmäßig Futter)', 'Fliegt in den warmen Süden'],
         correctIndex: 0
       });
       tasks.push({
         type: 'multiple-choice',
         schulstufe: grade,
-        lehrplanRef: 'SU-Verkehr-StVO',
-        signId: 'vz_schutzweg',
+        lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
+        question: 'Was macht das Eichhörnchen im kalten Winter?',
+        options: ['Winterruhe (schläft im Kobel, wacht auf zum Fressen)', 'Winterstarre (erstarrt wie Eis)', 'Winterschlaf ohne Aufwachen'],
+        correctIndex: 0
+      });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: grade,
+        lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
+        question: 'Wie verbringt der Laubfrosch den eisigen Winter?',
+        options: ['Winterstarre (Körper erstarrt völlig)', 'Baut ein Nest aus Moos', 'Zieht als Zugvogel nach Afrika'],
+        correctIndex: 0
+      });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: grade,
+        lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
+        question: 'Welche Vögel bleiben als Standvögel im Winter in Österreich?',
+        options: ['Amsel und Kohlmeise', 'Kuckuck und Nachtigall', 'Rauchschwalbe und Storch'],
+        correctIndex: 0
+      });
+    } else if (topicId === 'general-traffic') {
+      // 4 StVO Verkehrszeichen für den Schulweg (mit gültigen IDs aus js/signs.js)
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: grade,
+        lehrplanRef: 'SU-1/3-Verkehr-StVO',
+        signId: 'schutzweg',
         question: 'Wie verhältst du dich am Zebrastreifen (Schutzweg)?',
         options: ['Blickkontakt zum Fahrer suchen und zügig queren', 'Ohne zu schauen hinüberlaufen', 'Auf der Straße stehenbleiben'],
         correctIndex: 0
@@ -612,23 +788,70 @@ window.Schlaufuchs.PrintEngine = (function () {
       tasks.push({
         type: 'multiple-choice',
         schulstufe: grade,
-        lehrplanRef: 'SU-Verkehr-StVO',
-        signId: 'vz_radweg',
-        question: 'Welche Ausrüstung ist am Fahrrad laut Fahrradverordnung gesetzlich vorgeschrieben?',
-        options: ['Zwei voneinander unabhängige Bremsen & Klingel', 'Ein Lautsprecher', 'Ein Rückspiegel'],
+        lehrplanRef: 'SU-1/3-Verkehr-StVO',
+        signId: 'stop',
+        question: 'Was bedeutet das achteckige rote Stopp-Schild an einer Kreuzung?',
+        options: ['Unbedingt anhalten und Vorrang geben', 'Schnell weiterfahren', 'Nur für Radfahrer'],
         correctIndex: 0
       });
       tasks.push({
         type: 'multiple-choice',
         schulstufe: grade,
-        lehrplanRef: 'SU-Verkehr-StVO',
-        signId: 'vz_vorrang_geben',
+        lehrplanRef: 'SU-1/3-Verkehr-StVO',
+        signId: 'vorrang-geben',
         question: 'Was bedeutet das auf der Spitze stehende weiße Dreieck mit rotem Rand?',
         options: ['Vorrang geben', 'Hier habe ich immer Vorrang', 'Sackgasse'],
         correctIndex: 0
       });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: grade,
+        lehrplanRef: 'SU-1/3-Verkehr-StVO',
+        signId: 'geh-radweg',
+        question: 'Wer darf diesen blau markierten Weg benützen?',
+        options: ['Fußgänger und Radfahrer', 'Nur Autos und Mopeds', 'Nur Traktoren'],
+        correctIndex: 0
+      });
+    } else if (topicId === 'general-bike-test') {
+      // 4 Fragen zur freiwilligen Radfahrprüfung (4. Klasse, mit StVO Zeichen)
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: 4,
+        lehrplanRef: 'SU-4-Radfahrpruefung-StVO',
+        signId: 'radweg',
+        question: 'Wer muss den mit diesem runden blauen Schild gekennzeichneten Weg benützen?',
+        options: ['Radfahrerinnen und Radfahrer (Benützungspflicht)', 'Alle Fußgänger', 'Nur Autos'],
+        correctIndex: 0
+      });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: 4,
+        lehrplanRef: 'SU-4-Radfahrpruefung-StVO',
+        signId: 'stop',
+        question: 'Musst du mit dem Fahrrad an einer Stopp-Tafel immer vollständig anhalten?',
+        options: ['Ja, immer mit den Füßen am Boden anhalten', 'Nein, langsames Rollen reicht', 'Nur wenn ein Auto kommt'],
+        correctIndex: 0
+      });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: 4,
+        lehrplanRef: 'SU-4-Radfahrpruefung-StVO',
+        signId: 'vorrang-geben',
+        question: 'Was gilt beim Verkehrszeichen „Vorrang geben“ an einer Kreuzung?',
+        options: ['Warten und Querverkehr vorlassen', 'Einfach durchfahren', 'Klingeln und weiterfahren'],
+        correctIndex: 0
+      });
+      tasks.push({
+        type: 'multiple-choice',
+        schulstufe: 4,
+        lehrplanRef: 'SU-4-Radfahrpruefung-StVO',
+        signId: 'einbahnstrasse',
+        question: 'Darf man mit dem Fahrrad in eine Einbahnstraße gegen die Richtung fahren?',
+        options: ['Nur wenn eine Zusatztafel „Ausgenommen Radfahrer“ angebracht ist', 'Ja, immer überall', 'Nein, niemals'],
+        correctIndex: 0
+      });
     } else {
-      // Österreich: Bundesländer & Hauptstädte
+      // general-austria: 4 Fragen zu Bundesländern und Hauptstädten
       tasks.push({
         type: 'multiple-choice',
         schulstufe: 4,
@@ -649,7 +872,7 @@ window.Schlaufuchs.PrintEngine = (function () {
         type: 'multiple-choice',
         schulstufe: 4,
         lehrplanRef: 'SU-4-Oesterreich',
-        question: 'Wie heißt die Landeshauptstadt des flächenmäßig größten Bundeslandes Niederösterreich?',
+        question: 'Wie heißt die Landeshauptstadt von Niederösterreich?',
         options: ['St. Pölten', 'Eisenstadt', 'Linz'],
         correctIndex: 0
       });
@@ -705,7 +928,14 @@ window.Schlaufuchs.PrintEngine = (function () {
   function generateWorksheetTasks(topicId, targetGrade) {
     const Topics = window.Schlaufuchs.Topics;
     const meta = Topics ? Topics.getTopicById(topicId) : null;
-    const grade = targetGrade || (meta && meta.grades ? meta.grades[0] : 2);
+    let grade = targetGrade || (meta && meta.grades ? meta.grades[0] : 2);
+    if (meta && meta.grades && meta.grades.length > 0) {
+      if (!meta.grades.includes(grade)) {
+        if (grade < meta.grades[0]) grade = meta.grades[0];
+        else if (grade > meta.grades[meta.grades.length - 1]) grade = meta.grades[meta.grades.length - 1];
+        else grade = meta.grades[0];
+      }
+    }
     const archetype = meta ? meta.archetype : 'compact-calc';
 
     switch (archetype) {

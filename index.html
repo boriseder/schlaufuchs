@@ -60,18 +60,6 @@
 
     <!-- ANSICHT 1: HAUPTMENÜ / THEMENAUSWAHL -->
     <section id="view-menu" class="view-section active">
-      <!-- Haupt-Modus-Umschalter: Online üben vs. Arbeitsblätter -->
-      <div class="main-mode-switcher">
-        <button type="button" class="mode-tab-btn active" id="tab-btn-online" title="Interaktives Üben am Bildschirm">
-          <img src="assets/icons/fuchs.svg" class="tab-icon-svg" alt="">
-          <span>Online üben</span>
-        </button>
-        <button type="button" class="mode-tab-btn" id="tab-btn-worksheets" title="Vollwertige A4-Arbeitsblätter zum Ausdrucken">
-          <img src="assets/icons/drucken.svg" class="tab-icon-svg" alt="">
-          <span>Arbeitsblätter drucken</span>
-        </button>
-      </div>
-
       <!-- Klassenfilter -->
       <nav class="grade-segmented-control class-filter-bar" aria-label="Schulstufe auswählen">
         <button class="filter-btn active" data-grade="all">Alle Klassen</button>
@@ -541,81 +529,34 @@
 
     <!-- ANSICHT 3: ARBEITSBLÄTTER-ZENTRUM (FÜR LEHRKRÄFTE & ELTERN) -->
     <section id="view-worksheets" class="view-section">
-      <div class="worksheets-hub-header">
-        <div class="hub-header-top">
-          <div class="hub-title-group">
-            <div class="hub-badge-pill">
-              <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
-              <span>Druckzentrum</span>
-            </div>
-            <h2>Arbeitsblätter Volksschule</h2>
-            <p class="hub-subtext">
-              Vollwertige A4-Übungsblätter nach österreichischem Lehrplan (BMBWF 2025). Mit Montessori-Knick-Lösung und Schatzkisten-Geheimwort.
-            </p>
-          </div>
-          <div class="hub-quick-actions">
-            <button type="button" class="btn-hub-primary" id="btn-batch-print" title="Alle angezeigten Arbeitsblätter in einem Durchgang drucken">
-              <img src="assets/icons/drucken.svg" class="btn-icon-svg" alt="">
-              <span>Alle angezeigten Blätter drucken</span>
-            </button>
-            <button type="button" class="btn-hub-secondary" id="btn-back-from-worksheets" title="Zurück zum Online-Üben">
-              <img src="assets/icons/zurueck.svg" class="btn-icon-svg" alt="">
-              <span>Zurück zum Online-Üben</span>
-            </button>
-          </div>
+      <!-- Ruhige Kopfzeile direkt auf dem Seitenhintergrund (keine Karten-in-Karten) -->
+      <div class="worksheets-page-intro">
+        <div class="ws-intro-text">
+          <h2>Arbeitsblätter zum Ausdrucken</h2>
+          <p class="ws-intro-sub">
+            Vollwertige A4-Übungsblätter nach österreichischem Lehrplan (BMBWF 2025) mit Montessori-Knick-Lösung zur Selbstkontrolle.
+            (<span id="worksheets-count">27 Arbeitsblätter</span>)
+          </p>
         </div>
-
-        <!-- Filter nach Schulstufe -->
-        <nav class="grade-segmented-control worksheets-grade-filter" aria-label="Schulstufe für Arbeitsblätter auswählen">
-          <button class="filter-btn-ws active" data-grade="all">Alle Klassen</button>
-          <button class="filter-btn-ws" data-grade="1">1. Klasse</button>
-          <button class="filter-btn-ws" data-grade="2">2. Klasse</button>
-          <button class="filter-btn-ws" data-grade="3">3. Klasse</button>
-          <button class="filter-btn-ws" data-grade="4">4. Klasse</button>
-        </nav>
-
-        <!-- Filter nach Fach -->
-        <nav class="subject-segmented-control worksheets-subject-filter" aria-label="Fach für Arbeitsblätter auswählen">
-          <button class="filter-subj-ws active" data-subject="all">Alle Fächer</button>
-          <button class="filter-subj-ws" data-subject="math">
-            <img src="assets/icons/fach-mathe.svg" class="filter-icon-svg" alt="">
-            <span>Mathematik</span>
+        <div class="ws-intro-actions">
+          <button type="button" class="btn-batch-print" id="btn-batch-print" title="Alle angezeigten Arbeitsblätter in einem Durchgang drucken">
+            <img src="assets/icons/drucken.svg" class="btn-icon-svg" alt="">
+            <span id="batch-print-text">Alle 27 Blätter drucken</span>
           </button>
-          <button class="filter-subj-ws" data-subject="german">
-            <img src="assets/icons/fach-deutsch.svg" class="filter-icon-svg" alt="">
-            <span>Deutsch</span>
-          </button>
-          <button class="filter-subj-ws" data-subject="general">
-            <img src="assets/icons/fach-sach.svg" class="filter-icon-svg" alt="">
-            <span>Sachunterricht</span>
-          </button>
-          <button class="filter-subj-ws" data-subject="brain">
-            <img src="assets/icons/fach-denken.svg" class="filter-icon-svg" alt="">
-            <span>Gehirntraining</span>
-          </button>
-        </nav>
-
-        <!-- Druckeinstellungen-Leiste vor Ort -->
-        <div class="hub-settings-bar">
-          <div class="hub-setting-item">
-            <span class="hub-setting-label">Lösungsformat:</span>
-            <select id="hub-solution-mode" class="hub-select">
-              <option value="knick">Knick-Lösung (1 Seite, Montessori)</option>
-              <option value="two-page">Separates Lösungsblatt (2 Seiten)</option>
-              <option value="none">Nur Aufgabenblatt (ohne Lösung)</option>
-            </select>
-          </div>
-          <div class="hub-setting-item">
-            <label class="hub-toggle-label">
-              <input type="checkbox" id="hub-secret-word" checked>
-              <span>Schlaufuchs-Geheimwort (für Schatzkiste im Sticker-Album)</span>
-            </label>
-          </div>
         </div>
       </div>
 
-      <!-- Raster aller Arbeitsblätter -->
-      <div class="worksheets-grid" id="worksheets-cards-container">
+      <!-- Klassenfilter (Gleiche Filterleiste wie im Hauptmenü) -->
+      <nav class="grade-segmented-control class-filter-bar worksheets-grade-filter" aria-label="Schulstufe für Arbeitsblätter auswählen">
+        <button class="filter-btn filter-btn-ws active" data-grade="all">Alle Klassen</button>
+        <button class="filter-btn filter-btn-ws" data-grade="1">1. Klasse</button>
+        <button class="filter-btn filter-btn-ws" data-grade="2">2. Klasse</button>
+        <button class="filter-btn filter-btn-ws" data-grade="3">3. Klasse</button>
+        <button class="filter-btn filter-btn-ws" data-grade="4">4. Klasse</button>
+      </nav>
+
+      <!-- Fächer & Arbeitsblätter Raster (Strukturiert nach den 4 Fächern wie im Hauptmenü) -->
+      <div class="subjects-container" id="worksheets-cards-container">
         <!-- Dynamisch gefüllt durch js/worksheets.js -->
       </div>
     </section>

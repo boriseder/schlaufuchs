@@ -29,16 +29,22 @@ vm.runInNewContext(printCode, sandbox);
 
 const { Print, State } = sandbox.window.Schlaufuchs;
 
-test('Print: pickSecretWord liefert kindgerechte Wörter für die Schatzkiste', () => {
+test('Print: pickSecretWord liefert exakt passende Wortlängen (Bijektion für Schatzkiste)', () => {
+  const w4 = Print.pickSecretWord(4);
+  assert.equal(w4.length, 4, '4 verlangt -> exakt 4 geliefert');
+  assert.equal(w4, w4.toUpperCase());
+
   const w5 = Print.pickSecretWord(5);
-  assert.ok(w5.length >= 4 && w5.length <= 6);
-  assert.equal(w5, w5.toUpperCase());
+  assert.equal(w5.length, 5, '5 verlangt -> exakt 5 geliefert');
 
   const w6 = Print.pickSecretWord(6);
-  assert.ok(w6.length >= 5 && w6.length <= 7);
+  assert.equal(w6.length, 6, '6 verlangt -> exakt 6 geliefert');
+
+  const w7 = Print.pickSecretWord(7);
+  assert.equal(w7.length, 7, '7 verlangt -> exakt 7 geliefert');
 
   const w8 = Print.pickSecretWord(8);
-  assert.ok(w8.length >= 6);
+  assert.equal(w8.length, 8, '8 verlangt -> exakt 8 geliefert');
 });
 
 test('State: getPrintSettings und savePrintSettings persistieren Knick- und Geheimwort-Optionen', () => {
@@ -95,7 +101,8 @@ test('Print: Arbeitsblatt-Druck erzeugt Knick-Lösungsstreifen standardmäßig',
   Print.generateAndPrintWorksheet('Addition bis 100', '2. Klasse', mockTasks);
   assert.ok(createdElement.innerHTML.includes('print-knick-wrapper'), 'Knick-Wrapper muss im DOM sein');
   assert.ok(createdElement.innerHTML.includes('HIER VOR DEM LÖSEN NACH HINTEN KNICKEN'), 'Falt-Indikator muss vorhanden sein');
-  assert.ok(createdElement.innerHTML.includes('Schlaufuchs-Geheimwort'), 'Geheimwort-Bereich muss vorhanden sein');
+  assert.ok(!createdElement.innerHTML.includes('Schlaufuchs-Geheimwort'), 'Kein unnötiger Geheimwort-Bereich auf dem Arbeitsblatt');
+  assert.ok(createdElement.innerHTML.includes('LÖSUNGEN'), 'Lösungs-Header muss vorhanden sein');
   assert.ok(createdElement.innerHTML.includes('Wie war das Blatt für dich?'), 'Selbsteinschätzung muss vorhanden sein');
   assert.ok(!createdElement.innerHTML.includes('PIRLS'), 'Kein Prüfungsjargon (PIRLS)');
 });

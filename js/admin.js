@@ -718,6 +718,9 @@ window.Schlaufuchs.Admin = (function () {
 
   return {
     init: init,
-    openAdminModal: openAdminModal
+    openAdminModal: openAdminModal,
+    isGatePassed: function () {
+      return gatePassed;
+    }
   };
 })();
