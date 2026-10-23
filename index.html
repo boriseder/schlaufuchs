@@ -698,58 +698,73 @@
 
     <!-- MODAL: ADMIN-EINSTELLUNGEN -->
     <div id="admin-modal" class="modal-overlay">
-      <div class="modal-card">
+      <div class="modal-card modal-card-lg">
         <div class="modal-header">
           <h3><img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt=""> Eltern- & Lehrkräfte-Bereich</h3>
-          <button id="btn-close-admin" class="modal-close-btn">&times;</button>
+          <button id="btn-close-admin" class="modal-close-btn" aria-label="Schließen">&times;</button>
         </div>
         <div class="modal-body">
           <!-- Sicherheitsabfrage / Rechen-Gate -->
-          <form id="admin-gate-form" class="admin-gate-box" style="text-align: center; padding: 16px 0;">
-            <div id="admin-gate-badge" style="display: inline-block; padding: 4px 12px; background: var(--flaeche, #F3EEDF); border: 1.5px solid var(--linie-leise, #C8C2B4); border-radius: 999px; font-weight: 800; font-size: 0.85rem; color: var(--text-sekundaer, #5A626A); margin-bottom: 12px;">Kindersicherung</div>
-            <p id="admin-gate-question" style="font-weight: 800; font-size: 1.15rem; color: #1e293b; margin-bottom: 14px;"></p>
-            <div style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
-              <input type="text" inputmode="numeric" id="admin-gate-input" class="task-input" placeholder="Ergebnis" style="width: 150px; text-align: center; font-size: 1.25rem;" required autocomplete="off" />
+          <form id="admin-gate-form" class="admin-gate-box">
+            <div id="admin-gate-badge" class="admin-gate-icon">
+              <img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt="" style="width: 32px; height: 32px;">
+            </div>
+            <p id="admin-gate-question" class="admin-gate-question"></p>
+            <div class="admin-gate-input-row">
+              <input type="text" inputmode="numeric" id="admin-gate-input" class="task-input admin-gate-input" placeholder="PIN" required autocomplete="off" />
               <button type="submit" id="btn-gate-submit" class="btn btn-primary">Öffnen</button>
             </div>
-            <div id="admin-gate-fallback" style="margin-top: 14px; display: none;">
-              <button type="button" id="btn-gate-toggle-mode" style="font-size: 0.9rem; font-weight: 700; background: transparent; border: none; text-decoration: underline; cursor: pointer; color: var(--mathe, #2255A4);">PIN vergessen? Rechenaufgabe lösen</button>
+            <div id="admin-gate-fallback" class="admin-gate-fallback" style="display: none;">
+              <button type="button" id="btn-gate-toggle-mode" class="admin-gate-toggle-btn">PIN vergessen? Rechenaufgabe lösen</button>
             </div>
-            <div id="admin-gate-hint" style="margin-top: 12px; font-size: 0.85rem; color: #64748b; display: none;">Tipp: Du kannst in den Einstellungen einen eigenen 4-stelligen Eltern-PIN festlegen.</div>
-            <div id="admin-gate-error" style="display: none; color: #dc2626; font-weight: 800; margin-top: 12px;"></div>
+            <div id="admin-gate-hint" class="admin-gate-hint" style="display: none;">Tipp: Du kannst in den Einstellungen einen eigenen 4-stelligen Eltern-PIN festlegen.</div>
+            <div id="admin-gate-error" class="admin-gate-error" style="display: none;"></div>
           </form>
 
           <!-- Geschütztes Einstellungs-Panel mit Tab-Navigation -->
           <div id="admin-settings-panel" style="display: none;">
-            <div class="admin-tabs-nav">
-              <button type="button" class="admin-tab-btn active" data-tab="tab-children">
+            <div class="admin-tabs-nav" role="tablist">
+              <button type="button" class="admin-tab-btn active" data-tab="tab-children" role="tab" aria-selected="true">
+                <img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="">
                 <span>Kinder & Klassen</span>
               </button>
-              <button type="button" class="admin-tab-btn" data-tab="tab-diagnosis">
+              <button type="button" class="admin-tab-btn" data-tab="tab-diagnosis" role="tab" aria-selected="false">
+                <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="">
                 <span>Lernstand & Diagnose</span>
               </button>
-              <button type="button" class="admin-tab-btn" data-tab="tab-tools">
-                <span>Sicherung & Werkzeuge</span>
+              <button type="button" class="admin-tab-btn" data-tab="tab-tools" role="tab" aria-selected="false">
+                <img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt="">
+                <span>Einstellungen & Werkzeuge</span>
               </button>
             </div>
 
             <!-- TAB 1: KINDER & KLASSEN -->
-            <div id="tab-children" class="admin-tab-pane active">
+            <div id="tab-children" class="admin-tab-pane active" role="tabpanel">
               <div class="admin-pane-desc">
                 Passe die freigeschalteten Klassenstufen für jedes Kind an. Änderungen sind sofort aktiv:
               </div>
               <div id="admin-profiles-list" class="admin-profiles-container"></div>
               
-              <div class="admin-add-profile-bar">
-                <input type="text" id="new-profile-name" class="task-input" placeholder="Name des neuen Kindes (z. B. Mia)" />
-                <button id="btn-add-profile" class="btn btn-secondary">
-                  <span>Kind hinzufügen</span>
-                </button>
+              <div class="admin-card admin-add-profile-box">
+                <div class="admin-card-header">
+                  <img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="">
+                  <h4>Neues Kind anlegen</h4>
+                </div>
+                <div class="admin-add-profile-bar">
+                  <input type="text" id="new-profile-name" class="task-input" placeholder="Spitzname des Kindes (z. B. Mia)" autocomplete="off" />
+                  <button type="button" id="btn-add-profile" class="btn btn-secondary">
+                    <img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt="">
+                    <span>Kind anlegen</span>
+                  </button>
+                </div>
+                <div class="admin-privacy-hint">
+                  Datenschutz: Bitte nur Vornamen oder Spitznamen verwenden. Alle Profildaten verbleiben lokal auf diesem Gerät.
+                </div>
               </div>
             </div>
 
             <!-- TAB 2: LERNSTAND & DIAGNOSE -->
-            <div id="tab-diagnosis" class="admin-tab-pane">
+            <div id="tab-diagnosis" class="admin-tab-pane" role="tabpanel">
               <div class="admin-pane-desc">
                 Übersicht über die erarbeiteten Kompetenzen des aktiven Kindes:
               </div>
@@ -757,66 +772,119 @@
             </div>
 
             <!-- TAB 3: SICHERUNG & WERKZEUGE -->
-            <div id="tab-tools" class="admin-tab-pane">
-              <div class="admin-tool-box">
-                <h4><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Druckzentrum & Offline-Lernen</h4>
-                <p>Passe die Erstellung der A4-Arbeitsblätter an die Bedürfnisse deines Kindes an:</p>
-                <div style="display: flex; flex-direction: column; gap: 12px; margin: 12px 0 16px 0;">
-                  <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label for="admin-print-solution-mode" style="font-weight: 700; font-size: 0.95rem;">Lösungs-Format für Arbeitsblätter:</label>
-                    <select id="admin-print-solution-mode" class="select-input" style="max-width: 440px;">
-                      <option value="knick">Knick-Lösungsstreifen (1 Blatt, Montessori-Selbstkontrolle) – Empfohlen</option>
-                      <option value="two-page">Separates Lösungsblatt (2 Blätter für Eltern & Lehrkräfte)</option>
-                      <option value="none">Keine Lösungen drucken (nur reines Aufgabenblatt)</option>
-                    </select>
-                    <small style="color: var(--tinte-leise, #475569);">Beim Knick-Streifen knickt das Kind die rechte Spalte vor dem Lösen nach hinten und kontrolliert danach selbstständig. Spart 50 % Papier!</small>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="admin-print-secret-word" style="width: 20px; height: 20px; cursor: pointer;" checked />
-                    <label for="admin-print-secret-word" style="font-weight: 700; font-size: 0.95rem; cursor: pointer;">
-                      Schlaufuchs-Geheimwort & Rätsel aktivieren (belohnt Offline-Fleiß in der Schatzkiste)
-                    </label>
-                  </div>
+            <div id="tab-tools" class="admin-tab-pane" role="tabpanel">
+              <!-- Sektion 1: Kindersicherung (PIN) -->
+              <section class="admin-card">
+                <div class="admin-card-header">
+                  <img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt="">
+                  <h4>Kindersicherung (Eltern-PIN)</h4>
                 </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                  <button id="btn-admin-print-cert" class="btn btn-secondary">
-                    <span><img src="assets/icons/drucken.svg" class="icon-inline-svg" alt=""> Schlaufuchs-Urkunde drucken</span>
+                <p class="admin-section-desc">
+                  Lege einen optionalen 4-stelligen Zahlencode fest, um den Einstellungen-Bereich noch sicherer vor Kindern zu sperren:
+                </p>
+                <div class="admin-pin-control-row">
+                  <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" id="input-parent-pin" class="task-input admin-pin-input" placeholder="PIN (4 Ziffern)" autocomplete="off" />
+                  <button type="button" id="btn-save-parent-pin" class="btn btn-primary">PIN speichern</button>
+                  <button type="button" id="btn-remove-parent-pin" class="btn btn-danger-outline" style="display: none;">PIN entfernen</button>
+                </div>
+                <div id="parent-pin-status" class="admin-status-message"></div>
+              </section>
+
+              <!-- Sektion 2: Druckzentrum & Arbeitsblätter -->
+              <section class="admin-card">
+                <div class="admin-card-header">
+                  <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+                  <h4>Druckzentrum & Offline-Lernen</h4>
+                </div>
+                <p class="admin-section-desc">
+                  Passe die Erstellung der A4-Arbeitsblätter an die Bedürfnisse deines Kindes an:
+                </p>
+                <div class="admin-form-group">
+                  <label for="admin-print-solution-mode" class="admin-form-label">Lösungs-Format für Arbeitsblätter:</label>
+                  <select id="admin-print-solution-mode" class="select-input admin-solution-select">
+                    <option value="knick">Knick-Lösungsstreifen (1 Blatt, Montessori-Selbstkontrolle) – Empfohlen</option>
+                    <option value="two-page">Separates Lösungsblatt (2 Blätter für Eltern & Lehrkräfte)</option>
+                    <option value="none">Keine Lösungen drucken (nur reines Aufgabenblatt)</option>
+                  </select>
+                  <p class="admin-form-hint">
+                    Beim Knick-Streifen knickt das Kind die rechte Spalte vor dem Lösen nach hinten und kontrolliert danach selbstständig. Spart 50 % Papier!
+                  </p>
+                </div>
+                <div class="admin-checkbox-row">
+                  <input type="checkbox" id="admin-print-secret-word" class="admin-checkbox" checked />
+                  <label for="admin-print-secret-word" class="admin-checkbox-label">
+                    Schlaufuchs-Geheimwort & Rätsel aktivieren (belohnt Offline-Fleiß in der Schatzkiste)
+                  </label>
+                </div>
+                <div class="admin-action-row" style="margin-top: 14px;">
+                  <button type="button" id="btn-admin-print-cert" class="btn btn-secondary">
+                    <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+                    <span>Schlaufuchs-Urkunde drucken</span>
                   </button>
                 </div>
-              </div>
+              </section>
 
-              <div class="admin-tool-box" style="margin-top: 16px;">
-                <h4>Datensicherung & Übertragung</h4>
-                <p>Sichere den Lernstand aller Kinder oder übertrage Profile auf ein anderes Tablet:</p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                  <button id="btn-export-backup" class="btn btn-secondary">
+              <!-- Sektion 3: Datensicherung & Übertragung -->
+              <section class="admin-card">
+                <div class="admin-card-header">
+                  <img src="assets/icons/album.svg" class="icon-inline-svg" alt="">
+                  <h4>Datensicherung & Übertragung</h4>
+                </div>
+                <p class="admin-section-desc">
+                  Sichere den Lernstand aller Kinder oder übertrage Profile auf ein anderes Tablet:
+                </p>
+                <div class="admin-action-row">
+                  <button type="button" id="btn-export-backup" class="btn btn-secondary">
+                    <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="" style="transform: rotate(180deg);">
                     <span>Daten als JSON sichern</span>
                   </button>
-                  <label class="btn btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                  <label class="btn btn-secondary admin-file-upload-label">
+                    <img src="assets/icons/neuladen.svg" class="icon-inline-svg" alt="">
                     <span>Sicherung laden</span>
                     <input type="file" id="input-import-backup" accept=".json" style="display: none;" />
                   </label>
                 </div>
-              </div>
+                <p class="admin-form-hint">
+                  Alle Profildaten und Einstellungen verbleiben immer lokal im Browser.
+                </p>
+              </section>
 
-              <div class="admin-tool-box" style="margin-top: 16px;">
-                <h4>Eltern-PIN (Kindersicherung)</h4>
-                <p>Lege einen optionalen 4-stelligen Zahlencode fest, um den Einstellungen-Bereich noch sicherer vor Kindern zu sperren:</p>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                  <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" id="input-parent-pin" class="task-input" placeholder="4-stelliger PIN" style="width: 160px; text-align: center; font-size: 1.15rem;" />
-                  <button type="button" id="btn-save-parent-pin" class="btn btn-secondary">PIN speichern</button>
-                  <button type="button" id="btn-remove-parent-pin" class="btn btn-secondary" style="display: none; background: #fff1f2; color: #e11d48; border-color: #fecdd3;">PIN entfernen</button>
+              <!-- Sektion 4: Lehrkräfte-Tools -->
+              <section class="admin-card">
+                <div class="admin-card-header">
+                  <img src="assets/icons/buch.svg" class="icon-inline-svg" alt="">
+                  <h4>Lehrkräfte-Tools: Qualitätssicherung & Dokumentation</h4>
                 </div>
-                <div id="parent-pin-status" style="margin-top: 8px; font-weight: 700; font-size: 0.95rem; color: #16a34a;"></div>
-              </div>
+                <p class="admin-section-desc">
+                  Manuelle Prüfung aller Aufgaben und Antworten für alle 28 Lehrplan-Themen sowie technische und didaktische Gesamtdokumentation der PWA:
+                </p>
+                <div class="admin-action-row">
+                  <a href="admin.html" id="link-admin-qa" class="btn btn-secondary" target="_blank" rel="noopener">
+                    <img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt="">
+                    <span>Aufgaben-Qualitätssicherung (Admin-Seite)</span>
+                  </a>
+                  <a href="dokumentation.html" id="link-admin-docs" class="btn btn-secondary" target="_blank" rel="noopener">
+                    <img src="assets/icons/buch.svg" class="icon-inline-svg" alt="">
+                    <span>PWA-Dokumentation (Handbuch)</span>
+                  </a>
+                </div>
+              </section>
 
-              <div class="admin-tool-box" style="margin-top: 16px;">
-                <h4><img src="assets/icons/stern.svg" class="icon-inline-svg" alt=""> Sterne zurücksetzen</h4>
-                <p>Setzt alle Sterne des aktuell gewählten Kindes auf 0 zurück:</p>
-                <button id="btn-reset-stars" class="btn btn-secondary" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3;">
-                  Sterne des aktiven Kindes zurücksetzen
-                </button>
-              </div>
+              <!-- Sektion 5: Gefahrenzone -->
+              <section class="admin-card admin-card-danger">
+                <div class="admin-card-header">
+                  <img src="assets/icons/zurueck.svg" class="icon-inline-svg" alt="">
+                  <h4>Sterne zurücksetzen</h4>
+                </div>
+                <p class="admin-section-desc">
+                  Setzt alle Sterne des aktuell gewählten Kindes auf 0 zurück:
+                </p>
+                <div>
+                  <button type="button" id="btn-reset-stars" class="btn btn-danger-outline">
+                    <span>Sterne des aktiven Kindes zurücksetzen</span>
+                  </button>
+                </div>
+              </section>
             </div>
 
             <div class="admin-panel-footer">
@@ -920,6 +988,7 @@
   <script src="js/generators/brain.js"></script>
   <script src="js/renderers.js?v=2.9"></script>
   <script src="js/admin.js"></script>
+  <script src="js/admin-qa.js"></script>
   <script src="js/app.js"></script>
 
   <!-- PWA Offline Service Worker Registration -->

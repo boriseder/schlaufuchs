@@ -112,8 +112,9 @@ window.Schlaufuchs.Admin = (function () {
         const Dialog = window.Schlaufuchs.Dialog;
         const doReset = () => {
           window.Schlaufuchs.State.resetAllStarsForActiveProfile();
-          if (Dialog) Dialog.alert('⭐ Sterne wurden zurückgesetzt.');
-          else alert('⭐ Sterne wurden zurückgesetzt.');
+          if (Dialog) Dialog.alert('Sterne wurden zurückgesetzt.');
+          else alert('Sterne wurden zurückgesetzt.');
+          populateSettings();
         };
 
         if (Dialog) {
@@ -171,7 +172,7 @@ window.Schlaufuchs.Admin = (function () {
                 .map(p => ({
                   id: String(p.id || ('profile_' + Date.now())),
                   name: String(p.name || 'Nils').trim().slice(0, 50),
-                  avatar: String(p.avatar || '🦊').slice(0, 8),
+                  avatar: String(p.avatar || '🦊').slice(0, 8), // check-regeln:ignore
                   grades: Array.isArray(p.grades) ? p.grades.map(Number).filter(g => g >= 1 && g <= 4) : [1, 2, 3],
                   stars: (p.stars && typeof p.stars === 'object') ? Object.fromEntries(
                     Object.entries(p.stars).map(([k, v]) => [String(k), Math.max(0, Math.min(3, Number(v) || 0))])
@@ -193,11 +194,11 @@ window.Schlaufuchs.Admin = (function () {
                   window.Schlaufuchs.State.saveSettings(data.settings);
                 }
                 if (Dialog) {
-                  Dialog.alert('✅ Sicherung erfolgreich wiederhergestellt!', {
+                  Dialog.alert('Sicherung erfolgreich wiederhergestellt!', {
                     onOk: () => location.reload()
                   });
                 } else {
-                  alert('✅ Sicherung erfolgreich wiederhergestellt!');
+                  alert('Sicherung erfolgreich wiederhergestellt!');
                   location.reload();
                 }
               };
@@ -237,18 +238,18 @@ window.Schlaufuchs.Admin = (function () {
       if (currentPin) {
         pinInput.value = '';
         pinInput.placeholder = '••••';
-        if (removePinBtn) removePinBtn.style.display = 'inline-block';
+        if (removePinBtn) removePinBtn.style.display = 'inline-flex';
         if (pinStatus) {
-          pinStatus.style.color = '#16a34a';
-          pinStatus.textContent = 'Eltern-PIN ist aktiv. Der Zugang zu den Einstellungen ist mit deinem PIN geschützt.';
+          pinStatus.className = 'admin-status-message status-active';
+          pinStatus.innerHTML = '<img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt=""> <span>Eltern-PIN ist aktiv. Der Zugang zu den Einstellungen ist mit deinem PIN geschützt.</span>';
         }
       } else {
         pinInput.value = '';
         pinInput.placeholder = '4-stelliger PIN';
         if (removePinBtn) removePinBtn.style.display = 'none';
         if (pinStatus) {
-          pinStatus.style.color = '#64748b';
-          pinStatus.textContent = 'Kein PIN gesetzt (Absicherung erfolgt über eine Rechenaufgabe für Erwachsene).';
+          pinStatus.className = 'admin-status-message status-inactive';
+          pinStatus.innerHTML = '<span>Kein PIN gesetzt (Absicherung erfolgt über eine Rechenaufgabe für Erwachsene).</span>';
         }
       }
     }
@@ -346,7 +347,7 @@ window.Schlaufuchs.Admin = (function () {
         questionEl.textContent = 'Sicherheitsabfrage für Erwachsene: Bitte gib deinen 4-stelligen Eltern-PIN ein.';
       }
       if (gateInput) {
-        gateInput.placeholder = '4-stelliger PIN';
+        gateInput.placeholder = 'PIN';
         gateInput.type = 'password';
         gateInput.maxLength = 4;
       }
@@ -445,10 +446,14 @@ window.Schlaufuchs.Admin = (function () {
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
-        tabBtns.forEach(b => b.classList.remove('active'));
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
         tabPanes.forEach(p => p.classList.remove('active'));
 
         btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
         const targetPane = document.getElementById(targetTab);
         if (targetPane) targetPane.classList.add('active');
       });
@@ -470,12 +475,16 @@ window.Schlaufuchs.Admin = (function () {
     if (!container) return;
 
     const profile = window.Schlaufuchs.State.getActiveProfile();
+    const allProfiles = window.Schlaufuchs.State.loadAllProfiles();
     const stars = profile.stars || {};
+    const esc = (window.Schlaufuchs && window.Schlaufuchs.escapeHtml) || (s => s);
 
     const SUBJECTS = [
       {
-        title: '🔵 Mathematik',
-        color: 'var(--mathe, #2563eb)',
+        id: 'math',
+        title: 'Mathematik',
+        icon: 'assets/icons/fach-mathe.svg',
+        color: 'var(--mathe, #2D5E9E)',
         topics: [
           { id: 'math-twenty', name: 'Zwanzigerfeld (1. Klasse)' },
           { id: 'math-addition', name: 'Addition (+)' },
@@ -493,8 +502,10 @@ window.Schlaufuchs.Admin = (function () {
         ]
       },
       {
-        title: '🔴 Deutsch',
-        color: 'var(--deutsch, #e11d48)',
+        id: 'german',
+        title: 'Deutsch',
+        icon: 'assets/icons/fach-deutsch.svg',
+        color: 'var(--deutsch, #B5502B)',
         topics: [
           { id: 'german-syllables', name: 'Silbenschwingen & Silbenkönige' },
           { id: 'german-word-types', name: 'Wortarten (Nomen, Verben, Adjektive)' },
@@ -506,8 +517,10 @@ window.Schlaufuchs.Admin = (function () {
         ]
       },
       {
-        title: '🟢 Sachunterricht',
-        color: 'var(--sachunterricht, #16a34a)',
+        id: 'sach',
+        title: 'Sachunterricht',
+        icon: 'assets/icons/fach-sach.svg',
+        color: 'var(--sach, #2F7A4F)',
         topics: [
           { id: 'general-calendar', name: 'Jahreskreis & Kalender' },
           { id: 'general-traffic', name: 'Sicherer Schulweg & Verkehr' },
@@ -517,7 +530,9 @@ window.Schlaufuchs.Admin = (function () {
         ]
       },
       {
-        title: '🟣 Gehirntraining',
+        id: 'denken',
+        title: 'Gehirntraining',
+        icon: 'assets/icons/fach-denken.svg',
         color: 'var(--denken, #6B4C9A)',
         topics: [
           { id: 'brain-memory', name: 'Tier- & Bilder-Memory' },
@@ -534,17 +549,19 @@ window.Schlaufuchs.Admin = (function () {
     let subjectsHtml = '';
     SUBJECTS.forEach(subj => {
       let topicRows = '';
+      let subjectStars = 0;
       subj.topics.forEach(t => {
         const s = stars[t.id] || 0;
+        subjectStars += s;
         let badge = '';
         if (s === 3) {
-          badge = '<span class="admin-diag-pill secure">🟢 Sicher (3★)</span>';
+          badge = '<span class="admin-diag-pill secure"><img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt=""> <span>Sicher (3★)</span></span>';
           secureCount++;
         } else if (s > 0) {
-          badge = `<span class="admin-diag-pill progress">🟡 Im Aufbau (${s}★)</span>`;
+          badge = `<span class="admin-diag-pill progress"><img src="assets/icons/stern.svg" class="icon-inline-svg" alt=""> <span>Im Aufbau (${s}★)</span></span>`;
           inProgressCount++;
         } else {
-          badge = '<span class="admin-diag-pill open">⚪ Offen</span>';
+          badge = '<span class="admin-diag-pill open"><span>Offen</span></span>';
           notStartedCount++;
         }
 
@@ -556,17 +573,43 @@ window.Schlaufuchs.Admin = (function () {
         `;
       });
 
+      const maxSubjectStars = subj.topics.length * 3;
       subjectsHtml += `
         <details class="admin-diag-subject-group" open>
-          <summary class="admin-diag-subject-title" style="color: ${subj.color};">
-            <span>${subj.title}</span>
+          <summary class="admin-diag-subject-title">
+            <div class="admin-diag-title-left">
+              <img src="${subj.icon}" class="icon-inline-svg" alt="">
+              <span style="color: ${subj.color};">${subj.title}</span>
+            </div>
+            <div class="admin-diag-title-right">
+              <span>${subjectStars} / ${maxSubjectStars} Sterne</span>
+              <span class="admin-diag-chevron" aria-hidden="true">▾</span>
+            </div>
           </summary>
           <div class="admin-diag-subject-rows">${topicRows}</div>
         </details>
       `;
     });
 
+    let switcherHtml = '';
+    if (allProfiles.length > 1) {
+      switcherHtml = `
+        <div class="admin-diag-profile-switcher">
+          <span class="admin-diag-switcher-label">Lernstand für Kind:</span>
+          <div class="admin-diag-switcher-chips">
+            ${allProfiles.map(p => `
+              <button type="button" class="admin-diag-profile-btn ${p.id === profile.id ? 'active' : ''}" data-pid="${p.id}">
+                <span>${esc(p.name)}</span>
+                ${p.id === profile.id ? '<span class="admin-diag-active-tag">(Aktiv)</span>' : ''}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     container.innerHTML = `
+      ${switcherHtml}
       <div class="admin-diag-kpi-bar">
         <div class="admin-diag-kpi secure">
           <div class="admin-diag-kpi-val">${secureCount}</div>
@@ -585,6 +628,19 @@ window.Schlaufuchs.Admin = (function () {
         ${subjectsHtml}
       </div>
     `;
+
+    // Kind-Umschalter Event-Listener
+    const switcherBtns = container.querySelectorAll('.admin-diag-profile-btn');
+    switcherBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pid = btn.getAttribute('data-pid');
+        if (pid) {
+          window.Schlaufuchs.State.switchProfile(pid);
+          renderDiagnosisDashboard();
+          renderProfileManagement();
+        }
+      });
+    });
   }
 
   function renderProfileManagement() {
@@ -598,7 +654,7 @@ window.Schlaufuchs.Admin = (function () {
     profiles.forEach(p => {
       const card = document.createElement('div');
       const isActive = p.id === activeId;
-      card.className = `admin-profile-card ${isActive ? 'is-active' : ''}`;
+      card.className = `admin-card admin-profile-card ${isActive ? 'is-active' : ''}`;
 
       const totalStars = Object.values(p.stars || {}).reduce((a, b) => a + b, 0);
       const gradesList = (p.grades && p.grades.length > 0) ? p.grades : [1, 2, 3, 4];
@@ -614,14 +670,17 @@ window.Schlaufuchs.Admin = (function () {
             <div>
               <div class="admin-profile-title-wrap">
                 <strong class="admin-profile-name">${safeName}</strong>
-                ${isActive ? '<span class="admin-badge-active">Aktiv</span>' : ''}
+                ${isActive ? '<span class="admin-badge-active"><img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt=""> <span>Aktiv</span></span>' : ''}
               </div>
-              <div class="admin-profile-stars">⭐ ${totalStars} Sterne gesammelt</div>
+              <div class="admin-profile-stars">
+                <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="">
+                <span>${totalStars} Sterne gesammelt</span>
+              </div>
             </div>
           </div>
           <div class="admin-profile-actions">
-            ${!isActive ? `<button class="btn btn-secondary btn-sm select-prof-btn" data-pid="${p.id}">Als aktives Kind wählen</button>` : ''}
-            ${profiles.length > 1 ? `<button class="btn btn-danger btn-sm del-prof-btn" data-pid="${p.id}">Löschen</button>` : ''}
+            ${!isActive ? `<button type="button" class="btn btn-secondary btn-sm select-prof-btn" data-pid="${p.id}">Als aktives Kind wählen</button>` : ''}
+            ${profiles.length > 1 ? `<button type="button" class="btn btn-danger-outline btn-sm del-prof-btn" data-pid="${p.id}">Löschen</button>` : ''}
           </div>
         </div>
 

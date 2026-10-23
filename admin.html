@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schlaufuchs – Aufgaben-Qualitätssicherung</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#FBF7EE">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Spezifische Layout-Stile für die Admin-QS-Seite (100 % Tokens, kein SaaS-Look) */
+    .qa-page-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 64px 16px;
+    }
+
+    .qa-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--linie);
+      margin-bottom: 24px;
+    }
+
+    .qa-header-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .qa-header-title h1 {
+      font-size: 1.6rem;
+      margin: 0;
+      color: var(--tinte);
+    }
+
+    .qa-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--flaeche);
+      border: 1.5px solid var(--linie);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--tinte);
+    }
+
+    .qa-nav-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .qa-filter-panel {
+      background: var(--flaeche);
+      border: 2px solid var(--linie);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .qa-filter-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .qa-filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .qa-filter-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--tinte-leise);
+    }
+
+    .qa-topic-summary {
+      background: var(--papier);
+      border: 2px solid var(--linie);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .qa-topic-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .qa-topic-meta h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: var(--tinte);
+    }
+
+    .qa-topic-meta p {
+      margin: 0;
+      color: var(--tinte-leise);
+      font-size: 0.95rem;
+    }
+
+    .qa-topic-stats {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .qa-task-card {
+      background: var(--flaeche);
+      border: 2px solid var(--linie);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      break-inside: avoid;
+    }
+
+    .qa-task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--linie-leise);
+    }
+
+    .qa-task-index {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--tinte);
+    }
+
+    .qa-task-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .qa-task-question {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--tinte);
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    .qa-visual-box {
+      max-width: 240px;
+      margin: 8px 0;
+      padding: 8px;
+      background: var(--papier);
+      border: 1px solid var(--linie-leise);
+      border-radius: var(--radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .qa-visual-box svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .qa-answer-box {
+      background: var(--papier);
+      border: 2px solid var(--richtig);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .qa-answer-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--tinte);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qa-answer-content {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--tinte);
+    }
+
+    .qa-options-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .qa-option-item {
+      padding: 8px 12px;
+      border: 1.5px solid var(--linie-leise);
+      border-radius: var(--radius);
+      background: var(--flaeche);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qa-option-item.correct {
+      border-color: var(--richtig);
+      background: #FDF9EE;
+      font-weight: 700;
+    }
+
+    .qa-hint-box {
+      padding: 10px 14px;
+      background: var(--flaeche);
+      border-left: 4px solid var(--mathe);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.9rem;
+      color: var(--tinte-leise);
+    }
+
+    .qa-hidden-answer {
+      color: transparent;
+      background: var(--linie-leise);
+      border-radius: var(--radius);
+      user-select: none;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .qa-hidden-answer:hover {
+      color: var(--tinte);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    @media print {
+      .qa-header, .qa-filter-panel, .qa-nav-actions {
+        display: none !important;
+      }
+      .qa-page-container {
+        padding: 0;
+        max-width: 100%;
+      }
+      .qa-task-card {
+        border-color: #000;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="qa-page-container">
+    
+    <!-- HEADER -->
+    <header class="qa-header">
+      <div class="qa-header-title">
+        <img src="assets/icons/fuchs.svg" width="44" height="44" alt="Schlaufuchs">
+        <div>
+          <h1>Schlaufuchs – Qualitätssicherung</h1>
+          <span class="qa-badge">Admin-Inspektor für Aufgaben & Lehrplan</span>
+        </div>
+      </div>
+      <div class="qa-nav-actions">
+        <a href="index.html" class="btn btn-secondary">
+          <img src="assets/icons/zurueck.svg" class="icon-inline-svg" alt="">
+          <span>Zurück zur App</span>
+        </a>
+        <a href="dokumentation.html" class="btn btn-secondary">
+          <img src="assets/icons/buch.svg" class="icon-inline-svg" alt="">
+          <span>Dokumentation</span>
+        </a>
+        <button id="btn-print-qa" class="btn btn-secondary" onclick="window.print()">
+          <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+          <span>Drucken</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- FILTER & STEUERUNG -->
+    <section class="qa-filter-panel" aria-label="Aufgaben-Filter">
+      <div class="qa-filter-row">
+        <!-- Themen-Auswahl Dropdown -->
+        <div class="qa-filter-group" style="flex: 2;">
+          <label for="select-qa-topic" class="qa-filter-label">Themengebiet auswählen (alle 28 Lehrplan-Themen):</label>
+          <select id="select-qa-topic" class="select-input" style="font-weight: 700; font-size: 1rem;"></select>
+        </div>
+
+        <!-- Schulstufen-Filter -->
+        <div class="qa-filter-group" style="flex: 1;">
+          <label for="select-qa-grade" class="qa-filter-label">Schulstufe:</label>
+          <select id="select-qa-grade" class="select-input">
+            <option value="all">Alle Schulstufen</option>
+            <option value="1">1. Klasse</option>
+            <option value="2">2. Klasse</option>
+            <option value="3">3. Klasse</option>
+            <option value="4">4. Klasse</option>
+          </select>
+        </div>
+
+        <!-- Volltext-Suche -->
+        <div class="qa-filter-group" style="flex: 1.5;">
+          <label for="input-qa-search" class="qa-filter-label">Suche in Fragen & Antworten:</label>
+          <input type="search" id="input-qa-search" class="task-input" placeholder="Suchbegriff eingeben..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="qa-filter-row" style="justify-content: space-between; border-top: 1px solid var(--linie-leise); padding-top: 12px;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button id="btn-toggle-answers" class="btn btn-secondary" style="font-size: 0.9rem;">
+            <span>Antworten ausblenden (Blind-Review)</span>
+          </button>
+          <button id="btn-regenerate-batch" class="btn btn-secondary" style="font-size: 0.9rem;">
+            <img src="assets/icons/neuladen.svg" class="icon-inline-svg" alt="">
+            <span>Zufalls-Batch neu auswürfeln</span>
+          </button>
+        </div>
+        <div id="qa-stats-counter" style="font-weight: 700; color: var(--tinte); font-size: 0.95rem;">
+          0 Aufgaben geladen
+        </div>
+      </div>
+    </section>
+
+    <!-- THEMEN-STECKBRIEF -->
+    <section id="qa-topic-summary" class="qa-topic-summary"></section>
+
+    <!-- AUFGABEN-LISTE -->
+    <main id="qa-tasks-container"></main>
+
+  </div>
+
+  <!-- CORE & LOGIK-SKRIPTE -->
+  <script src="js/core/format.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/random.js"></script>
+  <script src="js/core/texte.js"></script>
+  <script src="js/core/topics.js"></script>
+  <script src="js/clock.js"></script>
+  <script src="js/signs.js"></script>
+  <script src="js/generators/math.js"></script>
+  <script src="js/generators/german.js"></script>
+  <script src="js/generators/general.js"></script>
+  <script src="js/generators/brain.js"></script>
+  <script src="js/admin-qa.js"></script>
+
+  <!-- INTERAKTIVER CONTROLLER FÜR DIE ADMIN-SEITE -->
+  <script>
+    (function () {
+      'use strict';
+
+      const QA = window.Schlaufuchs.AdminQA;
+      const Topics = window.Schlaufuchs.Topics;
+
+      let currentTopicId = 'math-addition';
+      let currentQuestions = [];
+      let answersHidden = false;
+
+      const topicSelect = document.getElementById('select-qa-topic');
+      const gradeSelect = document.getElementById('select-qa-grade');
+      const searchInput = document.getElementById('input-qa-search');
+      const toggleAnswersBtn = document.getElementById('btn-toggle-answers');
+      const regenerateBtn = document.getElementById('btn-regenerate-batch');
+      const summaryEl = document.getElementById('qa-topic-summary');
+      const containerEl = document.getElementById('qa-tasks-container');
+      const statsEl = document.getElementById('qa-stats-counter');
+
+      function init() {
+        populateTopicDropdown();
+        loadTopic(currentTopicId);
+
+        topicSelect.addEventListener('change', (e) => {
+          currentTopicId = e.target.value;
+          loadTopic(currentTopicId);
+        });
+
+        gradeSelect.addEventListener('change', renderQuestions);
+        searchInput.addEventListener('input', renderQuestions);
+
+        toggleAnswersBtn.addEventListener('click', () => {
+          answersHidden = !answersHidden;
+          toggleAnswersBtn.querySelector('span').textContent = answersHidden 
+            ? 'Antworten einblenden' 
+            : 'Antworten ausblenden (Blind-Review)';
+          renderQuestions();
+        });
+
+        regenerateBtn.addEventListener('click', () => {
+          loadTopic(currentTopicId);
+        });
+      }
+
+      function populateTopicDropdown() {
+        const all = QA.getAllTopics();
+        const subjects = [
+          { key: 'math', label: 'Mathematik' },
+          { key: 'german', label: 'Deutsch' },
+          { key: 'general', label: 'Sachunterricht' },
+          { key: 'brain', label: 'Gehirntraining' }
+        ];
+
+        topicSelect.innerHTML = '';
+        subjects.forEach(sub => {
+          const group = document.createElement('optgroup');
+          group.label = sub.label;
+          const subTopics = all.filter(t => t.subject === sub.key);
+          subTopics.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.id;
+            const gradesLabel = t.grades.map(g => `${g}.`).join(', ') + ' Klasse';
+            opt.textContent = `${t.title} (${gradesLabel}) – [${t.lehrplanRef}]`;
+            group.appendChild(opt);
+          });
+          topicSelect.appendChild(group);
+        });
+
+        // Set default
+        topicSelect.value = currentTopicId;
+      }
+
+      function loadTopic(topicId) {
+        const topic = QA.getTopic(topicId);
+        if (!topic) return;
+
+        currentQuestions = QA.getAllQuestionsForTopic(topicId, { seed: Date.now() });
+        renderTopicSummary(topic);
+        renderQuestions();
+      }
+
+      function renderTopicSummary(topic) {
+        const subjectLabel = Topics.getSubjectLabel(topic.subject);
+        const archetypeLabel = Topics.getArchetypeLabel(topic.archetype);
+        const gradesText = topic.grades.map(g => `${g}. Klasse`).join(', ');
+
+        summaryEl.innerHTML = `
+          <div class="qa-topic-meta">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+              <span class="qa-badge" style="background: var(--${topic.subject}); color: #fff;">${escapeHtml(subjectLabel)}</span>
+              <span class="qa-badge">${escapeHtml(topic.lehrplanRef)}</span>
+            </div>
+            <h2>${escapeHtml(topic.title)}</h2>
+            <p>${escapeHtml(topic.subtitle)}</p>
+          </div>
+          <div class="qa-topic-stats">
+            <div class="qa-badge">Schulstufen: ${escapeHtml(gradesText)}</div>
+            <div class="qa-badge">Didaktik: ${escapeHtml(archetypeLabel)}</div>
+          </div>
+        `;
+      }
+
+      function renderQuestions() {
+        const gradeFilter = gradeSelect.value;
+        const queryFilter = searchInput.value;
+
+        const filtered = QA.filterQuestions(currentQuestions, {
+          grade: gradeFilter,
+          query: queryFilter
+        });
+
+        statsEl.textContent = `${filtered.length} von ${currentQuestions.length} Aufgaben angezeigt`;
+
+        if (filtered.length === 0) {
+          containerEl.innerHTML = `
+            <div class="qa-task-card" style="text-align: center; padding: 40px; color: var(--tinte-leise);">
+              <h3>Keine passenden Aufgaben gefunden</h3>
+              <p>Passe den Schulstufen-Filter an oder leere das Suchfeld.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        filtered.forEach(q => {
+          let optionsHtml = '';
+          if (Array.isArray(q.options) && q.options.length > 0) {
+            optionsHtml = '<div class="qa-options-list">';
+            q.options.forEach(opt => {
+              const optCls = opt.isCorrect ? 'qa-option-item correct' : 'qa-option-item';
+              const mark = opt.isCorrect ? '✓' : '○';
+              optionsHtml += `
+                <div class="${optCls}">
+                  <span style="font-weight: 800;">${mark}</span>
+                  <span>${escapeHtml(opt.text)}</span>
+                </div>
+              `;
+            });
+            optionsHtml += '</div>';
+          }
+
+          let visualHtml = '';
+          if (q.visualHtml) {
+            visualHtml = `<div class="qa-visual-box">${q.visualHtml}</div>`;
+          }
+
+          const answerBlurCls = answersHidden ? 'qa-hidden-answer' : '';
+
+          html += `
+            <article class="qa-task-card">
+              <div class="qa-task-header">
+                <span class="qa-task-index">#${q.index}</span>
+                <div class="qa-task-badges">
+                  <span class="qa-badge">${q.schulstufe}. Klasse</span>
+                  <span class="qa-badge">${escapeHtml(q.lehrplanRef)}</span>
+                  <span class="qa-badge" style="background: var(--papier);">${escapeHtml(q.type)}</span>
+                </div>
+              </div>
+
+              <div class="qa-task-question">${escapeHtml(q.questionText)}</div>
+
+              ${visualHtml}
+
+              <div class="qa-answer-box">
+                <div class="qa-answer-title">
+                  <img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt="">
+                  <span>Richtige Lösung / Fachantwort:</span>
+                </div>
+                <div class="qa-answer-content ${answerBlurCls}">${escapeHtml(q.correctAnswer)}</div>
+                ${optionsHtml}
+              </div>
+
+              ${q.hint ? `
+                <div class="qa-hint-box">
+                  <strong>Didaktischer Lösungshinweis (Scaffolding):</strong> ${escapeHtml(q.hint)}
+                </div>
+              ` : ''}
+            </article>
+          `;
+        });
+
+        containerEl.innerHTML = html;
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      window.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+</body>
+</html>

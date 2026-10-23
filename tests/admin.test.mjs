@@ -202,3 +202,12 @@ test('Admin: Profilverwaltung speichert kindgerechte Spitznamen (Datenschutz Reg
   State.switchProfile(newProf.id);
   assert.equal(State.getActiveProfile().name, 'Mia');
 });
+
+test('Admin: Einstellungen enthalten funktionierende Links zu admin.html und dokumentation.html', () => {
+  const indexHtml = readFileSync('index.html', 'utf8');
+  assert.ok(indexHtml.includes('href="admin.html"'), 'index.html muss Link zu admin.html enthalten');
+  assert.ok(indexHtml.includes('href="dokumentation.html"'), 'index.html muss Link zu dokumentation.html enthalten');
+  assert.ok(indexHtml.includes('id="link-admin-qa"'), 'Link zu admin.html muss ID link-admin-qa haben');
+  assert.ok(indexHtml.includes('id="link-admin-docs"'), 'Link zu dokumentation.html muss ID link-admin-docs haben');
+});
+

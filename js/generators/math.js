@@ -404,7 +404,7 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 6. UHRZEIT (⏰ 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-  function buildClockTasks() {
+  function buildClockTasks(opts) {
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const tasks = [];
 
@@ -856,13 +856,17 @@ window.Schlaufuchs.Generators.Math = (function () {
     ];
 
     let activePool = [];
-    if (grades.includes(1)) activePool.push(...poolGrade1);
-    if (grades.includes(2)) activePool.push(...poolGrade2);
-    if (grades.includes(3)) activePool.push(...poolGrade3);
-    if (grades.includes(4)) activePool.push(...poolGrade4);
-    if (activePool.length === 0) activePool = poolGrade2;
+    if (opts && opts.all) {
+      activePool = [...poolGrade1, ...poolGrade2, ...poolGrade3, ...poolGrade4];
+    } else {
+      if (grades.includes(1)) activePool.push(...poolGrade1);
+      if (grades.includes(2)) activePool.push(...poolGrade2);
+      if (grades.includes(3)) activePool.push(...poolGrade3);
+      if (grades.includes(4)) activePool.push(...poolGrade4);
+      if (activePool.length === 0) activePool = poolGrade2;
+    }
 
-    const shuffled = activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const shuffled = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
     shuffled.forEach(fn => {
       const t = fn();
       tasks.push({
@@ -902,7 +906,7 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 7. GELD & EURO (💶 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-  function buildMoneyTasks() {
+  function buildMoneyTasks(opts) {
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const tasks = [];
 
@@ -1056,13 +1060,17 @@ window.Schlaufuchs.Generators.Math = (function () {
     ];
 
     let activePool = [];
-    if (grades.includes(1)) activePool.push(...poolGrade1);
-    if (grades.includes(2)) activePool.push(...poolGrade2);
-    if (grades.includes(3)) activePool.push(...poolGrade3);
-    if (grades.includes(4)) activePool.push(...poolGrade4);
-    if (activePool.length === 0) activePool = poolGrade3;
+    if (opts && opts.all) {
+      activePool = [...poolGrade1, ...poolGrade2, ...poolGrade3, ...poolGrade4];
+    } else {
+      if (grades.includes(1)) activePool.push(...poolGrade1);
+      if (grades.includes(2)) activePool.push(...poolGrade2);
+      if (grades.includes(3)) activePool.push(...poolGrade3);
+      if (grades.includes(4)) activePool.push(...poolGrade4);
+      if (activePool.length === 0) activePool = poolGrade3;
+    }
 
-    const shuffled = activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const shuffled = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
     shuffled.forEach(fn => {
       const t = fn();
       tasks.push({
@@ -1179,7 +1187,7 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 8. MASSE & GEWICHTE (⚖️ 3. & 4. Klasse mit kg, g, dag, t, hl, km)
-  function buildUnitsTasks() {
+  function buildUnitsTasks(opts) {
     const grades = getEffectiveGrades([3, 4]);
     const tasks = [];
     const poolGrade3 = [
@@ -1332,11 +1340,15 @@ window.Schlaufuchs.Generators.Math = (function () {
     ];
 
     let activePool = [];
-    if (grades.includes(3)) activePool.push(...poolGrade3);
-    if (grades.includes(4)) activePool.push(...poolGrade4);
-    if (activePool.length === 0) activePool = poolGrade4;
+    if (opts && opts.all) {
+      activePool = [...poolGrade3, ...poolGrade4];
+    } else {
+      if (grades.includes(3)) activePool.push(...poolGrade3);
+      if (grades.includes(4)) activePool.push(...poolGrade4);
+      if (activePool.length === 0) activePool = poolGrade4;
+    }
 
-    const chosen = activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const chosen = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
     chosen.forEach(fn => {
       const item = fn();
       tasks.push({
@@ -1438,7 +1450,7 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 10. RECHENGESCHICHTEN / TEXTAUFGABEN (2. – 4. Klasse mit F, R, A, 5 Aufgaben)
-  function buildStoryTasks() {
+  function buildStoryTasks(opts) {
     const grades = getEffectiveGrades([2, 3, 4]);
 
     const storiesGrade2 = [
@@ -1583,12 +1595,16 @@ window.Schlaufuchs.Generators.Math = (function () {
     ];
 
     let pool = [];
-    if (grades.includes(2)) pool.push(...storiesGrade2);
-    if (grades.includes(3)) pool.push(...storiesGrade3);
-    if (grades.includes(4)) pool.push(...storiesGrade4);
-    if (pool.length === 0) pool = storiesGrade2;
+    if (opts && opts.all) {
+      pool = [...storiesGrade2, ...storiesGrade3, ...storiesGrade4];
+    } else {
+      if (grades.includes(2)) pool.push(...storiesGrade2);
+      if (grades.includes(3)) pool.push(...storiesGrade3);
+      if (grades.includes(4)) pool.push(...storiesGrade4);
+      if (pool.length === 0) pool = storiesGrade2;
+    }
 
-    const chosen = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const chosen = (opts && opts.all) ? pool : pool.sort(() => 0.5 - Math.random()).slice(0, 5);
     return chosen.map(s => ({
       fach: 'mathe',
       schulstufe: s.schulstufe || 3,

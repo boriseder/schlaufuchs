@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schlaufuchs – System-Dokumentation & Handbuch</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#FBF7EE">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .docs-page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px 80px 16px;
+    }
+
+    .docs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--linie);
+      margin-bottom: 32px;
+    }
+
+    .docs-header-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .docs-header-title h1 {
+      font-size: 1.7rem;
+      margin: 0;
+      color: var(--tinte);
+    }
+
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar Navigation */
+    .docs-sidebar {
+      position: sticky;
+      top: 24px;
+      background: var(--flaeche);
+      border: 2px solid var(--linie);
+      border-radius: var(--radius);
+      padding: 18px 14px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+
+    .docs-sidebar h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--tinte-leise);
+      margin: 0 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--linie-leise);
+    }
+
+    .docs-nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .docs-nav-link {
+      display: block;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      color: var(--tinte);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: background 0.15s ease;
+    }
+
+    .docs-nav-link:hover {
+      background: var(--papier);
+      color: var(--mathe);
+    }
+
+    /* Dokument-Inhalt */
+    .docs-content {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .docs-section {
+      background: var(--flaeche);
+      border: 2px solid var(--linie);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .docs-section h2 {
+      font-size: 1.45rem;
+      margin: 0 0 16px 0;
+      color: var(--tinte);
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--linie-leise);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .docs-section h3 {
+      font-size: 1.15rem;
+      margin: 24px 0 10px 0;
+      color: var(--tinte);
+    }
+
+    .docs-section p, .docs-section li {
+      line-height: 1.6;
+      color: var(--tinte);
+      font-size: 1rem;
+    }
+
+    .docs-section ul, .docs-section ol {
+      margin: 10px 0 18px 24px;
+      padding: 0;
+    }
+
+    .docs-section li {
+      margin-bottom: 6px;
+    }
+
+    .docs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.95rem;
+    }
+
+    .docs-table th, .docs-table td {
+      border: 1.5px solid var(--linie);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .docs-table th {
+      background: var(--papier);
+      font-weight: 800;
+      color: var(--tinte);
+    }
+
+    .docs-table tr:nth-child(even) {
+      background: #FDFBF5;
+    }
+
+    .docs-callout {
+      background: var(--papier);
+      border-left: 4px solid var(--mathe);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 18px;
+      margin: 18px 0;
+    }
+
+    .docs-callout.highlight {
+      border-left-color: var(--deutsch);
+    }
+
+    .docs-callout.success {
+      border-left-color: var(--sach);
+    }
+
+    .docs-code {
+      font-family: monospace;
+      background: var(--papier);
+      padding: 2px 6px;
+      border: 1px solid var(--linie-leise);
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    @media print {
+      .docs-header, .docs-sidebar {
+        display: none !important;
+      }
+      .docs-layout {
+        display: block;
+      }
+      .docs-page-container {
+        padding: 0;
+        max-width: 100%;
+      }
+      .docs-section {
+        border-color: #000;
+        margin-bottom: 24px;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="docs-page-container">
+
+    <!-- HEADER -->
+    <header class="docs-header">
+      <div class="docs-header-title">
+        <img src="assets/icons/fuchs.svg" width="46" height="46" alt="Schlaufuchs">
+        <div>
+          <h1>Schlaufuchs – System-Dokumentation</h1>
+          <span style="font-weight: 700; color: var(--tinte-leise); font-size: 0.9rem;">Technik, Didaktik, Aufgaben-Genese & Qualitätssicherung</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="index.html" class="btn btn-secondary">
+          <img src="assets/icons/zurueck.svg" class="icon-inline-svg" alt="">
+          <span>Zurück zur App</span>
+        </a>
+        <a href="admin.html" class="btn btn-secondary">
+          <img src="assets/icons/einstellungen.svg" class="icon-inline-svg" alt="">
+          <span>Aufgaben-Qualitätssicherung</span>
+        </a>
+        <button class="btn btn-secondary" onclick="window.print()">
+          <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+          <span>Drucken</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="docs-layout">
+      <!-- SIDEBAR INHALTSVERZEICHNIS -->
+      <nav class="docs-sidebar" aria-label="Inhaltsverzeichnis">
+        <h3>Inhaltsübersicht</h3>
+        <ul class="docs-nav-list">
+          <li><a href="#leitbild" class="docs-nav-link">1. Leitbild & Grundsätze</a></li>
+          <li><a href="#technik" class="docs-nav-link">2. Technischer Aufbau & PWA</a></li>
+          <li><a href="#datenschutz" class="docs-nav-link">3. Datenschutz & Speicherung</a></li>
+          <li><a href="#module" class="docs-nav-link">4. Modul-Architektur</a></li>
+          <li><a href="#design" class="docs-nav-link">5. Design & Barrierefreiheit</a></li>
+          <li><a href="#lehrplan" class="docs-nav-link">6. Österreichischer Lehrplan</a></li>
+          <li><a href="#genese" class="docs-nav-link">7. Wann & wie Aufgaben entstehen</a></li>
+          <li><a href="#lernpsychologie" class="docs-nav-link">8. Didaktik & Fehlerkultur</a></li>
+          <li><a href="#testing" class="docs-nav-link">9. Testing & Qualitätssicherung</a></li>
+        </ul>
+      </nav>
+
+      <!-- HAUPTINHALT -->
+      <main class="docs-content">
+
+        <!-- 1. LEITBILD -->
+        <section id="leitbild" class="docs-section">
+          <h2>1. Leitbild & Grundsätze</h2>
+          <p>
+            <strong>Schlaufuchs</strong> ist eine digitale Übungs- und Festigungsplattform für Kinder der 
+            <strong>1. bis 4. Schulstufe</strong> (6 bis 10 Jahre) an österreichischen Volksschulen.
+            Sie versteht sich ausdrücklich als <strong>Ergänzung des Unterrichts</strong> und nicht als dessen Ersatz.
+            Schlaufuchs führt keinen neuen Stoff ein, sondern festigt das im Unterricht Erarbeitete durch gezielte, 
+            kindgerechte Übungen und differenzierte A4-Arbeitsblätter zum Ausdrucken.
+          </p>
+          <div class="docs-callout">
+            <strong>Die vier Kernprinzipien von Schlaufuchs:</strong>
+            <ol style="margin-top: 6px; margin-bottom: 0;">
+              <li><strong>100 % Offline & Autark:</strong> Keine externen Serveranfragen, keine CDNs, kein Tracking, keine Cookies.</li>
+              <li><strong>Datenschutz by Design:</strong> Keine Speicherung von Klarnamen. Alle Daten bleiben lokal auf dem Endgerät.</li>
+              <li><strong>Ruhe statt Reizüberflutung:</strong> Keine Dauer-Animationen, kein Zeitdruck, keine Bestrafungen, kein SaaS-Look.</li>
+              <li><strong>Österreichischer Lehrplan 2025:</strong> 100 % Konformität mit BMBWF, ÖWB-Sprachstandards und DIN/ÖNORM 1083.</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- 2. TECHNISCHER AUFBAU -->
+        <section id="technik" class="docs-section">
+          <h2>2. Technischer Aufbau & PWA-Architektur</h2>
+          <p>
+            Schlaufuchs ist als moderne <strong>Progressive Web App (PWA)</strong> nach dem 
+            <strong>Offline-First-Prinzip</strong> konzipiert. Die Anwendung läuft vollständig im Webbrowser 
+            und benötigt nach dem ersten Laden keinerlei Internetverbindung mehr.
+          </p>
+          <h3>Service Worker & Cache-Strategie (<span class="docs-code">sw.js</span>)</h3>
+          <p>
+            Der Service Worker implementiert eine strikte <strong>Cache-First-Strategie</strong>:
+          </p>
+          <ul>
+            <li><strong>Pre-Caching (<span class="docs-code">CACHE_NAME</span>):</strong> Alle statischen HTML-Seiten (<span class="docs-code">index.html</span>, <span class="docs-code">admin.html</span>, <span class="docs-code">dokumentation.html</span>), Stylesheets, Schriftarten und JavaScript-Dateien werden bei der Installation sofort vollständig im Browser-Cache gesichert.</li>
+            <li><strong>Autarker Betrieb:</strong> Netzwerkausfälle oder Flugmodus führen zu keinerlei Einschränkungen.</li>
+            <li><strong>Zero External Requests:</strong> Die Anwendung referenziert keine externen URLs (weder Fonts, noch Bibliotheken wie jQuery oder Tailwind). Alles liegt lokal im Projektverzeichnis.</li>
+          </ul>
+
+          <h3>Web App Manifest (<span class="docs-code">manifest.webmanifest</span>)</h3>
+          <p>
+            Ermöglicht die Installation auf Tablets (iPad / Android) und Computern als native App:
+          </p>
+          <ul>
+            <li>Display-Modus: <span class="docs-code">standalone</span> (ohne störende Browserleisten im Unterricht).</li>
+            <li>Theme-Farbe: <span class="docs-code">#FBF7EE</span> (warmes Papier).</li>
+            <li>Ausrichtung: Adaptiv für Quer- und Hochformat auf Klassenzimmer-Tablets.</li>
+          </ul>
+        </section>
+
+        <!-- 3. DATENSCHUTZ & SPEICHERUNG -->
+        <section id="datenschutz" class="docs-section">
+          <h2>3. Datenspeicherung & Datenschutz (Local-First)</h2>
+          <p>
+            Als Schul- und Lernanwendung für Kinder genießt der Datenschutz oberste Priorität (Vorrang-Regel 1 aus <span class="docs-code">AGENTS.md</span>):
+          </p>
+          <ul>
+            <li><strong>Keine Klarnamen:</strong> Kinder verwenden ausschließlich kindgerechte Spitznamen (z. B. „Nils“, „Mia“) und Avatare.</li>
+            <li><strong>Kein Cloud-Zwang & keine Benutzerkonten:</strong> Es gibt keine Registrierung, keine Passwörter und keine Telemetrie.</li>
+            <li><strong>Speichermodul (<span class="docs-code">js/core/storage.js</span>):</strong> Kapselt den Zugriff auf den Browser-Speicher mit dem Präfix <span class="docs-code">schlaufuchs_</span> und implementiert einen speicherresidenten Fallback bei deaktiviertem oder defektem Browser-Speicher.</li>
+            <li><strong>Datensicherung & Klassen-Transfer:</strong> Eltern und Lehrkräfte können Profile und Lernstände im Einstellungsbereich mit einem Klick als lokale JSON-Datei sichern und auf andere Tablets übertragen.</li>
+            <li><strong>Kindersicherung & Eltern-PIN:</strong> Der Einstellungsbereich ist standardmäßig durch eine mathematische Rechenaufgabe oder einen optionalen 4-stelligen PIN geschützt.</li>
+          </ul>
+        </section>
+
+        <!-- 4. MODUL-ARCHITEKTUR -->
+        <section id="module" class="docs-section">
+          <h2>4. Modul-Architektur & Quellcode-Struktur</h2>
+          <p>
+            Die Software ist in modularer, erweiterbarer Vanilla-JavaScript-Architektur ohne schwerfällige Frameworks aufgebaut:
+          </p>
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Schicht / Ordner</th>
+                <th>Dateien</th>
+                <th>Verantwortung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Core</strong></td>
+                <td><span class="docs-code">format.js</span>, <span class="docs-code">storage.js</span>, <span class="docs-code">random.js</span>, <span class="docs-code">topics.js</span></td>
+                <td>Zahlenformatierung nach ÖNORM 1083, Datenspeicherung, Zufallsgenerator mit Seed-Support, zentrale Themen-Registry (28 Themen).</td>
+              </tr>
+              <tr>
+                <td><strong>Generators</strong></td>
+                <td><span class="docs-code">math.js</span>, <span class="docs-code">german.js</span>, <span class="docs-code">general.js</span>, <span class="docs-code">brain.js</span></td>
+                <td>Reine Datenobjekte (Task-Modell). Erzeugt mathematische Aufgaben, Sprachübungen, Sachunterrichtsfragen und Logikmuster.</td>
+              </tr>
+              <tr>
+                <td><strong>Renderers</strong></td>
+                <td><span class="docs-code">renderers.js</span>, <span class="docs-code">clock.js</span>, <span class="docs-code">signs.js</span></td>
+                <td>DOM-Rendering für Fokusaufgaben, analoge Uhren-SVGs, StVO-Verkehrszeichen-SVGs, Zwanzigerfeld und Zahlenmauern.</td>
+              </tr>
+              <tr>
+                <td><strong>Validators</strong></td>
+                <td><span class="docs-code">validators/index.js</span></td>
+                <td>Darstellungsunabhängige Validierung von Kinder-Eingaben (<span class="docs-code">pruefeZahl</span>, <span class="docs-code">pruefeAuswahl</span> etc.).</td>
+              </tr>
+              <tr>
+                <td><strong>Print-Engine</strong></td>
+                <td><span class="docs-code">print-engine.js</span>, <span class="docs-code">print.js</span>, <span class="docs-code">worksheets.js</span></td>
+                <td>Clientseitige Erstellung druckreifer A4-Arbeitsblätter mit Montessori-Knickstreifen und Geheimwort-Rätseln.</td>
+              </tr>
+              <tr>
+                <td><strong>Admin & QA</strong></td>
+                <td><span class="docs-code">admin.js</span>, <span class="docs-code">admin-qa.js</span></td>
+                <td>Kindersicherung, Schulstufen-Zuweisung, Diagnoseansicht und vollständige Qualitätssicherungs-Engine.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 5. DESIGN & BARRIEREFREIHEIT -->
+        <section id="design" class="docs-section">
+          <h2>5. Design-System & Barrierefreiheit (Anti-KI-Optik)</h2>
+          <p>
+            Das UI-Design orientiert sich an einem <strong>ruhigen österreichischen Schulbuch oder Arbeitsheft</strong>, nicht an einem bunten SaaS-Dashboard.
+          </p>
+          <ul>
+            <li><strong>Design-Tokens (<span class="docs-code">css/tokens.css</span>):</strong> Einzige Quelle für Farben, Abstände und Rahmen. Keine willkürlichen Hex-Farben.</li>
+            <li><strong>Farbpalette:</strong>
+              <ul>
+                <li>Hintergrund: warmes Papier (<span class="docs-code">--papier</span>), Karten weiß (<span class="docs-code">--flaeche</span>), Linien 2px (<span class="docs-code">--linie</span>).</li>
+                <li>Fächerfarben: Mathematik (Blau), Deutsch (Ziegelrot), Sachunterricht (Grün), Gehirntraining (Violett). Farbe trägt nie alleine Bedeutung!</li>
+                <li>Rückmeldung: Richtig = Gelb mit Haken (<span class="docs-code">--richtig</span>), Noch nicht = Grau-Blau mit Nochmal-Symbol (<span class="docs-code">--nochmal</span>). <strong>Niemals Rot oder Grün als Fehlersignal!</strong></li>
+              </ul>
+            </li>
+            <li><strong>Touch-Bedienung zuerst:</strong> Alle Touch-Ziele haben eine Mindesthöhe von <strong>56 px</strong> und mindestens <strong>12 px</strong> Abstand. Jede Zieh-Aufgabe (Drag-and-Drop) ist vollwertig durch Antippen lösbar.</li>
+            <li><strong>App-eigenes Ziffernfeld:</strong> Zahlen werden über große, barrierefreie Tasten in der App eingegeben. Keine störende Bildschirmtastatur, die die Aufgabe verdeckt. Kein HTML5-Zahlenfeld (<span class="docs-code">type="number"</span>). <!-- check-regeln:ignore --></li>
+            <li><strong>Typografie:</strong> Lokale Schulschriften <em>Primae</em> und <em>PrimaeText</em>. Tabellarische Ziffern für stellenwertgenaues Untereinanderstehen.</li>
+          </ul>
+        </section>
+
+        <!-- 6. LEHRPLAN -->
+        <section id="lehrplan" class="docs-section">
+          <h2>6. Österreichischer Lehrplan (BMBWF 2025)</h2>
+          <p>
+            Alle Aufgaben entsprechen den verbindlichen Vorgaben des österreichischen Lehrplans für die Volksschule 
+            (BMBWF BGBl. II Nr. 178/2025, gültig ab Schuljahr 2025/26):
+          </p>
+          <ul>
+            <li><strong>Stufenreinheit:</strong> Jede Aufgabe trägt ihre verbindliche Schulstufe (1 bis 4) und den Lehrplanschlüssel (z. B. <span class="docs-code">M-1/4-Groessen-Uhrzeit</span>). Keine Inhalte außerhalb ihrer Klassenstufe.</li>
+            <li><strong>Zahlenschreibweise (DIN/ÖNORM 1083):</strong>
+              Niemals Tausenderpunkte! Ab vier Stellen wird ein Schmaltrennzeichen (Spatium) gesetzt: <span class="docs-code">1 000</span>, <span class="docs-code">125 000</span>. Dezimaltrennzeichen ist das Komma.
+            </li>
+            <li><strong>Rechenzeichen:</strong> Ausschließlich <span class="docs-code">+</span>, <span class="docs-code">−</span>, <span class="docs-code">·</span> (mal) und <span class="docs-code">:</span> (geteilt). Niemals Tastatur-Sternchen, Schrägstrich oder Obelus.</li>
+            <li><strong>Österreichische Standardvarietät (ÖWB):</strong>
+              Verwendung landesüblicher Begriffe: <em>Jänner</em> (nicht Januar), <em>Sessel</em> (nicht Stuhl), <em>Klasse</em>, <em>Schultasche</em>, <em>Mitvergangenheit</em> (nicht Präteritum als alleiniger Begriff), <em>Tunwort</em> / <em>Namenwort</em> / <em>Wiewort</em> in Grundstufe I.
+            </li>
+            <li><strong>Verkehrszeichen nach österreichischer StVO:</strong>
+              Echte, handgezeichnete StVO-SVGs (z. B. Schutzweg, Vorrang geben, Halt, Radweg, Fußgängerzone). <strong>Keine ungenauen Emojis als Verkehrszeichen!</strong>
+            </li>
+          </ul>
+        </section>
+
+        <!-- 7. WANN & WIE AUFGABEN ENTSTEHEN -->
+        <section id="genese" class="docs-section">
+          <h2>7. Aufgabengenese: Wann und wie Aufgaben entstehen</h2>
+          <p>
+            In Schlaufuchs entstehen Aufgaben <strong>rein clientseitig und dynamisch („Just-in-Time“)</strong>. 
+            Es existieren keine starren Server-Datenbanken und keine zufälligen KI-Halluzinationen.
+          </p>
+
+          <h3>Wann werden neue Aufgaben generiert? (Lifecycle & Trigger-Punkte)</h3>
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Auslöser / Trigger</th>
+                <th>Programm-Ablauf</th>
+                <th>Didaktische Wirkung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Menü-Klick auf Thema</strong></td>
+                <td><span class="docs-code">startExercise(topicId)</span> ruft <span class="docs-code">generateTasksForTopic(topicId)</span> auf.</td>
+                <td>Erzeugt einen frischen Satz von 5–6 Aufgaben, abgestimmt auf die freigeschalteten Schulstufen des aktiven Kindes.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Neuladen-Button in Fokusleiste</strong></td>
+                <td><span class="docs-code">regenerateCurrentExercise()</span> verwirft die aktuelle Aufgabe und würfelt an Ort und Stelle eine neue aus.</td>
+                <td>Ermöglicht dem Kind Autonomie: Wenn eine Aufgabe zu schwer wirkt oder schon bekannt ist, kann es ohne Frust eine neue anfordern.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Abschlusskarte: „Nochmal üben“</strong></td>
+                <td><span class="docs-code">#btn-summary-retry</span> generiert die Runde für dasselbe Thema komplett neu.</td>
+                <td>Garantiert durch den Zufalls- bzw. Permutationsalgorithmus, dass in der neuen Runde andere Zahlen oder ungesehene Fragen erscheinen.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Arbeitsblatt drucken</strong></td>
+                <td><span class="docs-code">generateWorksheet(topicId)</span> in <span class="docs-code">print-engine.js</span> erzeugt 12 A4-Aufgaben.</td>
+                <td>Strukturierte A4-Blätter mit Lösungsstreifen zum Knicken und kindgerechtem Schatzkisten-Geheimwort.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Sammeldruck (Klassen-Set)</strong></td>
+                <td><span class="docs-code">printBatchWorksheets()</span> berechnet für jedes Thema ein eigenes Blatt mit individuellem Seed.</td>
+                <td>Hohe Inter-Sheet-Varianz: Keine doppelten Aufgabenblöcke bei mehreren Ausdrucken hintereinander.</td>
+              </tr>
+              <tr>
+                <td><strong>6. Admin-QS Inspektor</strong></td>
+                <td>Button <em>„Zufalls-Batch neu auswürfeln“</em> auf <span class="docs-code">admin.html</span>.</td>
+                <td>Prüfer und Lehrkräfte können jederzeit neue Varianten prozeduraler Aufgaben zur manuellen Sichtprüfung erzeugen.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Wie werden Aufgaben generiert? (Das Hybrid-Modell)</h3>
+          <p>
+            Schlaufuchs teilt die 28 Lehrplan-Themen in zwei methodische Generierungs-Klassen ein:
+          </p>
+
+          <div class="docs-callout success">
+            <h4>A. Prozedurale mathematische Generierung (Mathematik & Logik)</h4>
+            <p>
+              Reine Rechenaufgaben entstehen algorithmisch unter strikter Einhaltung didaktischer Schranken:
+            </p>
+            <ul>
+              <li><strong>1. Klasse (ZR 20):</strong> Grundaufgaben mit Zehnerzerlegung (z. B. $7 + 5 = 7 + 3 + 2 = 12$). Keine unlösbaren Subtraktionen ($a \ge b$).</li>
+              <li><strong>2. Klasse (ZR 100):</strong> Gezielte Steuerung des Zehnerübergangs. Multiplikation fokussiert zuerst die Kernaufgaben ($1\cdot, 2\cdot, 5\cdot, 10\cdot$).</li>
+              <li><strong>3. Klasse (ZR 1 000):</strong> Hunderter- und Zehnersprünge. Division als exakte Umkehrung von Mal-Aufgaben oder mit kontrolliertem Rest.</li>
+              <li><strong>4. Klasse (ZR 1 000 000):</strong> Stellenwerttafel (HT, ZT, T), Tausenderergänzungen, schriftliche Rechenverfahren.</li>
+              <li><strong>Didaktisches Scaffolding:</strong> Zu jeder mathematischen Aufgabe berechnet der Generator die didaktischen Zwischenschritte (z. B. Zehnersprung-Rechenstrich) automatisch mit.</li>
+            </ul>
+          </div>
+
+          <div class="docs-callout highlight">
+            <h4>B. Kuratierte Pools mit dynamischer Permutation (Deutsch & Sachunterricht)</h4>
+            <p>
+              Sprachliche und sachkundliche Inhalte werden aus umfangreichen, fachdidaktisch geprüften Pools (20 bis 30 Fragen je Thema) generiert:
+            </p>
+            <ul>
+              <li><strong>Warum kuratierte Pools?</strong> Um 100 % sprachliche Korrektheit (ÖWB) und sachliche Exaktheit (österreichische StVO) zu garantieren. KI-Textgeneratoren neigen zu Ungenauigkeiten oder bundesdeutschem Vokabular.</li>
+              <li><strong>Fisher-Yates-Permutation:</strong> Vor jeder Übungsrunde wird der Pool zufällig gemischt (<span class="docs-code">shuffle</span>) und eine Teilmenge gewählt.</li>
+              <li><strong>Distraktoren-Shuffling:</strong> Bei Multiple-Choice-Aufgaben werden die richtige Antwort und die falschen Optionen (Distraktoren) bei jedem Durchlauf neu geshuffelt, um Positionseffekte auszuschließen.</li>
+            </ul>
+          </div>
+
+          <h3>Deterministischer PRNG vs. echter Zufall</h3>
+          <ul>
+            <li><strong>Online-Übung:</strong> Verwendet <span class="docs-code">Math.random()</span> für maximale Abwechslung und Überraschung bei jedem Durchgang.</li>
+            <li><strong>Arbeitsblätter:</strong> Verwendet einen deterministischen Pseudo-Zufallsgenerator (<span class="docs-code">Schlaufuchs.Random.erstelleZufall(seed)</span>). Dadurch kann eine Lehrkraft ein Arbeitsblatt mit exakt denselben Aufgaben für die ganze Klasse nachdrucken.</li>
+          </ul>
+        </section>
+
+        <!-- 8. DIDAKTIK & FEHLERKULTUR -->
+        <section id="lernpsychologie" class="docs-section">
+          <h2>8. Didaktik, Fehlerkultur & Belohnungssystem</h2>
+          
+          <h3>Single-Task-Fokus (Kognitive Entlastung)</h3>
+          <p>
+            Während des Übens steht genau <strong>eine</strong> Aufgabe im Fokus. Es gibt keine globale Kopfzeile, 
+            keine ablenkenden Menüs, keine blinkenden Banner. Die drei Bereiche <em>Aufgabe</em>, <em>Eingabe</em> 
+            und <em>Rückmeldung</em> sind klar vertikal gegliedert.
+          </p>
+
+          <h3>Konstruktive Fehlerkultur</h3>
+          <p>
+            Kinder lernen aus Fehlern, wenn sie nicht beschämt werden:
+          </p>
+          <ul>
+            <li><strong>Keine Bestrafung:</strong> Es gibt keinen Punkteabzug, keinen Verlust von Herzen oder Leben, keine Zeitlimits und keine Fehlertöne.</li>
+            <li><strong>Didaktische Hilfen statt roter Signale:</strong> Bei einem Fehlversuch wechselt das Feld nicht auf Rot, sondern auf ein neutrales Blau-Grau. Es erscheint ein aufmunternder Hinweis („Schau noch einmal genau hin“) und ein konkreter didaktischer Rechen- oder Lesetipp.</li>
+          </ul>
+
+          <h3>Belohnungssystem ohne Glücksspiel-Mechanismen</h3>
+          <ul>
+            <li><strong>Sticker-Album:</strong> Für je 5 Sterne erhält das Kind ein Sammelpäckchen. Ein fairer Ziehungs-Algorithmus garantiert neue Sticker, bis das Album voll ist.</li>
+            <li><strong>Schatzkiste (Offline-Belohnung):</strong> Kinder, die ein gedrucktes Arbeitsblatt mit Stift auf Papier gelöst haben, können das ermittelte Knickstreifen-Geheimwort in der App eingeben und schalten damit eine Schatzkisten-Belohnung frei.</li>
+          </ul>
+        </section>
+
+        <!-- 9. TESTING & QS -->
+        <section id="testing" class="docs-section">
+          <h2>9. Testing & Qualitätssicherungs-Architektur</h2>
+          <p>
+            Um die hohen Qualitätsstandards für den Schuleinsatz dauerhaft zu gewährleisten, verfügt Schlaufuchs über ein mehrstufiges Prüfsystem:
+          </p>
+
+          <h3>1. Automatisierte Test-Suite (<span class="docs-code">tests/*.test.mjs</span>)</h3>
+          <p>
+            Wird mit dem nativen Node.js Test-Runner (<span class="docs-code">node --test</span>) ohne externe Abhängigkeiten ausgeführt:
+          </p>
+          <ul>
+            <li><strong>Didaktische Validierung:</strong> Prüft alle Generatoren auf Schulstufen-Einhaltung, Zahlenräume und fehlerfreie Berechnungen.</li>
+            <li><strong>Arbeitsblatt-Bijektion:</strong> Prüft für alle 28 Themen, dass jede Aufgabe auf dem Knick-Lösungsstreifen exakt der richtigen Lösung entspricht.</li>
+            <li><strong>Barrierefreiheit & Rendering:</strong> Stellt sicher, dass keine <span class="docs-code">type="number"</span> Felder existieren und alle Touch-Elemente barrierefrei sind. <!-- check-regeln:ignore --></li>
+            <li><strong>StVO-SVG-Prüfung:</strong> Garantiert, dass Verkehrszeichen immer echte SVGs rendern und niemals ein stiller Fallback auf Emojis stattfindet (Fail-Fast-Prinzip).</li>
+          </ul>
+
+          <h3>2. Strikter Regel-Check (<span class="docs-code">scripts/check-regeln.mjs</span>)</h3>
+          <p>
+            Validiert den gesamten Quellcode automatisch gegen die 13 verbindlichen Regeln aus <span class="docs-code">AGENTS.md</span>:
+          </p>
+          <ul>
+            <li>Verhindert Tausenderpunkte (Punkte als Tausendertrennzeichen sind verboten, nur Spatium <span class="docs-code">1 000</span> ist erlaubt).</li>
+            <li>Verhindert unzulässige Rechenzeichen wie Tastatur-Sternchen, Schrägstrich oder Obelus.</li>
+            <li>Verhindert externe Requests (CDNs, Google Fonts, Analytics).</li>
+            <li>Verhindert unerlaubte CSS-Eigenschaften (Gradients, Glassmorphism, Dauer-Animationen).</li>
+          </ul>
+
+          <h3>3. Manuelle Qualitätssicherung (<span class="docs-code">admin.html</span>)</h3>
+          <p>
+            Die Admin-Seite dient als interaktives Arbeitswerkzeug für Lehrkräfte und Fachdidaktiker:
+          </p>
+          <ul>
+            <li>Dropdown zur lückenlosen Auswahl aller 28 Themengebiete.</li>
+            <li>Vollständige Einsicht in alle kuratierten Fragenpools und prozeduralen Prüfmatrizen.</li>
+            <li>Filterung nach Schulstufe (1–4) und Volltextsuche.</li>
+            <li>Blind-Review-Modus (Lösungen verbergen) zur manuellen Probe-Lösung durch Lehrpersonen.</li>
+          </ul>
+        </section>
+
+      </main>
+    </div>
+
+  </div>
+</body>
+</html>
