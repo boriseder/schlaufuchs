@@ -83,7 +83,14 @@ Das System folgt einer strikten Trennung der Zuständigkeiten (Separation of Con
 │   │   └── brain.js            # Konzentration, Muster, Zahlenfolgen, Raumorientierung
 │   ├── validators/             # Reine Prüflogik (DOM-unabhängig & unit-testbar)
 │   │   └── index.js            # Zahl-, Wort- und Strukturvalidatoren
-│   ├── renderers.js            # DOM-Renderer für alle Aufgabentypen & Scaffolding
+│   ├── renderers/              # Modularisierte DOM-Renderer nach didaktischen Domänen
+│   │   ├── scaffolding.js      # Fachdidaktisches Scaffolding (Rechenstrich)
+│   │   ├── shell.js            # Standardisierte 3-Zonen-Bühne & Aktionsleiste
+│   │   ├── math.js             # Gleichungen, Pyramiden, Schriftlich, 20er-Feld
+│   │   ├── german.js           # Wortarten, Schüttelsätze, Leseverständnis
+│   │   ├── clocks.js           # Analoge Uhr, Uhr stellen, 4-Uhren-Auswahl
+│   │   └── general.js          # Multiple Choice, Memory, Muster, Sequenzen
+│   ├── renderers.js            # Aggregierte Fassade für Abwärtskompatibilität
 │   ├── app.js                  # Haupt-Controller: Routing, Focus-Mode, Numpad-Bridge
 │   ├── state.js                # Globaler State & Publish-Subscribe Event-Bus
 │   ├── audio.js                # Hybrid Web Audio Synthesizer + SpeechSynthesis (de-AT)

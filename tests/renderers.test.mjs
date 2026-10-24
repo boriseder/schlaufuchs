@@ -6,7 +6,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
 
 function createRenderersSandbox() {
@@ -53,7 +53,21 @@ function createRenderersSandbox() {
   vm.runInNewContext(readFileSync('js/clock.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/audio.js', 'utf8'), sandbox);
   sandbox.window.Schlaufuchs.Generators = { Math: { formatAustrianNumber: (n) => String(n) } };
-  vm.runInNewContext(readFileSync('js/renderers.js', 'utf8'), sandbox);
+  
+  const rendererFiles = [
+    'js/renderers/scaffolding.js',
+    'js/renderers/shell.js',
+    'js/renderers/math.js',
+    'js/renderers/german.js',
+    'js/renderers/clocks.js',
+    'js/renderers/general.js',
+    'js/renderers.js'
+  ];
+  for (const f of rendererFiles) {
+    if (existsSync(f)) {
+      vm.runInNewContext(readFileSync(f, 'utf8'), sandbox);
+    }
+  }
 
   return {
     Renderers: sandbox.window.Schlaufuchs.Renderers,

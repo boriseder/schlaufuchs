@@ -22,6 +22,7 @@ function createClockSandbox() {
   vm.runInNewContext(readFileSync('js/clock.js', 'utf8'), sandbox);
   vm.runInNewContext(`window.Schlaufuchs.State = { getActiveGrades: () => [1, 2, 3, 4] };`, sandbox);
   vm.runInNewContext(readFileSync('js/generators/math.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/generators/index.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/print-engine.js', 'utf8'), sandbox);
 
   return {

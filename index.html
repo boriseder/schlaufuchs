@@ -696,7 +696,7 @@
           <button id="btn-close-profile-modal" class="modal-close-btn">&times;</button>
         </div>
         <div class="modal-body">
-          <p style="margin-bottom: 14px; color: #475569; font-weight: 700;">Wähle dein Profil aus, um deine gesammelten Sterne zu sehen:</p>
+          <p style="margin-bottom: 14px; color: var(--tinte-leise); font-weight: 700;">Wähle dein Profil aus, um deine gesammelten Sterne zu sehen:</p>
           <div id="modal-profiles-grid" class="modal-profiles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px;"></div>
         </div>
       </div>
@@ -929,11 +929,11 @@
           <!-- SCHLAUFUCHS-SCHATZKISTE (OFFLINE-LERN-BELOHNUNG) -->
           <div class="stickers-treasure-banner">
             <div class="treasure-info">
-              <h4>🦊 Schlaufuchs-Schatzkiste (Arbeitsblatt-Geheimwort)</h4>
+              <h4><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"> Schlaufuchs-Schatzkiste (Arbeitsblatt-Geheimwort)</h4>
               <p>Hast du ein Arbeitsblatt offline mit Stift gelöst? Gib hier dein Geheimwort ein!</p>
             </div>
             <form id="treasure-code-form" class="treasure-form" autocomplete="off">
-              <input type="text" id="input-treasure-code" class="task-input treasure-input" placeholder="GEHEIMWORT" maxlength="15" autocorrect="off" autocapitalize="characters" spellcheck="false" required />
+              <input type="text" id="input-treasure-code" class="task-input treasure-input" placeholder="GEHEIMWORT" maxlength="15" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" required />
               <button type="submit" id="btn-submit-treasure-code" class="btn btn-primary btn-treasure">
                 <span>Öffnen</span>
               </button>
@@ -983,16 +983,23 @@
   <script src="js/audio.js"></script>
   <script src="js/dragdrop.js"></script>
   <script src="js/confetti.js"></script>
-  <script src="js/print-engine.js"></script>
-  <script src="js/print.js"></script>
-  <script src="js/worksheets.js"></script>
-  <script src="js/stickers.js"></script>
   <script src="js/validators/index.js"></script>
   <script src="js/generators/math.js"></script>
   <script src="js/generators/german.js"></script>
   <script src="js/generators/general.js"></script>
   <script src="js/generators/brain.js"></script>
-  <script src="js/renderers.js?v=2.9"></script>
+  <script src="js/generators/index.js"></script>
+  <script src="js/print-engine.js"></script>
+  <script src="js/print.js"></script>
+  <script src="js/worksheets.js"></script>
+  <script src="js/stickers.js"></script>
+  <script src="js/renderers/scaffolding.js?v=3.0"></script>
+  <script src="js/renderers/shell.js?v=3.0"></script>
+  <script src="js/renderers/math.js?v=3.0"></script>
+  <script src="js/renderers/german.js?v=3.0"></script>
+  <script src="js/renderers/clocks.js?v=3.0"></script>
+  <script src="js/renderers/general.js?v=3.0"></script>
+  <script src="js/renderers.js?v=3.0"></script>
   <script src="js/admin.js"></script>
   <script src="js/admin-qa.js"></script>
   <script src="js/app.js"></script>

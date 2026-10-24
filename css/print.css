@@ -216,7 +216,6 @@
 
 .preview-body .print-page {
   background: #FFFFFF !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* check-regeln:ignore */
   border: 1px solid #C8C2B4;
   border-radius: 4px;
   width: 210mm;
@@ -728,7 +727,7 @@
   align-items: flex-start;
   gap: 10px;
   padding-bottom: 8px;
-  border-bottom: 0.5pt solid #e2e8f0; /* check-regeln:ignore */
+  border-bottom: 0.5pt solid var(--linie-leise); /* check-regeln:ignore */
 }
 
 .print-task-num {
@@ -1176,7 +1175,6 @@
 
   .print-page {
     border: none !important;
-    box-shadow: none !important; /* check-regeln:ignore */
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;

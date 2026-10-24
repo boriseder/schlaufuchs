@@ -225,7 +225,7 @@ window.Schlaufuchs.Print = (function () {
             <div class="print-sheet-header">
               <div class="print-header-left">
                 <div class="print-brand-line">
-                  <span class="print-brand-logo">🦊</span>
+                  <span class="print-brand-logo"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"></span>
                   <span class="print-brand-title">SCHLAUFUCHS ARBEITSBLATT</span>
                 </div>
                 <div class="print-brand-sub">${topicTitle} • ${gradeText}</div>
@@ -250,9 +250,9 @@ window.Schlaufuchs.Print = (function () {
             <div class="print-sheet-footer">
               <div class="print-self-eval-inline">
                 <span class="print-eval-prompt">Wie war das Blatt für dich?</span>
-                <span class="print-eval-check">◯ 🦊 Leicht</span>
-                <span class="print-eval-check">◯ 🦊 Ging so</span>
-                <span class="print-eval-check">◯ 🦊 Knifflig</span>
+                <span class="print-eval-check">◯ Leicht</span>
+                <span class="print-eval-check">◯ Ging so</span>
+                <span class="print-eval-check">◯ Knifflig</span>
               </div>
               <div class="print-footer-sub">
                 <span>Schlaufuchs – Kostenlose Lernplattform für die Volksschule</span>
@@ -264,7 +264,7 @@ window.Schlaufuchs.Print = (function () {
           <!-- RECHTER TEIL: KNICK-LÖSUNGSSTREIFEN -->
           <div class="print-knick-col">
             <div class="print-knick-top-banner">
-              <span>✂️</span> <span>HIER VOR DEM LÖSEN NACH HINTEN KNICKEN</span> <span>✂️</span>
+              <span>-- - - - -</span> <span>HIER VOR DEM LÖSEN NACH HINTEN KNICKEN</span> <span>- - - - --</span>
             </div>
 
             <div class="print-knick-panel">
@@ -312,7 +312,7 @@ window.Schlaufuchs.Print = (function () {
     cards.forEach((card) => {
       cardsHtml += `
         <div class="print-memory-card">
-          <div class="print-mem-corner">🦊</div>
+          <div class="print-mem-corner"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 14px; height: 14px;"></div>
           <div class="print-mem-icon">${card.content}</div>
           <div class="print-mem-label">${card.subtitle || ''}</div>
         </div>
@@ -324,7 +324,7 @@ window.Schlaufuchs.Print = (function () {
         <div class="print-sheet-header">
           <div class="print-header-left">
             <div class="print-brand-line">
-              <span class="print-brand-logo">🦊</span>
+              <span class="print-brand-logo"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"></span>
               <span class="print-brand-title">SCHLAUFUCHS MEMORY-AUSSCHNEIDEBOGEN</span>
             </div>
             <div class="print-brand-sub">${topicTitle} • ${gradeText} • Ausschneiden & Spielen</div>
@@ -333,7 +333,7 @@ window.Schlaufuchs.Print = (function () {
         </div>
 
         <div class="print-craft-instructions">
-          <strong>✂️ Bastel-Anleitung:</strong>
+          <strong>Bastel-Anleitung:</strong>
           Schneide die ${cards.length} Kärtchen an den gestrichelten Linien aus. Lege sie verdeckt auf den Tisch und finde die zusammengehörenden Bildpaare gemeinsam mit deinen Eltern oder Freunden!
         </div>
 
@@ -459,7 +459,7 @@ window.Schlaufuchs.Print = (function () {
 
         let lineRow = '';
         if (isClockSet || t.promptType === 'draw-hands') {
-          lineRow = `<div class="print-clock-line-row print-clock-draw-cue"><span class="print-clock-draw-tip">✏️ Zeichne den kurzen (roten) und langen (blauen) Zeiger ein.</span></div>`;
+          lineRow = `<div class="print-clock-line-row print-clock-draw-cue"><span class="print-clock-draw-tip">Zeichne den kurzen (roten) und langen (blauen) Zeiger ein.</span></div>`;
         } else if (t.promptType === 'hour-only') {
           lineRow = `<div class="print-clock-line-row"><span class="print-clock-label">Es ist:</span><span class="print-clock-num-box"></span><span class="print-clock-unit">Uhr</span></div>`;
         } else if (t.promptType === 'digital') {
@@ -553,7 +553,7 @@ window.Schlaufuchs.Print = (function () {
       body = `
         <div class="print-syllable-wrapper">
           <div class="print-task-prompt-inline">
-            Sprich das Wort, zeichne die <strong>Silbenbögen (◡ ◡)</strong> darunter und kröne die <strong>Silbenkönige</strong> (A, E, I, O, U) mit einer Krone 👑:
+            Sprich das Wort, zeichne die <strong>Silbenbögen (◡ ◡)</strong> darunter und kröne die <strong>Silbenkönige</strong> (A, E, I, O, U):
           </div>
           <div class="print-syllable-word-box">
             <span class="print-syllable-word">${spacedWord}</span>
@@ -705,7 +705,7 @@ window.Schlaufuchs.Print = (function () {
         <div class="print-reading-wrap">
           <div class="print-reading-title">${task.title}</div>
           <div class="print-reading-text-card">${task.text}</div>
-          <div class="print-reading-active-prompt">💡 Lies aufmerksam und beantworte die Fragen:</div>
+          <div class="print-reading-active-prompt">Lies aufmerksam und beantworte die Fragen:</div>
           ${qMarkup}
         </div>
       `;
@@ -913,29 +913,29 @@ window.Schlaufuchs.Print = (function () {
       <div class="print-page">
         <div class="print-certificate">
           <div class="cert-header">
-            <div style="font-size: 3.5rem;">🦊</div>
+            <div class="cert-logo-wrap"><img src="assets/icons/fuchs.svg" alt="" style="width: 56px; height: 56px;"></div>
             <h1 class="cert-title">SCHLAUFUCHS-URKUNDE</h1>
             <div class="cert-sub">Offizielle Auszeichnung für herausragende Lernerfolge</div>
           </div>
 
           <div class="cert-body">
             <div class="cert-text">Diese Ehrenurkunde wird mit großem Stolz verliehen an</div>
-            <div class="cert-name">${profile.avatar} ${profile.name}</div>
+            <div class="cert-name">${profile.name}</div>
             <div class="cert-text">
               für besonderen Fleiß, schlaues Köpfchen und große Begeisterung beim Rechnen, Lesen, Schreiben und Entdecken auf der Volksschul-Lernplattform Schlaufuchs.
             </div>
 
             <div class="cert-stats">
               <div class="cert-stat-box">
-                <div class="cert-stat-val">⭐ ${totalStars}</div>
+                <div class="cert-stat-val">${totalStars}</div>
                 <div class="cert-stat-label">Gesammelte Sterne</div>
               </div>
               <div class="cert-stat-box">
-                <div class="cert-stat-val">📖 ${unlockedStickersCount} / 16</div>
+                <div class="cert-stat-val">${unlockedStickersCount} / 16</div>
                 <div class="cert-stat-label">Sammel-Sticker</div>
               </div>
               <div class="cert-stat-box">
-                <div class="cert-stat-val">🏆 Champion</div>
+                <div class="cert-stat-val">Champion</div>
                 <div class="cert-stat-label">Volksschule Österreich</div>
               </div>
             </div>
@@ -945,14 +945,14 @@ window.Schlaufuchs.Print = (function () {
             <div class="cert-footer">
               <div>
                 <div class="cert-sig-line">${dateStr}</div>
-                <div style="font-size: 9pt; color: #475569; margin-top: 4px;">Datum</div>
+                <div style="font-size: 9pt; color: var(--tinte-leise); margin-top: 4px;">Datum</div>
               </div>
               <div>
                 <div class="cert-sig-line" style="min-width: 200px;"></div>
-                <div style="font-size: 9pt; color: #475569; margin-top: 4px;">Unterschrift (Lehrkraft / Eltern)</div>
+                <div style="font-size: 9pt; color: var(--tinte-leise); margin-top: 4px;">Unterschrift (Lehrkraft / Eltern)</div>
               </div>
             </div>
-            <div style="margin-top: 24px; font-size: 8pt; color: #94a3b8;">
+            <div style="margin-top: 24px; font-size: 8pt; color: var(--linie);">
               Schlaufuchs Lernplattform • BMBWF Lehrplan Österreich • Entwickelt für die Volksschule
             </div>
           </div>

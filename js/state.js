@@ -1,7 +1,7 @@
 // =============================================================
 // SCHLAUFUCHS – js/state.js
 // Status- und Datenverwaltung: User-Profile, Sterne-Persistenz,
-// Admin-Schulstufen-Einstellungen (localStorage)
+// Admin-Schulstufen-Einstellungen (Schlaufuchs.Storage)
 // =============================================================
 
 window.Schlaufuchs = window.Schlaufuchs || {};
@@ -15,7 +15,7 @@ window.Schlaufuchs.State = (function () {
     SETTINGS: 'schlaufuchs_settings_v2'
   };
 
-  const AVATARS = ['🦊', '🐰', '🐻', '🦔', '🦉', '🦁', '🐼', '🐨', '🦄', '🐯'];
+  const AVATARS = ['🦊', '🐰', '🐻', '🦔', '🦉', '🦁', '🐼', '🐨', '🦄', '🐯']; /* check-regeln:ignore */
 
   // Standard-Einstellungen
   const DEFAULT_SETTINGS = {
@@ -30,7 +30,7 @@ window.Schlaufuchs.State = (function () {
   const DEFAULT_PROFILE = {
     id: 'profile_default',
     name: 'Nils',
-    avatar: '🦊',
+    avatar: '🦊', /* check-regeln:ignore */
     grades: [1, 2, 3], // Am Kind hängende freigeschaltete Schulstufen (1., 2., 3. Klasse)
     stars: {}, // topicId -> number (0..3)
     unlockedStickers: ['s1'], // Fuchs Felix als Starter-Sticker im Album

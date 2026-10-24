@@ -14,7 +14,7 @@ window.Schlaufuchs.Generators.German = (function () {
   const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
-  // 1. WORTARTEN (Namenwort 🔵, Tunwort 🔴, Wiewort 🟢 – 25+ Sätze Pool)
+  // 1. WORTARTEN (Namenwort , Tunwort , Wiewort  – 25+ Sätze Pool)
   function buildWordTypesTasks(opts) {
     const grades = getEffectiveGrades([2, 3]);
     const isOnlyGrade2 = !grades.includes(3) && !grades.includes(4);
@@ -47,7 +47,8 @@ window.Schlaufuchs.Generators.German = (function () {
       { text: 'Der bunte Regenbogen überspannt das ganze Tal.', types: { Regenbogen: 'nomen', überspannt: 'verb', ganze: 'adjektiv', Tal: 'nomen', bunte: 'adjektiv' } }
     ];
 
-    const selectedSentences = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const selectedSentences = shuffle(pool).slice(0, targetCount);
     return selectedSentences.map(item => {
       const cleanWords = item.text.replace(/[.,]/g, '').split(' ');
       const sentenceTokens = cleanWords.map(word => {
@@ -240,7 +241,8 @@ window.Schlaufuchs.Generators.German = (function () {
       }
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = shuffle(pool).slice(0, targetCount);
     return chosen.map(item => ({
       fach: 'deutsch',
       schulstufe: 2,
@@ -278,7 +280,8 @@ window.Schlaufuchs.Generators.German = (function () {
       'In der Pause jausnen die Schüler einen knackigen Apfel'
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = shuffle(pool).slice(0, targetCount);
     return chosen.map(sentence => {
       const tokens = sentence.split(' ');
       const shuffledTokens = shuffle(tokens);
@@ -298,77 +301,99 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 4. DIE 4 FÄLLE DES NOMENS (4. Klasse – Wer-Fall, Wessen-Fall, Wem-Fall, Wen-Fall – 25+ Pool)
   function buildCasesTasks(opts) {
+    if (opts && opts.forPrint) {
+      const printCases = [
+        { sentence: 'Der schlaue Fuchs schleicht leise durch das Moos.', target: 'Der schlaue Fuchs', caseName: 'Werfall (1. Fall: Wer oder was?)', short: 'Werfall' },
+        { sentence: 'Die Schultasche des Schülers steht neben dem Sessel.', target: 'des Schülers', caseName: 'Wesfall (2. Fall: Wessen?)', short: 'Wesfall' },
+        { sentence: 'Wir helfen dem kleinen Kind über die Straße.', target: 'dem kleinen Kind', caseName: 'Wemfall (3. Fall: Wem?)', short: 'Wemfall' },
+        { sentence: 'Lukas zeichnet einen bunten Vogel auf das Blatt.', target: 'einen bunten Vogel', caseName: 'Wenfall (4. Fall: Wen oder was?)', short: 'Wenfall' }
+      ];
+      return printCases.map(c => ({
+        fach: 'deutsch',
+        type: 'cases',
+        schulstufe: 4,
+        grade: 4,
+        lehrplanRef: 'D-4-Sprachbetrachtung-Faelle',
+        sentence: c.sentence,
+        targetPhrase: c.target,
+        answer: c.short,
+        fullCase: c.caseName,
+        solutionText: c.short,
+        prompt: 'Bestimme den Fall des unterstrichenen Nomens (Werfall, Wesfall, Wemfall, Wenfall):'
+      }));
+    }
     const pool = [
       {
         question: 'In welchem Fall steht das unterstrichene Namenwort?\n„_Der Hund_ bellt den Postboten an.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 0,
-        hint: '💡 Überlege, mit welcher Frageprobe du nach dem unterstrichenen Teil fragst: Wer? Wessen? Wem? oder Wen?'
+        hint: 'Überlege, mit welcher Frageprobe du nach dem unterstrichenen Teil fragst: Wer? Wessen? Wem? oder Wen?'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Namenwort?\n„Das ist das Fahrrad _meines Bruders_.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 1,
-        hint: '💡 Frageprobe: Welches Fragewort passt hier am besten zum Fahrrad: Wer? Wessen? Wem? oder Wen?'
+        hint: 'Frageprobe: Welches Fragewort passt hier am besten zum Fahrrad: Wer? Wessen? Wem? oder Wen?'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Namenwort?\n„Lisa hilft _der Großmutter_ beim Tragen.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 2,
-        hint: '💡 Frageprobe: Welches Fragewort passt zum Helfen: Wer? Wessen? Wem? oder Wen?'
+        hint: 'Frageprobe: Welches Fragewort passt zum Helfen: Wer? Wessen? Wem? oder Wen?'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Namenwort?\n„Paul malt _einen bunten Drachen_.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 3,
-        hint: '💡 Frageprobe: Was malt Paul? Probiere die 4 Fragewörter aus!'
+        hint: 'Frageprobe: Was malt Paul? Probiere die 4 Fragewörter aus!'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Wort?\n„_Das Buch_ liegt auf dem Tisch.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 0,
-        hint: '💡 Frageprobe: Wer oder was liegt auf dem Tisch? Überlege, welcher Fall das ist.'
+        hint: 'Frageprobe: Wer oder was liegt auf dem Tisch? Überlege, welcher Fall das ist.'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Wort?\n„Wegen _des Regens_ bleiben wir drinnen.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 1,
-        hint: '💡 Achte auf die Endung „-es“ und das Signalwort „Wegen ...“.'
+        hint: 'Achte auf die Endung „-es“ und das Signalwort „Wegen ...“.'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Wort?\n„Ich gebe _dem Lehrer_ mein Heft.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 2,
-        hint: '💡 Frageprobe: Wem gebe ich mein Heft? Überlege, welcher Fall das ist.'
+        hint: 'Frageprobe: Wem gebe ich mein Heft? Überlege, welcher Fall das ist.'
       },
       {
         question: 'In welchem Fall steht das unterstrichene Wort?\n„Wir sehen _einen scheuen Fuchs_ im Wald.“',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 3,
-        hint: '💡 Frageprobe: Wen oder was sehen wir? Ordne dem passenden Fall zu.'
+        hint: 'Frageprobe: Wen oder was sehen wir? Ordne dem passenden Fall zu.'
       },
       {
         question: 'In welchem Fall steht: „_Die Kinder_ lachen herzlich.“?',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 0,
-        hint: '💡 Wer lacht hier herzlich? Überlege, zu welchem Fall dieses Fragewort gehört.'
+        hint: 'Wer lacht hier herzlich? Überlege, zu welchem Fall dieses Fragewort gehört.'
       },
       {
         question: 'In welchem Fall steht: „Die Mütze _des Kindes_ ist warm.“?',
         options: ['1. Fall (Wer-Fall / Nominativ)', '2. Fall (Wessen-Fall / Genitiv)', '3. Fall (Wem-Fall / Dativ)', '4. Fall (Wen-Fall / Akkusativ)'],
         correct: 1,
-        hint: '💡 Frage: Wessen Mütze ist warm? Achte auf das Fragewort!'
+        hint: 'Frage: Wessen Mütze ist warm? Achte auf das Fragewort!'
       }
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = shuffle(pool).slice(0, targetCount);
     return chosen.map(item => ({
       fach: 'deutsch',
       schulstufe: 4,
       grade: 4,
       lehrplanRef: 'D-4-Sprachbetrachtung-Faelle',
       type: 'multiple-choice',
-      icon: '📖',
+      icon: null,
       question: item.question,
       options: item.options,
       correctIndex: item.correct,
@@ -381,6 +406,26 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 5. ZEITFORMEN (Gegenwart / Mitvergangenheit / Vergangenheit / Zukunft – 25+ Pool)
   function buildTensesTasks(opts) {
+    if (opts && opts.forPrint) {
+      const printTenses = [
+        { pres: 'Lukas läuft schnell zur Schule.', past: 'Lukas lief schnell zur Schule.' },
+        { pres: 'Wir lesen ein spannendes Buch.', past: 'Wir lasen ein spannendes Buch.' },
+        { pres: 'Die Kinder singen ein schönes Lied.', past: 'Die Kinder sangen ein schönes Lied.' },
+        { pres: 'Der schlaue Fuchs schleicht leise durch den Wald.', past: 'Der schlaue Fuchs schlich leise durch den Wald.' }
+      ];
+      return printTenses.map(t => ({
+        fach: 'deutsch',
+        type: 'tenses',
+        schulstufe: 4,
+        grade: 4,
+        lehrplanRef: 'D-4-Sprachbetrachtung-Zeitformen',
+        presentSentence: t.pres,
+        targetSentence: t.past,
+        answer: t.past,
+        solutionText: t.past,
+        prompt: 'Setze den Satz aus der Gegenwart in die Mitvergangenheit:'
+      }));
+    }
     const grades = getEffectiveGrades([3, 4]);
     const isOnlyGrade3 = !grades.includes(4);
 
@@ -388,52 +433,52 @@ window.Schlaufuchs.Generators.German = (function () {
       {
         sentence: '„Gestern liefen die Kinder schnell nach Hause.“',
         tense: 'Mitvergangenheit (Präteritum)',
-        hint: '💡 Überlege: Findet das Geschehen im Moment statt oder wird von Vergangenem berichtet?'
+        hint: 'Überlege: Findet das Geschehen im Moment statt oder wird von Vergangenem berichtet?'
       },
       {
         sentence: '„Ich schreibe heute eine schöne Geschichte.“',
         tense: 'Gegenwart (Präsens)',
-        hint: '💡 Passiert das Geschehen genau jetzt in diesem Augenblick?'
+        hint: 'Passiert das Geschehen genau jetzt in diesem Augenblick?'
       },
       {
         sentence: '„Wir haben gestern gemeinsam einen Film geschaut.“',
         tense: 'Vergangenheit (Perfekt)',
-        hint: '💡 Achte auf das zweiteilige Verb mit Hilfsverb (haben/sein).'
+        hint: 'Achte auf das zweiteilige Verb mit Hilfsverb (haben/sein).'
       },
       {
         sentence: '„Morgen werden wir in den Zoo fahren.“',
         tense: 'Zukunft (Futur)',
-        hint: '💡 Bezieht sich dieser Satz auf ein Ereignis, das erst noch kommen wird?'
+        hint: 'Bezieht sich dieser Satz auf ein Ereignis, das erst noch kommen wird?'
       },
       {
         sentence: '„Der Vogel flog hoch in den blauen Himmel.“',
         tense: 'Mitvergangenheit (Präteritum)',
-        hint: '💡 Überlege, ob das Geschehen jetzt stattfindet oder in der Vergangenheit liegt.'
+        hint: 'Überlege, ob das Geschehen jetzt stattfindet oder in der Vergangenheit liegt.'
       },
       {
         sentence: '„Die Katze schläft friedlich auf dem Sessel.“',
         tense: 'Gegenwart (Präsens)',
-        hint: '💡 Achte auf das Zeitwort: Passiert das Geschehen gerade jetzt?'
+        hint: 'Achte auf das Zeitwort: Passiert das Geschehen gerade jetzt?'
       },
       {
         sentence: '„Anna hat gestern ihre Hausübung gemacht.“',
         tense: 'Vergangenheit (Perfekt)',
-        hint: '💡 Überlege, ob die Handlung bereits abgeschlossen in der Vergangenheit liegt.'
+        hint: 'Überlege, ob die Handlung bereits abgeschlossen in der Vergangenheit liegt.'
       },
       {
         sentence: '„Nächste Woche wird es viel schneien.“',
         tense: 'Zukunft (Futur)',
-        hint: '💡 Findet das Geschehen schon statt oder liegt es noch vor uns?'
+        hint: 'Findet das Geschehen schon statt oder liegt es noch vor uns?'
       },
       {
         sentence: '„Er sang ein fröhliches Lied beim Wandern.“',
         tense: 'Mitvergangenheit (Präteritum)',
-        hint: '💡 Achte auf das Zeitwort: Erzählt es von einem vergangenen Geschehen?'
+        hint: 'Achte auf das Zeitwort: Erzählt es von einem vergangenen Geschehen?'
       },
       {
         sentence: '„Wir spielen jetzt auf dem Pausenhof.“',
         tense: 'Gegenwart (Präsens)',
-        hint: '💡 Überlege: Zu welcher Zeitstufe gehört das Signalwort „jetzt“?'
+        hint: 'Überlege: Zu welcher Zeitstufe gehört das Signalwort „jetzt“?'
       }
     ];
 
@@ -460,7 +505,7 @@ window.Schlaufuchs.Generators.German = (function () {
       grade: effectiveGrade,
       lehrplanRef: 'D-' + effectiveGrade + '-Sprachbetrachtung-Zeitformen',
       type: 'multiple-choice',
-      icon: '⏳',
+      icon: null,
       question: `In welcher Zeitform steht der Satz:\n${item.sentence}?`,
       options: allTenses,
       correctIndex: allTenses.indexOf(item.tense),
@@ -474,16 +519,16 @@ window.Schlaufuchs.Generators.German = (function () {
   // 6. SILBENSCHWINGEN & SILBENKÖNIGE (1. & 2. Klasse)
   function buildSyllableTasks(opts) {
     const pool = [
-      { word: 'Schule', syllables: 'Schu - le', count: 2, vowels: 'u, e', hint: '💡 Sprich das Wort langsam und klatsche bei jedem Silbenbogen in die Hände!' },
-      { word: 'Schmetterling', syllables: 'Schmet - ter - ling', count: 3, vowels: 'e, e, i', hint: '💡 Lege deine Hand unters Kinn: Wie oft geht dein Kinn beim Sprechen nach unten?' },
-      { word: 'Igel', syllables: 'I - gel', count: 2, vowels: 'I, e', hint: '💡 Klatsche beim langsamen Sprechen mit: I - ...' },
-      { word: 'Kinder', syllables: 'Kin - der', count: 2, vowels: 'i, e', hint: '💡 Sprich das Wort in Schritten und zähle deine Klatscher.' },
-      { word: 'Sonnenblume', syllables: 'Son - nen - blu - me', count: 4, vowels: 'o, e, u, e', hint: '💡 Ein langes zusammengesetztes Wort: Klatsche jeden Teil sorgfältig ab.' },
-      { word: 'Regenbogen', syllables: 'Re - gen - bo - gen', count: 4, vowels: 'e, e, o, e', hint: '💡 Zähle die Silbenbögen, während du das Wort langsam aussprichst.' },
-      { word: 'Schneemann', syllables: 'Schnee - mann', count: 2, vowels: 'ee, a', hint: '💡 Sprich die zwei Wortteile langsam aus und achte auf die Selbstlaute (Silbenkönige).' },
-      { word: 'Eichhörnchen', syllables: 'Eich - hörn - chen', count: 3, vowels: 'Ei, ö, e', hint: '💡 Achte auf die Laute: Jede Silbe hat genau einen Silbenkönig!' },
-      { word: 'Schultasche', syllables: 'Schul - ta - sche', count: 3, vowels: 'u, a, e', hint: '💡 Sprich wie ein Roboter in Silben und klatsche im Takt mit.' },
-      { word: 'Frosch', syllables: 'Frosch', count: 1, vowels: 'o', hint: '💡 Kannst du dieses kurze Wort zerlegen oder sprichst du es mit einem einzigen Atemzug?' }
+      { word: 'Schule', syllables: 'Schu - le', count: 2, vowels: 'u, e', hint: 'Sprich das Wort langsam und klatsche bei jedem Silbenbogen in die Hände!' },
+      { word: 'Schmetterling', syllables: 'Schmet - ter - ling', count: 3, vowels: 'e, e, i', hint: 'Lege deine Hand unters Kinn: Wie oft geht dein Kinn beim Sprechen nach unten?' },
+      { word: 'Igel', syllables: 'I - gel', count: 2, vowels: 'I, e', hint: 'Klatsche beim langsamen Sprechen mit: I - ...' },
+      { word: 'Kinder', syllables: 'Kin - der', count: 2, vowels: 'i, e', hint: 'Sprich das Wort in Schritten und zähle deine Klatscher.' },
+      { word: 'Sonnenblume', syllables: 'Son - nen - blu - me', count: 4, vowels: 'o, e, u, e', hint: 'Ein langes zusammengesetztes Wort: Klatsche jeden Teil sorgfältig ab.' },
+      { word: 'Regenbogen', syllables: 'Re - gen - bo - gen', count: 4, vowels: 'e, e, o, e', hint: 'Zähle die Silbenbögen, während du das Wort langsam aussprichst.' },
+      { word: 'Schneemann', syllables: 'Schnee - mann', count: 2, vowels: 'ee, a', hint: 'Sprich die zwei Wortteile langsam aus und achte auf die Selbstlaute (Silbenkönige).' },
+      { word: 'Eichhörnchen', syllables: 'Eich - hörn - chen', count: 3, vowels: 'Ei, ö, e', hint: 'Achte auf die Laute: Jede Silbe hat genau einen Silbenkönig!' },
+      { word: 'Schultasche', syllables: 'Schul - ta - sche', count: 3, vowels: 'u, a, e', hint: 'Sprich wie ein Roboter in Silben und klatsche im Takt mit.' },
+      { word: 'Frosch', syllables: 'Frosch', count: 1, vowels: 'o', hint: 'Kannst du dieses kurze Wort zerlegen oder sprichst du es mit einem einzigen Atemzug?' }
     ];
 
     const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
@@ -495,7 +540,7 @@ window.Schlaufuchs.Generators.German = (function () {
       grade: 1,
       lehrplanRef: 'D-1-Rechtschreiben-Silben',
       type: 'multiple-choice',
-      icon: '👏',
+      icon: null,
       targetWord: item.word,
       syllables: item.syllables,
       syllableCount: item.count,
@@ -516,7 +561,7 @@ window.Schlaufuchs.Generators.German = (function () {
       {
         id: 'eichhoernchen',
         title: 'Das Eichhörnchen – Der schlaue Waldgärtner',
-        icon: '🐿️',
+        icon: null,
         text: 'Das Eichhörnchen ist ein flinkes Nagetier, das in unseren heimischen Wäldern und Parks lebt. Mit seinen scharfen Krallen kann es sogar kopfüber an Baumstämmen hinablaufen. Sein buschiger Schwanz dient beim Weitspringen von Ast zu Ast als wichtiges Steuer und im Winter als wärmende Decke. Im Herbst sammelt das Eichhörnchen fleißig Eicheln, Bucheckern, Zapfen und Haselnüsse. Es vergräbt diese Vorräte im Waldboden oder versteckt sie in Baumhöhlen für die kalte Jahreszeit. Weil das Eichhörnchen im Winter keinen echten Winterschlaf, sondern nur eine Winterruhe hält, wacht es an milden Tagen auf, um nach seinen Vorräten zu graben. Da es viele seiner Verstecke vergisst, keimen die vergrabenen Samen im Frühling. So hilft das Eichhörnchen ganz unbemerkt dabei, dass neue Bäume im Wald wachsen.',
         questions: [
           {
@@ -557,7 +602,7 @@ window.Schlaufuchs.Generators.German = (function () {
       {
         id: 'donau',
         title: 'Die Donau – Österreichs mächtiger Strom',
-        icon: '🌊',
+        icon: null,
         text: 'Die Donau ist nach der Wolga der zweitlängste Fluss unseres Kontinents Europa. Sie entspringt im deutschen Schwarzwald und fließt fast 2 850 Kilometer weit nach Osten, bis sie schließlich in das Schwarze Meer mündet. In Österreich durchfließt die Donau die drei Bundesländer Oberösterreich, Niederösterreich und Wien. Entlang des Flusses gibt es berühmte Landschaften wie die Wachau und den Nationalpark Donau-Auen. Dieser Nationalpark östlich von Wien schützt eine der letzten großen, unberührten Auenlandschaften Mitteleuropas. Hier finden bedrohte Tierarten wie der schillernde Eisvogel, der mächtige Seeadler und der fleißige Biber einen sicheren Lebensraum. Die Donau ist außerdem eine wichtige Schifffahrtsstraße und liefert mit ihren Wasserkraftwerken sauberen Ökostrom.',
         questions: [
           {
@@ -598,7 +643,7 @@ window.Schlaufuchs.Generators.German = (function () {
       {
         id: 'bienen',
         title: 'Das fleißige Bienenvolk',
-        icon: '🐝',
+        icon: null,
         text: 'In einem Bienenstock herrscht vom Frühling bis zum Spätsommer emsiges Treiben. Ein einziges Bienenvolk kann aus bis zu 60 000 Bienen bestehen. An der Spitze steht die Bienenkönigin, deren wichtigste Aufgabe darin besteht, täglich bis zu 2 000 Eier zu legen. Die allermeisten Bewohnerinnen sind weibliche Arbeiterinnen. Sie haben im Laufe ihres Lebens viele verschiedene Berufe: Zuerst putzen sie die Waben, dann füttern sie die Larven, bewachen das Flugloch und fliegen schließlich als Sammelbienen aus, um Nektar und Pollen von Blüten zu holen. Wenn eine Sammelbiene eine ergiebige Blumenwiese entdeckt hat, zeigt sie ihren Schwestern im Stock mit einem kunstvollen Schwänzeltanz die Richtung und Entfernung der Nahrung an. Durch die Bestäubung sichern Bienen unsere Obst- und Gemüseernte.',
         questions: [
           {
@@ -639,7 +684,7 @@ window.Schlaufuchs.Generators.German = (function () {
       {
         id: 'murmeltiere',
         title: 'Die Murmeltiere in den Hohen Tauern',
-        icon: '🏔️',
+        icon: null,
         text: 'Hoch oben auf den steinigen Almwiesen der österreichischen Alpen, besonders rund um den Großglockner, fühlt sich das Alpenmurmeltier wohl. Murmeltiere sind gesellige Tiere, die in großen Familienverbänden in tiefen Erdbauten leben. Droht Gefahr durch einen Steinadler aus der Luft oder einen Fuchs vom Boden, stößt das aufmerksame Wächter-Murmeltier einen lauten, schrillen Warnpfiff aus. Blitzschnell verschwinden dann alle Familienmitglieder in ihren sicheren Höhlen. Im Spätherbst fressen sich die Tiere eine dicke Fettschicht an, polstern ihre Schlafhöhle mit trockenem Heu aus und halten einen echten Winterschlaf, der bis zu sieben Monate dauern kann. Dabei sinkt die Körpertemperatur auf wenige Grad ab und das Herz schlägt nur noch ganz langsam, um die eisige Kälte zu überstehen.',
         questions: [
           {

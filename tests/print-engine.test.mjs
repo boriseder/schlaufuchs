@@ -9,9 +9,16 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
 const formatCode = readFileSync('js/core/format.js', 'utf8');
+const randomCode = readFileSync('js/core/random.js', 'utf8');
+const signsCode = readFileSync('js/signs.js', 'utf8');
 const clockCode = readFileSync('js/clock.js', 'utf8');
 const storageCode = readFileSync('js/core/storage.js', 'utf8');
 const topicsCode = readFileSync('js/core/topics.js', 'utf8');
+const mathGenCode = readFileSync('js/generators/math.js', 'utf8');
+const germanGenCode = readFileSync('js/generators/german.js', 'utf8');
+const generalGenCode = readFileSync('js/generators/general.js', 'utf8');
+const brainGenCode = readFileSync('js/generators/brain.js', 'utf8');
+const genIndexCode = readFileSync('js/generators/index.js', 'utf8');
 const printEngineCode = readFileSync('js/print-engine.js', 'utf8');
 const printCode = readFileSync('js/print.js', 'utf8');
 
@@ -28,9 +35,16 @@ const sandbox = {
 sandbox.window = sandbox;
 
 vm.runInNewContext(formatCode, sandbox);
+vm.runInNewContext(randomCode, sandbox);
+vm.runInNewContext(signsCode, sandbox);
 vm.runInNewContext(clockCode, sandbox);
 vm.runInNewContext(storageCode, sandbox);
 vm.runInNewContext(topicsCode, sandbox);
+vm.runInNewContext(mathGenCode, sandbox);
+vm.runInNewContext(germanGenCode, sandbox);
+vm.runInNewContext(generalGenCode, sandbox);
+vm.runInNewContext(brainGenCode, sandbox);
+vm.runInNewContext(genIndexCode, sandbox);
 vm.runInNewContext(printEngineCode, sandbox);
 vm.runInNewContext(printCode, sandbox);
 

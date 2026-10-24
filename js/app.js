@@ -142,7 +142,6 @@ window.Schlaufuchs = window.Schlaufuchs || {};
 
       const card = document.createElement('div');
       card.className = `profile-pick-card ${isActive ? 'active-profile' : ''}`;
-      card.style.cssText = 'cursor: pointer; padding: 14px; border-radius: 14px; border: 2px solid ' + (isActive ? '#2563eb' : '#e2e8f0') + '; background: ' + (isActive ? '#eff6ff' : 'white') + '; text-align: center; transition: all 0.2s;';
 
       const gradesList = (p.grades && p.grades.length > 0) ? p.grades : [1, 2, 3, 4];
       const sortedGrades = [...gradesList].sort((a, b) => a - b);
@@ -154,10 +153,14 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       const safeName = esc(p.name);
 
       card.innerHTML = `
-        <div style="font-size: 2.5rem; margin-bottom: 6px;">${safeAvatar}</div>
-        <strong style="font-size: 1.1rem; color: #1e293b;">${safeName}</strong>
-        <div style="font-size: 0.82rem; color: #2563eb; font-weight: 800; margin-top: 3px;">🏫 ${gradesText}</div>
-        <div style="font-size: 0.9rem; color: #f59e0b; font-weight: 800; margin-top: 4px;">⭐ ${totalStars} Sterne</div>
+        <div class="profile-card-avatar" style="font-size: 2.5rem; margin-bottom: 6px;">${safeAvatar}</div>
+        <strong class="profile-card-name" style="font-size: 1.1rem; color: var(--tinte);">${safeName}</strong>
+        <div class="profile-card-grades" style="font-size: 0.85rem; color: var(--mathe); font-weight: 700; margin-top: 4px;">
+          <img src="assets/icons/buch.svg" class="icon-inline-svg" alt="" style="width: 14px; height: 14px; vertical-align: -2px;"> ${gradesText}
+        </div>
+        <div class="profile-card-stars" style="font-size: 0.9rem; color: var(--tinte); font-weight: 700; margin-top: 4px;">
+          <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="" style="width: 16px; height: 16px; vertical-align: -2px;"> ${totalStars} Sterne
+        </div>
       `;
 
       card.addEventListener('click', () => {
@@ -473,82 +476,11 @@ window.Schlaufuchs = window.Schlaufuchs || {};
   }
 
   function generateTasksForTopic(topicId) {
-    switch (topicId) {
-      // 1. MATHEMATIK – Getrennte Grundrechenarten
-      case 'math-addition':
-        return MathGen.buildAdditionTasks();
-      case 'math-subtraction':
-        return MathGen.buildSubtractionTasks();
-      case 'math-multiplication':
-        return MathGen.buildMultiplicationTasks();
-      case 'math-division':
-        return MathGen.buildDivisionTasks();
-
-      // Weitere Mathe-Themen
-      case 'math-pyramid':
-        return MathGen.buildPyramidTasks();
-      case 'math-clock':
-        return MathGen.buildClockTasks();
-      case 'math-money':
-        return MathGen.buildMoneyTasks();
-      case 'math-time-money':
-        return MathGen.buildClockTasks();
-      case 'math-million':
-        return MathGen.buildMillionTasks();
-      case 'math-units':
-        return MathGen.buildUnitsTasks();
-      case 'math-geometry':
-        return MathGen.buildGeometryTasks();
-      case 'math-stories':
-      case 'math-story':
-        return MathGen.buildStoryTasks();
-      case 'math-twenty':
-        return MathGen.buildTwentyFieldTasks();
-      case 'math-written':
-        return MathGen.buildWrittenMathTasks();
-
-      // 2. DEUTSCH
-      case 'german-word-types':
-        return GermanGen.buildWordTypesTasks();
-      case 'german-capitalization':
-        return GermanGen.buildCapitalizationTasks();
-      case 'german-scramble':
-        return GermanGen.buildScrambleTasks();
-      case 'german-cases':
-        return GermanGen.buildCasesTasks();
-      case 'german-tenses':
-        return GermanGen.buildTensesTasks();
-      case 'german-syllables':
-        return GermanGen.buildSyllableTasks();
-      case 'german-reading':
-        return GermanGen.buildReadingTasks();
-
-      // 3. SACHUNTERRICHT
-      case 'general-calendar':
-        return GeneralGen.buildCalendarTasks();
-      case 'general-animals':
-      case 'general-winter':
-        return GeneralGen.buildWinterTasks();
-      case 'general-traffic':
-        return GeneralGen.buildSchoolWalkTasks();
-      case 'general-austria':
-        return GeneralGen.buildAustriaTasks();
-      case 'general-bike-test':
-        return GeneralGen.buildTrafficTasks();
-
-      // 4. GEHIRNTRAINING
-      case 'brain-memory':
-        return BrainGen.buildMemoryTasks();
-      case 'brain-pattern':
-      case 'brain-patterns':
-        return BrainGen.buildPatternsTasks();
-      case 'brain-sequence':
-        return BrainGen.buildSequenceTasks();
-
-      default:
-        console.warn(`Thema ${topicId} nicht erkannt, lade Addition.`);
-        return MathGen.buildAdditionTasks();
+    const Generators = window.Schlaufuchs && window.Schlaufuchs.Generators;
+    if (Generators && typeof Generators.getTasksForTopic === 'function') {
+      return Generators.getTasksForTopic(topicId);
     }
+    return MathGen.buildAdditionTasks();
   }
 
   // --- SINGLE-TASK FOCUS RENDERING & NAVIGATION ---
@@ -669,16 +601,22 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     }
 
     card.innerHTML = `
-      <div class="summary-icon">🎉</div>
+      <div class="summary-icon">
+        <img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 56px; height: 56px;">
+      </div>
       <h3 class="summary-title">Hervorragend gelöst!</h3>
-      <div class="summary-stars">⭐⭐⭐</div>
+      <div class="summary-stars">
+        <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Stern" style="width: 28px; height: 28px; margin: 0 3px;">
+        <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Stern" style="width: 28px; height: 28px; margin: 0 3px;">
+        <img src="assets/icons/stern.svg" class="icon-inline-svg" alt="Stern" style="width: 28px; height: 28px; margin: 0 3px;">
+      </div>
       <p class="summary-msg">Du hast alle ${total} Aufgaben richtig gelöst und 3 Sterne gesammelt!</p>
       <div class="summary-actions">
         <button type="button" class="btn btn-primary" id="btn-summary-retry">
-          <span>🔄</span> <span>Neue Aufgaben üben</span>
+          <img src="assets/icons/neuladen.svg" class="icon-inline-svg" alt=""> <span>Neue Aufgaben üben</span>
         </button>
         <button type="button" class="btn btn-secondary" id="btn-summary-back">
-          <span>🏠</span> <span>Zurück zur Übersicht</span>
+          <img src="assets/icons/zurueck.svg" class="icon-inline-svg" alt=""> <span>Zurück zur Übersicht</span>
         </button>
       </div>
     `;
@@ -830,7 +768,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       if (!allFilled) {
         if (feedback) {
           feedback.className = 'task-feedback incorrect';
-          feedback.innerHTML = '<span>⚠️ Bitte trage in alle Steine mit „?“ eine Zahl ein! 🧱</span>';
+          feedback.innerHTML = '<span class="feedback-icon"><img src="assets/icons/neuladen.svg" class="icon-inline-svg" alt=""></span> <span>Bitte trage in alle Steine mit „?“ eine Zahl ein!</span>';
         }
         if (firstEmpty) {
           firstEmpty.focus();
@@ -938,7 +876,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         const ansEl = card.querySelector(`#answer-text-${index}`);
         const calcEl = card.querySelector(`#calc-display-${index}`);
         if (ansEl && isCorrect) {
-          ansEl.innerHTML = `💬 Antwort: <strong class="text-problem-ans-highlight">${task.answerText}</strong> ✅`;
+          ansEl.innerHTML = `<strong>Antwort:</strong> <strong class="text-problem-ans-highlight">${task.answerText}</strong>`;
         }
         if (calcEl && isCorrect) {
           calcEl.style.display = 'block';
@@ -968,15 +906,15 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         const qHint = card.querySelector(`#reading-q-hint-${index}-${qIdx}`);
         if (qCard) {
           if (q.userAnswer === q.correctIndex) {
-            qCard.style.borderColor = '#22c55e';
-            qCard.style.backgroundColor = '#f0fdf4';
+            qCard.classList.add('reading-q-correct');
+            qCard.classList.remove('reading-q-incorrect');
             if (qHint) qHint.style.display = 'none';
           } else {
-            qCard.style.borderColor = '#ef4444';
-            qCard.style.backgroundColor = '#fef2f2';
+            qCard.classList.add('reading-q-incorrect');
+            qCard.classList.remove('reading-q-correct');
             if (qHint) {
               qHint.style.display = 'block';
-              qHint.textContent = '💡 ' + q.hint;
+              qHint.textContent = q.hint;
             }
           }
         }
@@ -1005,7 +943,7 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         feedback.classList.add('correct');
         const lobListe = (window.Schlaufuchs && window.Schlaufuchs.Texte && window.Schlaufuchs.Texte.lob) || ['Richtig!'];
         const lob = lobListe[Math.floor(Math.random() * lobListe.length)];
-        feedback.innerHTML = `<span>✅ ${lob}</span>`;
+        feedback.innerHTML = `<span class="feedback-icon"><img src="assets/icons/hakerl.svg" class="icon-inline-svg" alt=""></span> <span>${lob}</span>`;
         if (window.Schlaufuchs.Audio) window.Schlaufuchs.Audio.playSuccess();
 
         // 1. Auto-Advancement: nach ca. 450ms zur nächsten ungelösten Aufgabe scrollen & fokussieren
@@ -1015,9 +953,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
       } else {
         card.classList.add('incorrect');
         feedback.classList.add('incorrect');
-        const nochmalListe = (window.Schlaufuchs && window.Schlaufuchs.Texte && window.Schlaufuchs.Texte.nochmal) || ['Nochmal probieren! 💪'];
+        const nochmalListe = (window.Schlaufuchs && window.Schlaufuchs.Texte && window.Schlaufuchs.Texte.nochmal) || ['Nochmal probieren!'];
         const nochmal = nochmalListe[Math.floor(Math.random() * nochmalListe.length)];
-        feedback.innerHTML = `<span>💪 ${nochmal}</span>`;
+        feedback.innerHTML = `<span class="feedback-icon"><img src="assets/icons/neuladen.svg" class="icon-inline-svg" alt=""></span> <span>${nochmal}</span>`;
         if (window.Schlaufuchs.Audio) window.Schlaufuchs.Audio.playPlop();
 
         // 2. Auto-Select: Fehlerhafte Zahl markieren, sodass sofortiges Tippen den Fehler überschreibt

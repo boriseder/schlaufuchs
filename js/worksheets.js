@@ -151,7 +151,7 @@ window.Schlaufuchs.Worksheets = (function () {
     if (topics.length === 0) {
       container.innerHTML = `
         <div class="worksheets-empty-state">
-          <div class="empty-icon">🦊</div>
+          <div class="empty-icon"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 48px; height: 48px;"></div>
           <h3>Keine Arbeitsblätter gefunden</h3>
           <p>Für diese Schulstufe liegen keine Blätter vor.</p>
         </div>

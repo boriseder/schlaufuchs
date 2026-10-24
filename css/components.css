@@ -56,7 +56,7 @@
   font-family: var(--schrift-text, inherit);
   font-size: 1.15rem;
   font-weight: 800;
-  color: var(--tinte-leise, #64748B);
+  color: var(--tinte-leise, #6f675e);
   min-width: 28px;
   flex-shrink: 0;
   padding-top: 0;
@@ -141,7 +141,7 @@
 }
 
 .task-equals {
-  color: var(--tinte-leise, #64748B);
+  color: var(--tinte-leise, #6f675e);
   font-weight: 800;
 }
 

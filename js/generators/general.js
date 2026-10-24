@@ -67,7 +67,8 @@ window.Schlaufuchs.Generators.General = (function () {
       }
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+        const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, targetCount);
     return chosen.map(item => {
       const correctText = item.options[item.correct];
       const shuffledOptions = shuffle([...item.options]);
@@ -77,11 +78,12 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 1,
         lehrplanRef: 'SU-1-2-Zeit-Jahreskreis',
         type: 'multiple-choice',
-        icon: '📅',
+        icon: null,
         question: item.question,
         options: shuffledOptions,
         correctIndex: shuffledOptions.indexOf(correctText),
         correctText: correctText,
+        solutionText: correctText,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,
@@ -152,7 +154,8 @@ window.Schlaufuchs.Generators.General = (function () {
       'Standvogel (bleibt den ganzen Winter bei uns)'
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+        const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, targetCount);
     return chosen.map(item => {
       const wrongBehaviors = allBehaviors.filter(b => b !== item.behavior);
       const options = shuffle([item.behavior, ...shuffle(wrongBehaviors).slice(0, 3)]);
@@ -163,11 +166,12 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 3,
         lehrplanRef: 'SU-3-Natur-Tiere-Winter',
         type: 'multiple-choice',
-        icon: '❄️',
+        icon: null,
         question: `Wie verbringt das Tier den Winter?\nTier: ${item.animal}`,
         options: options,
         correctIndex: options.indexOf(item.behavior),
         correctText: item.behavior,
+        solutionText: item.behavior,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,
@@ -235,11 +239,12 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 4,
         lehrplanRef: 'SU-4-Raum-Oesterreich',
         type: 'multiple-choice',
-        icon: '🇦🇹',
+        icon: null,
         question: `Wie heißt die Landeshauptstadt des Bundeslandes ${item.state}?`,
         options: options,
         correctIndex: options.indexOf(item.capital),
         correctText: item.capital,
+        solutionText: item.capital,
         hint: `Tipp: Liegt im Bundesland ${item.state}.`,
         selectedText: null,
         isCorrect: null,
@@ -255,11 +260,12 @@ window.Schlaufuchs.Generators.General = (function () {
         grade: 4,
         lehrplanRef: 'SU-4-Raum-Oesterreich',
         type: 'multiple-choice',
-        icon: '⛰️',
+        icon: null,
         question: geoItem.question,
         options: geoItem.options,
         correctIndex: geoItem.correct,
         correctText: geoItem.options[geoItem.correct],
+        solutionText: geoItem.options[geoItem.correct],
         hint: geoItem.hint,
         selectedText: null,
         isCorrect: null,
@@ -408,11 +414,16 @@ window.Schlaufuchs.Generators.General = (function () {
       }
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+        const withSigns = pool.filter(item => item.signId);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = (opts && opts.forPrint)
+      ? shuffle(withSigns).slice(0, targetCount)
+      : ((opts && opts.all) ? pool : shuffle(pool).slice(0, targetCount));
+
     return chosen.map(item => {
       let customHtml = '';
-      if (item.signId && signs) {
-        customHtml = signs.getSignSvg(item.signId);
+      if (item.signId && window.Schlaufuchs && window.Schlaufuchs.Signs) {
+        customHtml = window.Schlaufuchs.Signs.getSignSvg(item.signId);
       }
       const correctText = item.options[item.correct];
       const shuffledOptions = shuffle([...item.options]);
@@ -424,11 +435,13 @@ window.Schlaufuchs.Generators.General = (function () {
         lehrplanRef: 'SU-4-Verkehr-Radfahrpruefung',
         type: 'multiple-choice',
         icon: null,
+        signId: item.signId || null,
         customVisualHtml: customHtml,
         question: item.question,
         options: shuffledOptions,
         correctIndex: shuffledOptions.indexOf(correctText),
         correctText: correctText,
+        solutionText: correctText,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,
@@ -735,11 +748,16 @@ window.Schlaufuchs.Generators.General = (function () {
       }
     ];
 
-    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, 5);
+        const withSigns = pool.filter(item => item.signId);
+    const targetCount = (opts && opts.forPrint) ? 4 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = (opts && opts.forPrint)
+      ? shuffle(withSigns).slice(0, targetCount)
+      : ((opts && opts.all) ? pool : shuffle(pool).slice(0, targetCount));
+
     return chosen.map(item => {
       let customHtml = null;
-      if (item.signId && signs) {
-        customHtml = signs.getSignSvg(item.signId);
+      if (item.signId && window.Schlaufuchs && window.Schlaufuchs.Signs) {
+        customHtml = window.Schlaufuchs.Signs.getSignSvg(item.signId);
       }
       const correctText = item.options[item.correct];
       const shuffledOptions = shuffle([...item.options]);
@@ -748,14 +766,16 @@ window.Schlaufuchs.Generators.General = (function () {
         fach: 'sachunterricht',
         schulstufe: 1,
         grade: 1,
-        lehrplanRef: 'SU-1-Verkehr-Schulweg',
+        lehrplanRef: 'SU-1/3-Verkehr-StVO',
         type: 'multiple-choice',
         icon: null,
+        signId: item.signId || null,
         customVisualHtml: customHtml,
         question: item.question,
         options: shuffledOptions,
         correctIndex: shuffledOptions.indexOf(correctText),
         correctText: correctText,
+        solutionText: correctText,
         hint: item.hint,
         selectedText: null,
         isCorrect: null,

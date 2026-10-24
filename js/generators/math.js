@@ -16,14 +16,21 @@ window.Schlaufuchs.Generators.Math = (function () {
   const formatAustrianNumber = (window.Schlaufuchs && window.Schlaufuchs.formatZahl) || (num => String(num));
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
-  // 1. ADDITION (➕ 1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
-  function buildAdditionTasks(seed) {
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
+  // 1. ADDITION (1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
+  function buildAdditionTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
     const grades = getEffectiveGrades([1, 2, 3, 4]);
-    const targetGrade = grades[rand(0, grades.length - 1)] || 2;
+    const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
+    const targetCount = opts.count || (opts.forPrint ? 12 : 6);
+    const isInjective = opts.injective || opts.forPrint;
+    const tracker = opts.tracker || null;
     const tasks = [];
+    const usedAnswers = new Set();
+    let attempts = 0;
 
-    for (let i = 0; i < 6; i++) {
+    while (tasks.length < targetCount && attempts < 1000) {
+      attempts++;
       const g = targetGrade;
       let a, b;
 
@@ -72,10 +79,18 @@ window.Schlaufuchs.Generators.Math = (function () {
         }
       }
 
+      const ans = a + b;
+      const sig = `${a}+${b}`;
+      if (isInjective && usedAnswers.has(ans)) continue;
+      if (tracker && tracker.has(sig)) continue;
+
+      usedAnswers.add(ans);
+      if (tracker) tracker.add(sig);
+
       tasks.push({
         fach: "mathe",
         schulstufe: g,
-        lehrplanRef: "M-" + g + "-Operationen",
+        lehrplanRef: "M-" + g + "-Operationen-Addition",
         type: "equation",
         op: "add",
         grade: g,
@@ -84,7 +99,8 @@ window.Schlaufuchs.Generators.Math = (function () {
         num2: formatAustrianNumber(b),
         raw1: a,
         raw2: b,
-        answer: a + b,
+        answer: ans,
+        solutionText: formatAustrianNumber(ans),
         userAnswer: '',
         isCorrect: null,
       });
@@ -93,14 +109,21 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 2. SUBTRAKTION (➖ 1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
-  function buildSubtractionTasks(seed) {
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
+  // 2. SUBTRAKTION (1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
+  function buildSubtractionTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
     const grades = getEffectiveGrades([1, 2, 3, 4]);
-    const targetGrade = grades[rand(0, grades.length - 1)] || 2;
+    const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
+    const targetCount = opts.count || (opts.forPrint ? 12 : 6);
+    const isInjective = opts.injective || opts.forPrint;
+    const tracker = opts.tracker || null;
     const tasks = [];
+    const usedAnswers = new Set();
+    let attempts = 0;
 
-    for (let i = 0; i < 6; i++) {
+    while (tasks.length < targetCount && attempts < 1000) {
+      attempts++;
       const g = targetGrade;
       let a, b;
 
@@ -150,10 +173,18 @@ window.Schlaufuchs.Generators.Math = (function () {
         }
       }
 
+      const ans = a - b;
+      const sig = `${a}−${b}`;
+      if (isInjective && usedAnswers.has(ans)) continue;
+      if (tracker && tracker.has(sig)) continue;
+
+      usedAnswers.add(ans);
+      if (tracker) tracker.add(sig);
+
       tasks.push({
         fach: "mathe",
         schulstufe: g,
-        lehrplanRef: "M-" + g + "-Operationen",
+        lehrplanRef: "M-" + g + "-Operationen-Subtraktion",
         type: "equation",
         op: "sub",
         grade: g,
@@ -162,7 +193,8 @@ window.Schlaufuchs.Generators.Math = (function () {
         num2: formatAustrianNumber(b),
         raw1: a,
         raw2: b,
-        answer: a - b,
+        answer: ans,
+        solutionText: formatAustrianNumber(ans),
         userAnswer: '',
         isCorrect: null,
       });
@@ -171,14 +203,21 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 3. MULTIPLIKATION (✖️ 2. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
+  // 3. MULTIPLIKATION (2. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   // Kind mit 2. Schulstufe erhält ausschließlich Kernaufgaben und kleines 1×1 bis 100!
-  function buildMultiplicationTasks() {
+  function buildMultiplicationTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
     const useGrades = getEffectiveGrades([2, 3, 4]);
-    const targetGrade = useGrades[rand(0, useGrades.length - 1)] || 2;
+    const targetGrade = opts.grade || (useGrades[rand(0, useGrades.length - 1)] || 2);
+    const targetCount = opts.count || (opts.forPrint ? 12 : 6);
+    const isInjective = opts.injective || opts.forPrint;
+    const tracker = opts.tracker || null;
     const tasks = [];
+    const usedAnswers = new Set();
+    let attempts = 0;
 
-    for (let i = 0; i < 6; i++) {
+    while (tasks.length < targetCount && attempts < 1000) {
+      attempts++;
       const g = targetGrade;
       let a, b;
 
@@ -226,10 +265,18 @@ window.Schlaufuchs.Generators.Math = (function () {
         }
       }
 
+      const ans = a * b;
+      const sig = `${a}·${b}`;
+      if (isInjective && usedAnswers.has(ans)) continue;
+      if (tracker && tracker.has(sig)) continue;
+
+      usedAnswers.add(ans);
+      if (tracker) tracker.add(sig);
+
       tasks.push({
         fach: "mathe",
         schulstufe: g,
-        lehrplanRef: "M-" + g + "-Operationen",
+        lehrplanRef: "M-" + g + "-Operationen-Mal",
         type: "equation",
         op: "mul",
         grade: g,
@@ -238,7 +285,8 @@ window.Schlaufuchs.Generators.Math = (function () {
         num2: formatAustrianNumber(b),
         raw1: a,
         raw2: b,
-        answer: a * b,
+        answer: ans,
+        solutionText: formatAustrianNumber(ans),
         userAnswer: '',
         isCorrect: null,
       });
@@ -250,13 +298,20 @@ window.Schlaufuchs.Generators.Math = (function () {
   // 4. DIVISION (: 2. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   // Kind mit 2. Schulstufe erhält nur 1×1-Umkehrung ohne Rest!
   // Kind mit 4. Schulstufe erhält altersgerechte halbschriftliche Divisionen!
-  function buildDivisionTasks(seed) {
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(seed) : { int: rand, next: Math.random };
+  function buildDivisionTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
     const useGrades = getEffectiveGrades([2, 3, 4]);
-    const targetGrade = useGrades[rand(0, useGrades.length - 1)] || 2;
+    const targetGrade = opts.grade || (useGrades[rand(0, useGrades.length - 1)] || 2);
+    const targetCount = opts.count || (opts.forPrint ? 12 : 6);
+    const isInjective = opts.injective || opts.forPrint;
+    const tracker = opts.tracker || null;
     const tasks = [];
+    const usedAnswers = new Set();
+    let attempts = 0;
 
-    for (let i = 0; i < 6; i++) {
+    while (tasks.length < targetCount && attempts < 1000) {
+      attempts++;
       const g = targetGrade;
       let a, b, answer;
 
@@ -324,10 +379,17 @@ window.Schlaufuchs.Generators.Math = (function () {
         }
       }
 
+      const sig = `${a}:${b}`;
+      if (isInjective && usedAnswers.has(answer)) continue;
+      if (tracker && tracker.has(sig)) continue;
+
+      usedAnswers.add(answer);
+      if (tracker) tracker.add(sig);
+
       tasks.push({
         fach: "mathe",
         schulstufe: g,
-        lehrplanRef: "M-" + g + "-Operationen",
+        lehrplanRef: "M-" + g + "-Operationen-Geteilt",
         type: "equation",
         op: "div",
         grade: g,
@@ -337,6 +399,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         raw1: a,
         raw2: b,
         answer: answer,
+        solutionText: formatAustrianNumber(answer),
         userAnswer: '',
         isCorrect: null,
       });
@@ -345,13 +408,16 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 5. RECHENTÜRME / ZAHLENMAUERN (🧱 Stufengerecht: 1. Kl <= 20, 2. Kl <= 100, 3. Kl <= 1 000)
-  function buildPyramidTasks() {
+  // 5. RECHENTÜRME / ZAHLENMAUERN (Stufengerecht: 1. Kl <= 20, 2. Kl <= 100, 3. Kl <= 1 000)
+  function buildPyramidTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
     const grades = getEffectiveGrades([1, 2, 3]);
+    const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
+    const targetCount = opts.count || (opts.forPrint ? 4 : 5);
     const tasks = [];
 
-    for (let i = 0; i < 5; i++) {
-      const g = grades[rand(0, grades.length - 1)] || 2;
+    for (let i = 0; i < targetCount; i++) {
+      const g = targetGrade;
       let b1, b2, b3;
 
       if (g === 1) {
@@ -388,14 +454,17 @@ window.Schlaufuchs.Generators.Math = (function () {
         hiddenKeys = ['b3', 'm1', 'peak']; // Umkehrung rechts: b3 = m2 - b2
       }
 
+      const valuesObj = { b1, b2, b3, m1, m2, peak };
       tasks.push({
         fach: "mathe",
         schulstufe: g,
-        lehrplanRef: "M-" + g + "-Operationen",
+        lehrplanRef: "M-" + g + "-Strukturen-Zahlenmauern",
         type: "pyramid",
         grade: g,
-        values: { b1, b2, b3, m1, m2, peak },
+        values: valuesObj,
         hidden: hiddenKeys,
+        answer: hiddenKeys.map(k => valuesObj[k]).join(', '),
+        solutionText: hiddenKeys.map(k => valuesObj[k]).join(', '),
         userAnswers: {},
         isCorrect: null,
       });
@@ -403,8 +472,167 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 6. UHRZEIT (⏰ 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-  function buildClockTasks(opts) {
+  // 6. UHRZEIT (1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
+    function buildClockTasks(opts) {
+    if (opts && opts.forPrint) {
+      const g = opts.grade || 2;
+      const tasks = [];
+      const Clock = window.Schlaufuchs && window.Schlaufuchs.Clock;
+      const formatTime = Clock ? Clock.formatTime : (h, m) => `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} Uhr`;
+      const describe = Clock ? Clock.describeTimeText : (h, m) => `${h}:${m}`;
+
+      if (g === 1) {
+        const hoursPool = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5).slice(0, 6);
+        for (let i = 0; i < 3; i++) {
+          const h = hoursPool[i];
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock',
+            schulstufe: 1,
+            grade: 1,
+            lehrplanRef: 'M-1-Groessen-Uhrzeit',
+            hours: h,
+            minutes: 0,
+            promptType: 'hour-only',
+            question: 'Wie viel Uhr ist es?',
+            answer: `${h} Uhr`,
+            solutionText: `${h} Uhr`
+          });
+        }
+        for (let i = 3; i < 6; i++) {
+          const h = hoursPool[i];
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock-set',
+            schulstufe: 1,
+            grade: 1,
+            lehrplanRef: 'M-1-Groessen-Uhrzeit',
+            targetHours: h,
+            targetMinutes: 0,
+            promptType: 'draw-hands',
+            prompt: `${h}:00 Uhr`,
+            targetText: `${h} Uhr`,
+            question: `Zeichne die Zeiger ein: <strong>${h} Uhr</strong>`,
+            answer: `${h} Uhr`,
+            solutionText: `${h}:00 Uhr (kurzer Zeiger auf ${h}, langer auf 12)`
+          });
+        }
+      } else if (g === 2) {
+        const timesRead = [
+          { h: rand(1, 5), m: 30 },
+          { h: rand(6, 11), m: 15 },
+          { h: rand(1, 11), m: 45 }
+        ];
+        timesRead.forEach(t => {
+          const textDesc = describe(t.h, t.m);
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock',
+            schulstufe: 2,
+            grade: 2,
+            lehrplanRef: 'M-2-Groessen-Uhrzeit',
+            hours: t.h,
+            minutes: t.m,
+            promptType: 'digital',
+            question: 'Wie viel Uhr ist es?',
+            answer: formatTime(t.h, t.m),
+            solutionText: `${formatTime(t.h, t.m)} (${textDesc})`
+          });
+        });
+        const timesDraw = [
+          { h: rand(1, 5), m: 30 },
+          { h: rand(6, 11), m: 15 },
+          { h: rand(1, 11), m: 45 }
+        ];
+        timesDraw.forEach(t => {
+          const textDesc = describe(t.h, t.m);
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock-set',
+            schulstufe: 2,
+            grade: 2,
+            lehrplanRef: 'M-2-Groessen-Uhrzeit',
+            targetHours: t.h,
+            targetMinutes: t.m,
+            promptType: 'draw-hands',
+            prompt: textDesc,
+            targetText: textDesc,
+            question: `Zeichne die Zeiger ein: <strong>${textDesc}</strong>`,
+            answer: textDesc,
+            solutionText: `${formatTime(t.h, t.m)} (${textDesc})`
+          });
+        });
+      } else if (g === 3) {
+        const mPool = [5, 10, 20, 25, 35, 40, 50, 55].sort(() => Math.random() - 0.5);
+        for (let i = 0; i < 3; i++) {
+          const h12 = rand(1, 11);
+          const m = mPool[i];
+          const isPm = i % 2 === 1;
+          const actualH = isPm ? h12 + 12 : h12;
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock',
+            schulstufe: 3,
+            grade: 3,
+            lehrplanRef: 'M-3-Groessen-Uhrzeit',
+            hours: h12,
+            minutes: m,
+            promptType: 'digital',
+            isAfternoon: isPm,
+            question: isPm ? `Nachmittag (${actualH} Uhr):` : `Vormittag (${actualH} Uhr):`,
+            answer: formatTime(actualH, m),
+            solutionText: formatTime(actualH, m)
+          });
+        }
+        for (let i = 3; i < 6; i++) {
+          const h12 = rand(1, 11);
+          const m = mPool[i];
+          const isPm = i % 2 === 1;
+          const actualH = isPm ? h12 + 12 : h12;
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock-set',
+            schulstufe: 3,
+            grade: 3,
+            lehrplanRef: 'M-3-Groessen-Uhrzeit',
+            targetHours: h12,
+            targetMinutes: m,
+            promptType: 'draw-hands',
+            targetText: `${actualH}:${String(m).padStart(2, '0')} Uhr`,
+            question: `Zeichne die Zeiger ein: <strong>${actualH}:${String(m).padStart(2, '0')} Uhr</strong>`,
+            answer: `${actualH}:${String(m).padStart(2, '0')} Uhr`,
+            solutionText: `${actualH}:${String(m).padStart(2, '0')} Uhr`
+          });
+        }
+      } else {
+        for (let i = 0; i < 6; i++) {
+          const startH = rand(8, 13);
+          const startM = rand(0, 3) * 15;
+          const durMin = (i + 2) * 15;
+          const totalStartMin = startH * 60 + startM;
+          const totalEndMin = totalStartMin + durMin;
+          const endH = Math.floor(totalEndMin / 60);
+          const endM = totalEndMin % 60;
+          tasks.push({
+            fach: 'mathe',
+            type: 'clock',
+            schulstufe: 4,
+            grade: 4,
+            lehrplanRef: 'M-4-Groessen-Uhrzeit',
+            hours: startH % 12 || 12,
+            minutes: startM,
+            clockStart: { hours: startH % 12 || 12, minutes: startM },
+            clockEnd: { hours: endH % 12 || 12, minutes: endM },
+            isPair: true,
+            promptType: 'interval',
+            question: `Von ${formatTime(startH, startM)} bis ${formatTime(endH, endM)}: Wie viele Minuten?`,
+            answer: `${durMin} min`,
+            solutionText: `${durMin} min`
+          });
+        }
+      }
+      return tasks;
+    }
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const tasks = [];
 
@@ -424,7 +652,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: h,
           answerText: `${h}:00 Uhr`,
           unit: 'Uhr',
-          hint: '💡 Schau auf den kurzen roten Zeiger: Er zeigt genau auf die Stundenzahl!'
+          hint: 'Schau auf den kurzen roten Zeiger: Er zeigt genau auf die Stundenzahl!'
         };
       },
       () => {
@@ -453,7 +681,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt diese Uhrzeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Suche die Uhr, bei der der kurze rote Zeiger auf die ${h} und der lange blaue Zeiger auf die 12 zeigt.`
+          hint: `Suche die Uhr, bei der der kurze rote Zeiger auf die ${h} und der lange blaue Zeiger auf die 12 zeigt.`
         };
       },
       () => {
@@ -470,7 +698,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: h,
           answerText: `${h}:00 Uhr`,
           unit: 'Uhr',
-          hint: '💡 Wenn der lange blaue Zeiger auf der 12 steht, ist es eine volle Stunde.'
+          hint: 'Wenn der lange blaue Zeiger auf der 12 steht, ist es eine volle Stunde.'
         };
       },
       () => {
@@ -500,7 +728,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt diese Uhrzeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Der kurze rote Zeiger muss genau auf die ${h} zeigen und der lange blaue Zeiger auf die 12.`
+          hint: `Der kurze rote Zeiger muss genau auf die ${h} zeigen und der lange blaue Zeiger auf die 12.`
         };
       }
     ];
@@ -529,7 +757,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           correctText: `halb ${nextH}`,
           answer: `halb ${nextH}`,
           answerText: `${String(h).padStart(2, '0')}:30 Uhr (halb ${nextH})`,
-          hint: `💡 Der lange blaue Zeiger steht unten auf der 6 (30 Minuten = eine halbe Stunde). Der rote Zeiger ist auf dem Weg zur ${nextH}.`
+          hint: `Der lange blaue Zeiger steht unten auf der 6 (30 Minuten = eine halbe Stunde). Der rote Zeiger ist auf dem Weg zur ${nextH}.`
         };
       },
       () => {
@@ -557,7 +785,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt diese Uhrzeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Bei „halb ${nextH}“ muss der lange blaue Zeiger nach unten auf die 6 zeigen, der kurze rote Zeiger liegt zwischen ${h} und ${nextH}.`
+          hint: `Bei „halb ${nextH}“ muss der lange blaue Zeiger nach unten auf die 6 zeigen, der kurze rote Zeiger liegt zwischen ${h} und ${nextH}.`
         };
       },
       () => {
@@ -581,7 +809,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           correctText: `viertel nach ${h}`,
           answer: `viertel nach ${h}`,
           answerText: `${String(h).padStart(2, '0')}:15 Uhr (viertel nach ${h})`,
-          hint: '💡 Der lange Minutenzeiger steht auf der 3: Es ist eine Viertelstunde (15 Minuten) nach der vollen Stunde.'
+          hint: 'Der lange Minutenzeiger steht auf der 3: Es ist eine Viertelstunde (15 Minuten) nach der vollen Stunde.'
         };
       },
       () => {
@@ -608,7 +836,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt diese Uhrzeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Bei „viertel nach ${h}“ steht der lange blaue Zeiger auf der 3 (15 Minuten vergangen).`
+          hint: `Bei „viertel nach ${h}“ steht der lange blaue Zeiger auf der 3 (15 Minuten vergangen).`
         };
       },
       () => {
@@ -633,7 +861,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           correctText: `viertel vor ${nextH}`,
           answer: `viertel vor ${nextH}`,
           answerText: `${String(h).padStart(2, '0')}:45 Uhr (viertel vor ${nextH})`,
-          hint: `💡 Der Minutenzeiger steht auf der 9: Es fehlt noch eine Viertelstunde auf ${nextH} Uhr.`
+          hint: `Der Minutenzeiger steht auf der 9: Es fehlt noch eine Viertelstunde auf ${nextH} Uhr.`
         };
       },
       () => {
@@ -651,7 +879,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Auf der Uhr ist es ${h}:${minPast} Uhr. Wie viele Minuten fehlen noch bis ${nextH}:00 Uhr?`,
           unit: 'Minuten',
           answer: 60 - minPast,
-          hint: `💡 Eine volle Stunde hat 60 Minuten. Der blaue Zeiger steht bei ${minPast} Minuten. Rechne: 60 − ${minPast}.`
+          hint: `Eine volle Stunde hat 60 Minuten. Der blaue Zeiger steht bei ${minPast} Minuten. Rechne: 60 − ${minPast}.`
         };
       }
     ];
@@ -675,7 +903,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: m,
           answerText: `${hStr}:${mStr} Uhr`,
           unit: 'Minuten',
-          hint: '💡 Zähle die 5-Minuten-Schritte auf dem Zifferblatt: 5, 10, 15, 20...'
+          hint: 'Zähle die 5-Minuten-Schritte auf dem Zifferblatt: 5, 10, 15, 20...'
         };
       },
       () => {
@@ -704,7 +932,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt diese Uhrzeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Schau zuerst auf den kurzen roten Zeiger (Stunde ${h}) und zähle dann die 5er-Schritte für den blauen Zeiger (${m} Minuten).`
+          hint: `Schau zuerst auf den kurzen roten Zeiger (Stunde ${h}) und zähle dann die 5er-Schritte für den blauen Zeiger (${m} Minuten).`
         };
       },
       () => {
@@ -725,7 +953,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: h24,
           answerText: `${h24}:${mStr} Uhr`,
           unit: 'Uhr',
-          hint: `💡 Nach 12 Uhr mittags zählen wir weiter: 12 + ${h12} = ${h24} Uhr.`
+          hint: `Nach 12 Uhr mittags zählen wir weiter: 12 + ${h12} = ${h24} Uhr.`
         };
       },
       () => {
@@ -741,7 +969,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Die Uhr zeigt eine Dreiviertelstunde nach ${h} Uhr. Wie viele Minuten sind das?`,
           unit: 'Minuten',
           answer: 45,
-          hint: '💡 Eine halbe Stunde (30 min) plus eine Viertelstunde (15 min) = 45 Minuten.'
+          hint: 'Eine halbe Stunde (30 min) plus eine Viertelstunde (15 min) = 45 Minuten.'
         };
       },
       () => {
@@ -757,7 +985,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Der Zeiger ist eine halbe Minute gewandert. Wie viele Sekunden hat eine halbe Minute?',
           unit: 'Sekunden',
           answer: 30,
-          hint: '💡 1 Minute = 60 Sekunden. Die Hälfte davon sind 30 Sekunden.'
+          hint: '1 Minute = 60 Sekunden. Die Hälfte davon sind 30 Sekunden.'
         };
       }
     ];
@@ -786,7 +1014,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: durMin,
           answerText: `${durMin} Minuten`,
           unit: 'Minuten',
-          hint: `💡 Zähle von ${startH}:${String(startM).padStart(2, '0')} bis zur nächsten vollen Stunde und dann weiter bis ${endH}:${String(endM).padStart(2, '0')}.`
+          hint: `Zähle von ${startH}:${String(startM).padStart(2, '0')} bis zur nächsten vollen Stunde und dann weiter bis ${endH}:${String(endM).padStart(2, '0')}.`
         };
       },
       () => {
@@ -819,7 +1047,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt die richtige Ankunftszeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `💡 Rechne zur Abfahrtszeit (${startH}:00 Uhr) die ${durMin} Minuten Fahrtzeit hinzu: ${endH}:${mStr} Uhr.`
+          hint: `Rechne zur Abfahrtszeit (${startH}:00 Uhr) die ${durMin} Minuten Fahrtzeit hinzu: ${endH}:${mStr} Uhr.`
         };
       },
       () => {
@@ -835,7 +1063,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viele Minuten haben ${stunden}\u00A0Stunden?`,
           unit: 'Minuten',
           answer: stunden * 60,
-          hint: '💡 1\u00A0Stunde = 60\u00A0Minuten. Multipliziere mit 60.'
+          hint: '1\u00A0Stunde = 60\u00A0Minuten. Multipliziere mit 60.'
         };
       },
       () => {
@@ -850,7 +1078,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Wie viele Stunden hat ein ganzer Tag?',
           unit: 'Stunden',
           answer: 24,
-          hint: '💡 Ein Tag hat 24 Stunden (von 0:00 bis 24:00 Uhr).'
+          hint: 'Ein Tag hat 24 Stunden (von 0:00 bis 24:00 Uhr).'
         };
       }
     ];
@@ -905,8 +1133,49 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 7. GELD & EURO (💶 1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-  function buildMoneyTasks(opts) {
+  // 7. GELD & EURO (1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
+    function buildMoneyTasks(opts) {
+    if (opts && opts.forPrint) {
+      const g = opts.grade || 2;
+      return [
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-1/4-Groessen-Geld',
+          story: 'Ein Kinoticket kostet 8 € und 50 Cent. Ein Popcorn kostet 4 € und 20 Cent. Wie viel bezahlt Maximilian an der Kassa?',
+          question: 'Wie viel kosten Ticket und Popcorn zusammen?',
+          calculation: '8,50 € + 4,20 €',
+          answer: '12 € und 70 Cent',
+          solutionText: 'R: 8,50 € + 4,20 € = 12 € und 70 Cent'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-1/4-Groessen-Geld',
+          story: 'Sophie kauft am Naschmarkt Äpfel um 3 € und Trauben um 4 €. Sie bezahlt mit einem 20-€-Schein. Wie viel Retourgeld bekommt sie?',
+          question: 'Wie viel Retourgeld bekommt Sophie?',
+          calculation: '20 € − 7 €',
+          answer: '13 €',
+          solutionText: 'R: 20 € − 7 € = 13 €'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-1/4-Groessen-Geld',
+          story: 'In der Spardose von Anna liegen 35 €. Zum Geburtstag schenkt ihr der Großvater 20 €. Wie viel Geld hat Anna nun insgesamt?',
+          question: 'Wie viel Geld hat Anna insgesamt?',
+          calculation: '35 € + 20 €',
+          answer: '55 €',
+          solutionText: 'R: 35 € + 20 € = 55 €'
+        }
+      ];
+    }
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const tasks = [];
 
@@ -924,7 +1193,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `In deiner Spardose liegen ${e1}\u00A0€ und ${e2}\u00A0€. Wie viel Euro sind das zusammen?`,
           unit: '€',
           answer: e1 + e2,
-          hint: '💡 Zähle die beiden Euro-Beträge zusammen: ' + e1 + ' + ' + e2 + '.'
+          hint: 'Zähle die beiden Euro-Beträge zusammen: ' + e1 + ' + ' + e2 + '.'
         };
       },
       () => {
@@ -939,7 +1208,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Buch kostet ${kosten}\u00A0€. Du zahlst mit einem 10-€-Schein. Wie viel Euro Rückgeld bekommst du?`,
           unit: '€',
           answer: gegeben - kosten,
-          hint: '💡 Rechne: 10 − ' + kosten + ' = ?'
+          hint: 'Rechne: 10 − ' + kosten + ' = ?'
         };
       }
     ];
@@ -958,7 +1227,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Euro sind ${euro1}\u00A0€ und ${euro2}\u00A0€ zusammen?`,
           unit: '€',
           answer: euro1 + euro2,
-          hint: '💡 Rechne: ' + euro1 + ' + ' + euro2 + '.'
+          hint: 'Rechne: ' + euro1 + ' + ' + euro2 + '.'
         };
       },
       () => {
@@ -971,7 +1240,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Du kaufst einen Apfel um 50 Cent und eine Semmel um 50 Cent. Wie viel Euro (€) sind das zusammen?',
           unit: '€',
           answer: 1,
-          hint: '💡 50 Cent + 50 Cent = 100 Cent. 100 Cent entsprechen genau 1 Euro.'
+          hint: '50 Cent + 50 Cent = 100 Cent. 100 Cent entsprechen genau 1 Euro.'
         };
       },
       () => {
@@ -985,7 +1254,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Malblock kostet ${kosten}\u00A0Cent. Wie viele Cent fehlen noch auf 1\u00A0Euro (100 Cent)?`,
           unit: 'Cent',
           answer: 100 - kosten,
-          hint: '💡 1\u00A0Euro hat 100 Cent. Rechne: 100 − ' + kosten + '.'
+          hint: '1\u00A0Euro hat 100 Cent. Rechne: 100 − ' + kosten + '.'
         };
       }
     ];
@@ -1004,7 +1273,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Cent sind ${euro1}\u00A0€ und ${cent1}\u00A0c zusammen?`,
           unit: 'Cent',
           answer: euro1 * 100 + cent1,
-          hint: '💡 1\u00A0Euro = 100\u00A0Cent. Rechne: ' + euro1 + ' · 100 + ' + cent1 + '.'
+          hint: '1\u00A0Euro = 100\u00A0Cent. Rechne: ' + euro1 + ' · 100 + ' + cent1 + '.'
         };
       },
       () => {
@@ -1020,7 +1289,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Heft kostet ${kostenCents}\u00A0Cent. Du zahlst mit einer 2-Euro-Münze. Wie viel Cent Rückgeld bekommst du?`,
           unit: 'Cent',
           answer: rueckgeld,
-          hint: '💡 Eine 2-Euro-Münze hat 200 Cent. Rechne: 200 − ' + kostenCents + '.'
+          hint: 'Eine 2-Euro-Münze hat 200 Cent. Rechne: 200 − ' + kostenCents + '.'
         };
       }
     ];
@@ -1039,7 +1308,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Für die Schulbibliothek werden Bücher um ${e1}\u00A0€ und Spiele um ${e2}\u00A0€ gekauft. Wie viel Euro kostet das insgesamt?`,
           unit: '€',
           answer: e1 + e2,
-          hint: '💡 Addiere die beiden Beträge: ' + e1 + ' + ' + e2 + '.'
+          hint: 'Addiere die beiden Beträge: ' + e1 + ' + ' + e2 + '.'
         };
       },
       () => {
@@ -1054,7 +1323,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein T-Shirt für den Schulsport kostet ${preis1}\u00A0€. Wie viel Euro kosten ${menge} solche T-Shirts?`,
           unit: '€',
           answer: preis1 * menge,
-          hint: '💡 Rechne: ' + menge + ' · ' + preis1 + '\u00A0€.'
+          hint: 'Rechne: ' + menge + ' · ' + preis1 + '\u00A0€.'
         };
       }
     ];
@@ -1096,8 +1365,45 @@ window.Schlaufuchs.Generators.Math = (function () {
     return buildClockTasks();
   }
 
-  // 7. ZAHLENRAUM 1 000 000 & STELLENWERTTAFEL (💎 4. Klasse)
-  function buildMillionTasks() {
+  // 7. ZAHLENRAUM 1 000 000 & STELLENWERTTAFEL (4. Klasse)
+    function buildMillionTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    if (opts && (opts.forPrint || opts.injective)) {
+      const tasks = [];
+      const usedAnswers = new Set();
+      const tracker = opts.tracker || null;
+      let attempts = 0;
+      while (tasks.length < 12 && attempts < 500) {
+        attempts++;
+        const base = rand(10, 85) * 10000;
+        const addPart = rand(1, 9) * 1000;
+        const ans = base + addPart;
+        const sig = `million:${base}+${addPart}`;
+        if (usedAnswers.has(ans)) continue;
+        if (tracker && tracker.has(sig)) continue;
+        usedAnswers.add(ans);
+        if (tracker) tracker.add(sig);
+
+        tasks.push({
+          fach: 'mathe',
+          schulstufe: 4,
+          grade: 4,
+          lehrplanRef: 'M-4-Zahlenraum-Million',
+          type: 'equation',
+          op: 'add',
+          symbol: '+',
+          num1: formatAustrianNumber(base),
+          num2: formatAustrianNumber(addPart),
+          raw1: base,
+          raw2: addPart,
+          answer: ans,
+          solutionText: formatAustrianNumber(ans),
+          userAnswer: '',
+          isCorrect: null
+        });
+      }
+      return tasks;
+    }
     const tasks = [];
 
     for (let i = 0; i < 5; i++) {
@@ -1122,7 +1428,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Welche Zahl ist: ${ht}\u00A0HT + ${zt}\u00A0ZT + ${t}\u00A0T + ${h}\u00A0H + ${z}\u00A0Z + ${e}\u00A0E?`,
           unit: '',
           answer: fullNum,
-          hint: '💡 Schreibe die Ziffern der Reihe nach von HT bis E auf.'
+          hint: 'Schreibe die Ziffern der Reihe nach von HT bis E auf.'
         });
       } else if (i === 1) {
         tasks.push({
@@ -1134,7 +1440,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Welchen Wert hat die Tausender-Ziffer (T) in der Zahl ${formattedNum}?`,
           unit: '',
           answer: t,
-          hint: '💡 Die Tausender-Stelle steht an 4. Stelle von rechts.'
+          hint: 'Die Tausender-Stelle steht an 4. Stelle von rechts.'
         });
       } else if (i === 2) {
         const step = rand(1, 4) * 1000;
@@ -1150,7 +1456,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Zähle weiter: ${formatAustrianNumber(cleanNum)} + ${formatAustrianNumber(step)} = ?`,
           unit: '',
           answer: answer,
-          hint: '💡 Achte auf die Tausender-Stelle und zähle in Tausenderschritten weiter.'
+          hint: 'Achte auf die Tausender-Stelle und zähle in Tausenderschritten weiter.'
         });
       } else if (i === 3) {
         const nachfolger = fullNum + 1;
@@ -1163,7 +1469,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Welche Zahl ist der unmittelbare Nachfolger von ${formattedNum}?`,
           unit: '',
           answer: nachfolger,
-          hint: '💡 Der Nachfolger ist um genau 1 größer.'
+          hint: 'Der Nachfolger ist um genau 1 größer.'
         });
       } else {
         const baseZt = rand(2, 8) * 10000;
@@ -1178,7 +1484,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel fehlt von ${formatAustrianNumber(start)} auf ${formatAustrianNumber(baseZt)}?`,
           unit: '',
           answer: part,
-          hint: '💡 Ergänze auf den nächsten vollen Zehntausender.'
+          hint: 'Ergänze auf den nächsten vollen Zehntausender.'
         });
       }
     }
@@ -1186,8 +1492,49 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks.map(t => ({ ...t, userAnswer: '', isCorrect: null }));
   }
 
-  // 8. MASSE & GEWICHTE (⚖️ 3. & 4. Klasse mit kg, g, dag, t, hl, km)
-  function buildUnitsTasks(opts) {
+  // 8. MASSE & GEWICHTE (3. & 4. Klasse mit kg, g, dag, t, hl, km)
+    function buildUnitsTasks(opts) {
+    if (opts && opts.forPrint) {
+      const g = opts.grade || 4;
+      return [
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Groessen-Masseinheiten',
+          story: 'Ein Bäcker benötigt für 10 Brote genau 5 kg Mehl. Wie viel Gramm (g) Mehl sind das?',
+          question: 'Rechne die Menge in Gramm um:',
+          calculation: '5 · 1 000 g',
+          answer: '5 000 g',
+          solutionText: 'R: 5 · 1 000 g = 5 000 g'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Groessen-Masseinheiten',
+          story: 'Ein Wanderweg um den Wolfgangsee ist 12 km und 400 m lang. Eine Familie ist bereits 8 km gewandert.',
+          question: 'Wie viele Kilometer und Meter fehlen noch bis zum Ziel?',
+          calculation: '12 km 400 m − 8 km',
+          answer: '4 km 400 m',
+          solutionText: 'R: 12 km 400 m − 8 km = 4 km 400 m'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Groessen-Masseinheiten',
+          story: 'In ein großes Aquarium passen 150 Liter Wasser. Mit einem Eimer werden 6 Eimer zu je 12 Liter eingefüllt.',
+          question: 'Wie viel Wasser ist bereits im Becken?',
+          calculation: '6 · 12 l',
+          answer: '72 l',
+          solutionText: 'R: 6 · 12 l = 72 l'
+        }
+      ];
+    }
     const grades = getEffectiveGrades([3, 4]);
     const tasks = [];
     const poolGrade3 = [
@@ -1201,7 +1548,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Gramm (g) sind ${kg}\u00A0kg?`,
           unit: 'g',
           answer: kg * 1000,
-          hint: '💡 1\u00A0kg = 1\u00A0000\u00A0g.'
+          hint: '1\u00A0kg = 1\u00A0000\u00A0g.'
         };
       },
       () => {
@@ -1214,7 +1561,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Zentimeter (cm) sind ${m}\u00A0m?`,
           unit: 'cm',
           answer: m * 100,
-          hint: '💡 1\u00A0m = 100\u00A0cm.'
+          hint: '1\u00A0m = 100\u00A0cm.'
         };
       },
       () => {
@@ -1227,7 +1574,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Millimeter (mm) sind ${cm}\u00A0cm?`,
           unit: 'mm',
           answer: cm * 10,
-          hint: '💡 1\u00A0cm = 10\u00A0mm.'
+          hint: '1\u00A0cm = 10\u00A0mm.'
         };
       },
       () => {
@@ -1240,7 +1587,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Zentimeter (cm) sind ${dm}\u00A0Dezimeter (dm)?`,
           unit: 'cm',
           answer: dm * 10,
-          hint: '💡 1\u00A0dm = 10\u00A0cm.'
+          hint: '1\u00A0dm = 10\u00A0cm.'
         };
       },
       () => {
@@ -1253,7 +1600,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Milliliter (ml) sind ${l}\u00A0Liter (l)?`,
           unit: 'ml',
           answer: l * 1000,
-          hint: '💡 1\u00A0Liter = 1\u00A0000\u00A0Milliliter.'
+          hint: '1\u00A0Liter = 1\u00A0000\u00A0Milliliter.'
         };
       }
     ];
@@ -1269,7 +1616,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Dekagramm (dag) sind ${kg}\u00A0kg?`,
           unit: 'dag',
           answer: kg * 100,
-          hint: '💡 In Österreich gilt: 1\u00A0kg = 100\u00A0dag.'
+          hint: 'In Österreich gilt: 1\u00A0kg = 100\u00A0dag.'
         };
       },
       () => {
@@ -1282,7 +1629,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Kilogramm (kg) sind ${dag}\u00A0dag?`,
           unit: 'kg',
           answer: dag / 100,
-          hint: '💡 100\u00A0dag = 1\u00A0kg.'
+          hint: '100\u00A0dag = 1\u00A0kg.'
         };
       },
       () => {
@@ -1295,7 +1642,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Gramm (g) sind ${dag}\u00A0dag?`,
           unit: 'g',
           answer: dag * 10,
-          hint: '💡 1\u00A0dag = 10\u00A0g.'
+          hint: '1\u00A0dag = 10\u00A0g.'
         };
       },
       () => {
@@ -1308,7 +1655,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Kilogramm (kg) sind ${t}\u00A0Tonnen (t)?`,
           unit: 'kg',
           answer: t * 1000,
-          hint: '💡 1\u00A0Tonne = 1\u00A0000\u00A0kg.'
+          hint: '1\u00A0Tonne = 1\u00A0000\u00A0kg.'
         };
       },
       () => {
@@ -1321,7 +1668,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Liter (l) sind ${hl}\u00A0Hektoliter (hl)?`,
           unit: 'l',
           answer: hl * 100,
-          hint: '💡 1\u00A0Hektoliter (hl) = 100\u00A0Liter (l).'
+          hint: '1\u00A0Hektoliter (hl) = 100\u00A0Liter (l).'
         };
       },
       () => {
@@ -1334,7 +1681,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Meter (m) sind ${km}\u00A0Kilometer (km)?`,
           unit: 'm',
           answer: km * 1000,
-          hint: '💡 1\u00A0km = 1\u00A0000\u00A0m.'
+          hint: '1\u00A0km = 1\u00A0000\u00A0m.'
         };
       }
     ];
@@ -1369,8 +1716,49 @@ window.Schlaufuchs.Generators.Math = (function () {
     return tasks;
   }
 
-  // 9. GEOMETRIE: UMFANG & FLÄCHE (📐 4. Klasse, 5 Aufgaben)
-  function buildGeometryTasks() {
+  // 9. GEOMETRIE: UMFANG & FLÄCHE (4. Klasse, 5 Aufgaben)
+    function buildGeometryTasks(opts) {
+    if (opts && opts.forPrint) {
+      const g = opts.grade || 4;
+      return [
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Geometrie-Flaechen',
+          story: 'Ein rechteckiges Klassenzimmer ist 8 m lang und 6 m breit. Wie groß ist die Fläche des Bodens?',
+          question: 'Wie groß ist der Flächeninhalt (A)?',
+          calculation: '8 · 6',
+          answer: '48 m²',
+          solutionText: 'R: 8 · 6 = 48 m²'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Geometrie-Flaechen',
+          story: 'Ein quadratischer Gemüsegarten hat eine Seitenlänge von 5 m. Um den Garten wird ein Holzzaun gebaut. Wie lange ist der Zaun insgesamt?',
+          question: 'Wie groß ist der Umfang (u)?',
+          calculation: '4 · 5',
+          answer: '20 m',
+          solutionText: 'R: 4 · 5 = 20 m'
+        },
+        {
+          fach: 'mathe',
+          type: 'text-problem',
+          schulstufe: g,
+          grade: g,
+          lehrplanRef: 'M-4-Geometrie-Flaechen',
+          story: 'Ein Spielplatz ist 12 m lang und 10 m breit. Wie groß ist der Umfang des gesamten Spielplatzes?',
+          question: 'Wie groß ist der Umfang (u)?',
+          calculation: '2 · 12 + 2 · 10',
+          answer: '44 m',
+          solutionText: 'R: 2 · 12 + 2 · 10 = 44 m'
+        }
+      ];
+    }
     const tasks = [];
 
     // Aufgabe 1: Umfang Rechteck (u = 2·a + 2·b)
@@ -1464,7 +1852,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 54,
         unit: 'Murmeln',
         answerText: 'Felix hat jetzt 54 Murmeln.',
-        hint: '💡 Überlege: Werden es mehr oder weniger Murmeln? Welche Rechenart passt?'
+        hint: 'Überlege: Werden es mehr oder weniger Murmeln? Welche Rechenart passt?'
       },
       {
         grade: 2,
@@ -1476,7 +1864,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 17,
         unit: 'Kinder',
         answerText: 'Es sind heute 17 Kinder in der Schule.',
-        hint: '💡 Lies genau: Die kranken Kinder sind heute nicht da. Welche Rechenart musst du anwenden?'
+        hint: 'Lies genau: Die kranken Kinder sind heute nicht da. Welche Rechenart musst du anwenden?'
       },
       {
         grade: 2,
@@ -1488,7 +1876,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 32,
         unit: 'Euro',
         answerText: 'Die Familie bezahlt 32 Euro.',
-        hint: '💡 Jede der 4 Karten kostet gleich viel. Mit welcher Rechenart berechnest du den Gesamtpreis?'
+        hint: 'Jede der 4 Karten kostet gleich viel. Mit welcher Rechenart berechnest du den Gesamtpreis?'
       },
       {
         grade: 2,
@@ -1500,7 +1888,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 7,
         unit: 'Buntstifte',
         answerText: 'Jeder Tisch bekommt 7 Buntstifte.',
-        hint: '💡 Verteilen bedeutet: Aufteilen in gleich große Mengen. Welche Rechenart hilft dir?'
+        hint: 'Verteilen bedeutet: Aufteilen in gleich große Mengen. Welche Rechenart hilft dir?'
       }
     ];
 
@@ -1515,7 +1903,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 35,
         unit: 'Semmeln',
         answerText: 'Es sind noch 35 Semmeln übrig.',
-        hint: '💡 Überlege: Wie viele Semmeln bleiben nach dem Verkauf noch in der Bäckerei übrig?'
+        hint: 'Überlege: Wie viele Semmeln bleiben nach dem Verkauf noch in der Bäckerei übrig?'
       },
       {
         grade: 3,
@@ -1527,7 +1915,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 55,
         unit: 'Euro',
         answerText: 'Lukas fehlen noch 55 Euro.',
-        hint: '💡 Wie viel Geld fehlt Lukas noch auf den vollen Betrag des Fahrrads?'
+        hint: 'Wie viel Geld fehlt Lukas noch auf den vollen Betrag des Fahrrads?'
       },
       {
         grade: 3,
@@ -1539,7 +1927,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 240,
         unit: 'Bücher',
         answerText: 'Es stehen insgesamt 240 Bücher in den Regalen.',
-        hint: '💡 In jedem Regal stehen gleich viele Bücher. Welche Rechenart rechnet gleiche Mengen zusammen?'
+        hint: 'In jedem Regal stehen gleich viele Bücher. Welche Rechenart rechnet gleiche Mengen zusammen?'
       },
       {
         grade: 3,
@@ -1551,7 +1939,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 17,
         unit: 'Euro',
         answerText: 'Anna hat noch 17 Euro übrig.',
-        hint: '💡 Wie viel Geld bleibt von 45 Euro nach Abzug von 28 Euro übrig?'
+        hint: 'Wie viel Geld bleibt von 45 Euro nach Abzug von 28 Euro übrig?'
       }
     ];
 
@@ -1566,7 +1954,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 600,
         unit: 'dag',
         answerText: 'Die Einkäufe wiegen 600 dag.',
-        hint: '💡 Berechne zuerst das Gewicht vom Mehl, dann das vom Zucker, und zähle beides zusammen.'
+        hint: 'Berechne zuerst das Gewicht vom Mehl, dann das vom Zucker, und zähle beides zusammen.'
       },
       {
         grade: 4,
@@ -1578,7 +1966,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 21000,
         unit: 'm',
         answerText: 'Der Wanderer ist 21 000 m gewandert.',
-        hint: '💡 Rechne zuerst die gesamten Kilometer aus und wandle sie anschließend in Meter um.'
+        hint: 'Rechne zuerst die gesamten Kilometer aus und wandle sie anschließend in Meter um.'
       },
       {
         grade: 4,
@@ -1590,7 +1978,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         answer: 2500,
         unit: 'kg',
         answerText: 'Es verbleiben 2 500 kg Sand auf dem Lastwagen.',
-        hint: '💡 1 Tonne = 1 000 kg. Wandle zuerst 4 Tonnen in kg um (4 000 kg) und ziehe dann ab.'
+        hint: '1 Tonne = 1 000 kg. Wandle zuerst 4 Tonnen in kg um (4 000 kg) und ziehe dann ab.'
       }
     ];
 
@@ -1604,12 +1992,13 @@ window.Schlaufuchs.Generators.Math = (function () {
       if (pool.length === 0) pool = storiesGrade2;
     }
 
-    const chosen = (opts && opts.all) ? pool : pool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const targetCount = (opts && opts.forPrint) ? 3 : ((opts && opts.all) ? pool.length : 5);
+    const chosen = pool.sort(() => 0.5 - Math.random()).slice(0, targetCount);
     return chosen.map(s => ({
       fach: 'mathe',
-      schulstufe: s.schulstufe || 3,
-      grade: s.grade || 3,
-      lehrplanRef: s.lehrplanRef || 'M-3-Sachaufgaben',
+      schulstufe: s.schulstufe || (opts && opts.grade) || 3,
+      grade: s.grade || (opts && opts.grade) || 3,
+      lehrplanRef: s.lehrplanRef || 'M-2/4-Sachrechnen-Modellieren',
       type: 'text-problem',
       story: s.story,
       question: s.question,
@@ -1617,6 +2006,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       answer: s.answer,
       unit: s.unit,
       answerText: s.answerText,
+      solutionText: `R: ${s.calculation} = ${s.answer} ${s.unit || ''}`.trim(),
       hint: s.hint,
       userAnswer: '',
       isCorrect: null,
@@ -1624,9 +2014,11 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 11. MENGEN- & ZWANZIGERFELD (1. Klasse mit blauen & roten Wendeplättchen)
-  function buildTwentyFieldTasks(seed) {
+  function buildTwentyFieldTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const targetCount = (opts && opts.forPrint) ? 4 : 5;
     const tasks = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < targetCount; i++) {
       const a = rand(6, 9);
       const toTen = 10 - a;
       const overTen = rand(2, 5);
@@ -1637,14 +2029,17 @@ window.Schlaufuchs.Generators.Math = (function () {
         fach: "mathe",
         schulstufe: 1,
         grade: 1,
-        lehrplanRef: "M-1-Zahlen",
+        lehrplanRef: "M-1-Zahlenraum-20",
         type: "twenty-field",
         a: a,
         b: b,
+        val: total,
         total: total,
+        prompt: `Zeichne ${total} Punkte in das Zwanzigerfeld ein und zerlege in Zehner und Einer:`,
         question: `Wie viele Punkte siehst du insgesamt im Zwanzigerfeld? Rechne: ${a} + ${b} = ?`,
-        hint: `💡 Tipp: Zähle zuerst die Lücken bis zum vollen Zehner 10 auf (Stopp bei 10!) und addiere dann die restlichen Punkte der zweiten Reihe.`,
+        hint: `Tipp: Zähle zuerst die Lücken bis zum vollen Zehner 10 auf (Stopp bei 10!) und addiere dann die restlichen Punkte der zweiten Reihe.`,
         answer: total,
+        solutionText: String(total),
         userAnswer: '',
         isCorrect: null,
       });
@@ -1653,9 +2048,12 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 12. SCHRIFTLICHE RECHENVERFAHREN (3. & 4. Klasse: Untereinander mit Übertrag)
-  function buildWrittenMathTasks() {
+  function buildWrittenMathTasks(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
     const grades = getEffectiveGrades([3, 4]);
-    const isOnlyGrade3 = !grades.includes(4);
+    const targetGrade = opts.grade || (grades.includes(4) ? 4 : 3);
+    const isOnlyGrade3 = targetGrade === 3;
+    const targetCount = opts.count || (opts.forPrint ? 6 : 5);
     const tasks = [];
 
     // 1. Schriftliche Addition zweier 3-stelliger Zahlen (mit Zehnerübertrag)
@@ -1703,7 +2101,14 @@ window.Schlaufuchs.Generators.Math = (function () {
       tasks.push(createWrittenTask('+', n1, n2, sum, 'Addiere Einer, Zehner und Hunderter und notiere den Übertrag.'));
     }
 
-    return tasks;
+    // 6. Zusatzaufgabe für A4-Druck (6 Aufgaben)
+    if (tasks.length < targetCount) {
+      const n1 = isOnlyGrade3 ? rand(210, 530) : rand(1400, 4800);
+      const n2 = isOnlyGrade3 ? rand(120, 390) : rand(1100, 3500);
+      tasks.push(createWrittenTask('+', n1, n2, n1 + n2, 'Schriftliche Addition mit Stellenwert-Übertrag.'));
+    }
+
+    return tasks.slice(0, targetCount);
   }
 
   function createWrittenTask(op, num1, num2, answer, hint) {
@@ -1723,12 +2128,15 @@ window.Schlaufuchs.Generators.Math = (function () {
       fach: "mathe",
       schulstufe: (num1 > 1000 || num2 > 1000) ? 4 : 3,
       grade: (num1 > 1000 || num2 > 1000) ? 4 : 3,
-      lehrplanRef: "M-" + ((num1 > 1000 || num2 > 1000) ? 4 : 3) + "-Schriftlich",
+      lehrplanRef: "M-" + ((num1 > 1000 || num2 > 1000) ? 4 : 3) + "-Operationen-Schriftlich",
       type: "written-calc",
       operation: op,
       num1: num1,
       num2: num2,
+      raw1: num1,
+      raw2: num2,
       answer: answer,
+      solutionText: padAns.join(''),
       maxLen: maxLen,
       headers: headers,
       digits1: pad1,

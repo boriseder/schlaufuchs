@@ -13,7 +13,6 @@
   background: var(--flaeche, #FFFFFF);
   border: 2px solid var(--linie, #3B4651);
   border-radius: var(--radius, 8px);
-  box-shadow: none !important;
   overflow: hidden;
 }
 
@@ -74,7 +73,6 @@
   padding: 9px 18px !important;
   min-height: 44px !important;
   border-radius: var(--radius, 8px) !important;
-  box-shadow: none !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -91,7 +89,6 @@
   background: var(--mathe, #2D5E9E) !important;
   color: #FFFFFF !important;
   border: 2px solid var(--linie, #3B4651) !important;
-  box-shadow: none !important;
 }
 
 #admin-modal .btn-primary:hover,
@@ -106,7 +103,6 @@
   background: var(--flaeche, #FFFFFF) !important;
   color: var(--tinte, #1E2A36) !important;
   border: 2px solid var(--linie-leise, #6B6558) !important;
-  box-shadow: none !important;
 }
 
 #admin-modal .btn-secondary:hover,
@@ -122,7 +118,6 @@
   background: var(--flaeche, #FFFFFF) !important;
   color: var(--deutsch, #B5502B) !important;
   border: 2px solid var(--deutsch, #B5502B) !important;
-  box-shadow: none !important;
 }
 
 #admin-modal .btn-danger-outline:hover,
@@ -150,7 +145,6 @@
   font-family: var(--schrift-text, sans-serif);
   font-size: 1rem;
   color: var(--tinte, #1E2A36);
-  box-shadow: none !important;
   box-sizing: border-box;
 }
 

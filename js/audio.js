@@ -37,7 +37,7 @@ window.Schlaufuchs.Audio = (function () {
     window.speechSynthesis.cancel(); // Vorherige Wiedergabe abbrechen
 
     const cleanText = (text || '')
-      .replace(/[➕➖✖️·:=?_]/g, ' ')
+      .replace(/[➕➖✖️·:=?_]/g, ' ') /* check-regeln:ignore */
       .replace(/\s+/g, ' ')
       .trim();
 

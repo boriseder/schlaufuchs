@@ -24,14 +24,14 @@
 
 .booster-info p {
   font-size: 0.9rem;
-  color: #475569;
+  color: var(--tinte-leise);
   font-weight: 700;
 }
 
 .btn-booster {
   background: #eab308;
   border: 1.5px solid #ca8a04;
-  color: #1e293b;
+  color: var(--tinte);
   font-weight: 900;
 }
 
@@ -124,7 +124,7 @@
 .stickers-collection-title {
   font-size: 1.15rem;
   font-weight: 900;
-  color: #1e293b;
+  color: var(--tinte);
 }
 
 .stickers-collection-stats {
@@ -136,7 +136,7 @@
 .stickers-progress-bar-bg {
   width: 100%;
   height: 8px;
-  background: #e2e8f0;
+  background: var(--linie-leise);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -174,25 +174,23 @@
   align-items: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
+  background: var(--papier);
+  border: 2px dashed var(--linie-leise);
 }
 
 .sticker-album-card.owned {
   background: #ffffff;
   border: 2.5px solid #93c5fd;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
 }
 
 .sticker-album-card.owned:hover {
   transform: translateY(-3px);
   border-color: #3b82f6;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
 }
 
 .sticker-album-card.locked {
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
+  background: var(--papier);
+  border: 2px dashed var(--linie-leise);
 }
 
 .sticker-card-inner {
@@ -209,8 +207,8 @@
   left: 10px;
   font-size: 0.75rem;
   font-weight: 800;
-  color: #64748b;
-  background: #e2e8f0;
+  color: var(--tinte-leise);
+  background: var(--linie-leise);
   padding: 2px 7px;
   border-radius: 6px;
   letter-spacing: 0.5px;
@@ -230,14 +228,14 @@
 .sticker-album-card .sticker-name {
   font-weight: 900;
   font-size: 0.92rem;
-  color: #1e293b;
+  color: var(--tinte);
   margin-bottom: 2px;
 }
 
 .sticker-album-card .sticker-desc {
   font-size: 0.76rem;
   font-weight: 700;
-  color: #64748b;
+  color: var(--tinte-leise);
   line-height: 1.25;
 }
 
@@ -249,8 +247,8 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: #f1f5f9;
-  border: 1.5px dashed #cbd5e1;
+  background: var(--flaeche);
+  border: 1.5px dashed var(--linie-leise);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -259,13 +257,13 @@
 
 .sticker-silhouette-star {
   font-size: 1.8rem;
-  color: #cbd5e1;
+  color: var(--linie-leise);
 }
 
 .sticker-category-tag {
   font-size: 0.78rem;
   font-weight: 800;
-  color: #94a3b8;
+  color: var(--linie);
 }
 
 /* Trophäen-Vitrine */
@@ -276,13 +274,13 @@
 .trophies-title {
   font-size: 1.15rem;
   font-weight: 900;
-  color: #1e293b;
+  color: var(--tinte);
   margin-bottom: 2px;
 }
 
 .trophies-subtitle {
   font-size: 0.82rem;
-  color: #64748b;
+  color: var(--tinte-leise);
   font-weight: 600;
 }
 

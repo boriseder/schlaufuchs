@@ -31,7 +31,7 @@ window.Schlaufuchs.Signs = (function () {
     // 3. Vorrangstraße (StVO § 53 Z 25a): Gelbe Raute mit weißem Außenrand
     'vorrangstrasse': `
       <svg viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" aria-label="Vorrangstraße">
-        <polygon points="50,6 94,50 50,94 6,50" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" stroke-linejoin="round"/>
+        <polygon points="50,6 94,50 50,94 6,50" fill="#ffffff" stroke="#cccccc" stroke-width="1.5" stroke-linejoin="round"/>
         <polygon points="50,18 82,50 50,82 18,50" fill="#eab308" stroke="#ca8a04" stroke-width="1" stroke-linejoin="round"/>
       </svg>
     `,
@@ -39,9 +39,9 @@ window.Schlaufuchs.Signs = (function () {
     // 4. Ende der Vorrangstraße (StVO § 53 Z 25b): Gelbe Raute mit schwarzem Schrägbalken
     'ende-vorrangstrasse': `
       <svg viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" aria-label="Ende der Vorrangstraße">
-        <polygon points="50,6 94,50 50,94 6,50" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" stroke-linejoin="round"/>
+        <polygon points="50,6 94,50 50,94 6,50" fill="#ffffff" stroke="#cccccc" stroke-width="1.5" stroke-linejoin="round"/>
         <polygon points="50,18 82,50 50,82 18,50" fill="#eab308" stroke="#ca8a04" stroke-width="1" stroke-linejoin="round"/>
-        <line x1="74" y1="26" x2="26" y2="74" stroke="#0f172a" stroke-width="8" stroke-linecap="round"/>
+        <line x1="74" y1="26" x2="26" y2="74" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
       </svg>
     `,
 
@@ -118,12 +118,12 @@ window.Schlaufuchs.Signs = (function () {
         <polygon points="50,8 95,88 5,88" fill="#dc2626" stroke="#b91c1c" stroke-width="2" stroke-linejoin="round"/>
         <polygon points="50,26 82,82 18,82" fill="#ffffff" stroke-linejoin="round"/>
         <!-- Großes Kind links -->
-        <circle cx="41" cy="46" r="4" fill="#0f172a"/>
-        <path d="M 38 52 L 44 52 L 46 62 L 44 63 L 43 76 L 39 76 L 40 66 L 37 66 L 34 76 L 30 76 L 33 60 L 30 58 L 32 55 L 38 52 Z" fill="#0f172a"/>
+        <circle cx="41" cy="46" r="4" fill="#1a1a1a"/>
+        <path d="M 38 52 L 44 52 L 46 62 L 44 63 L 43 76 L 39 76 L 40 66 L 37 66 L 34 76 L 30 76 L 33 60 L 30 58 L 32 55 L 38 52 Z" fill="#1a1a1a"/>
         <!-- Kleines Kind mit Schultasche rechts -->
-        <circle cx="58" cy="53" r="3.5" fill="#0f172a"/>
-        <path d="M 55 58 L 61 58 L 62 66 L 60 67 L 59 76 L 56 76 L 57 68 L 54 68 L 52 76 L 49 76 L 51 64 L 46 60 L 48 57 L 55 58 Z" fill="#0f172a"/>
-        <rect x="61" y="60" width="4.5" height="6" rx="1" fill="#0f172a"/>
+        <circle cx="58" cy="53" r="3.5" fill="#1a1a1a"/>
+        <path d="M 55 58 L 61 58 L 62 66 L 60 67 L 59 76 L 56 76 L 57 68 L 54 68 L 52 76 L 49 76 L 51 64 L 46 60 L 48 57 L 55 58 Z" fill="#1a1a1a"/>
+        <rect x="61" y="60" width="4.5" height="6" rx="1" fill="#1a1a1a"/>
       </svg>
     `,
 
@@ -168,7 +168,7 @@ window.Schlaufuchs.Signs = (function () {
         <circle cx="87" cy="43" r="2.5" fill="#0284c7"/>
         <!-- Tempo 20 Kreis -->
         <circle cx="50" cy="74" r="18" fill="#ffffff" stroke="#dc2626" stroke-width="3.5"/>
-        <text x="50" y="75" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="18" fill="#0f172a" text-anchor="middle" dominant-baseline="central">20</text>
+        <text x="50" y="75" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="18" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">20</text>
       </svg>
     `,
 
@@ -215,8 +215,8 @@ window.Schlaufuchs.Signs = (function () {
       <svg viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" aria-label="Gefahrenstelle">
         <polygon points="50,8 95,88 5,88" fill="#dc2626" stroke="#b91c1c" stroke-width="2" stroke-linejoin="round"/>
         <polygon points="50,26 82,82 18,82" fill="#ffffff" stroke-linejoin="round"/>
-        <rect x="47.5" y="38" width="5" height="24" rx="2.5" fill="#0f172a"/>
-        <circle cx="50" cy="70" r="3.5" fill="#0f172a"/>
+        <rect x="47.5" y="38" width="5" height="24" rx="2.5" fill="#1a1a1a"/>
+        <circle cx="50" cy="70" r="3.5" fill="#1a1a1a"/>
       </svg>
     `,
 

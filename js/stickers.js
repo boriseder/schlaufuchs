@@ -12,31 +12,31 @@ window.Schlaufuchs.Stickers = (function () {
   const STARS_PER_PACK = 5;
 
   const ALL_STICKERS = [
-    { id: 's1', name: 'Fuchs Felix', icon: '🦊', desc: 'Der schlaue Waldfuchs', category: 'Tiere' },
-    { id: 's2', name: 'Bär Balduin', icon: '🐻', desc: 'Gemütlich und stark', category: 'Tiere' },
-    { id: 's3', name: 'Eule Olivia', icon: '🦉', desc: 'Weise und aufmerksam', category: 'Tiere' },
-    { id: 's4', name: 'Igel Ignaz', icon: '🦔', desc: 'Zusammenroll-König', category: 'Tiere' },
-    { id: 's5', name: 'Hase Hopsi', icon: '🐰', desc: 'Flink wie der Blitz', category: 'Tiere' },
-    { id: 's6', name: 'Rakete Apollo', icon: '🚀', desc: 'Auf zum Mond!', category: 'Weltall' },
-    { id: 's7', name: 'Planet Saturn', icon: '🪐', desc: 'Mit goldenem Ring', category: 'Weltall' },
-    { id: 's8', name: 'Sternschnuppe', icon: '⭐', desc: 'Wünsch dir was!', category: 'Weltall' },
-    { id: 's9', name: 'T-Rex Rexi', icon: '🦖', desc: 'Der Urzeit-König', category: 'Dinos' },
-    { id: 's10', name: 'Bronto Bruno', icon: '🦕', desc: 'Sanfter Riese', category: 'Dinos' },
-    { id: 's11', name: 'Feuervulkan', icon: '🌋', desc: 'Voller Energie', category: 'Dinos' },
-    { id: 's12', name: 'Sonnenpalme', icon: '🌴', desc: 'Traumhafte Ferien', category: 'Natur' },
-    { id: 's13', name: 'Schultasche', icon: '🎒', desc: 'Vollgepackt mit Wissen', category: 'Schule' },
-    { id: 's14', name: 'Goldmedaille', icon: '🥇', desc: 'Beste Leistung', category: 'Schule' },
-    { id: 's15', name: 'Zauberhut', icon: '🎩', desc: 'Magische Ideen', category: 'Magie' },
-    { id: 's16', name: 'Meister-Pokal', icon: '🏆', desc: 'Volksschul-Champion', category: 'Schule' }
+    { id: 's1', name: 'Fuchs Felix', icon: '🦊', desc: 'Der schlaue Waldfuchs', category: 'Tiere' }, /* check-regeln:ignore */
+    { id: 's2', name: 'Bär Balduin', icon: '🐻', desc: 'Gemütlich und stark', category: 'Tiere' }, /* check-regeln:ignore */
+    { id: 's3', name: 'Eule Olivia', icon: '🦉', desc: 'Weise und aufmerksam', category: 'Tiere' }, /* check-regeln:ignore */
+    { id: 's4', name: 'Igel Ignaz', icon: '🦔', desc: 'Zusammenroll-König', category: 'Tiere' }, /* check-regeln:ignore */
+    { id: 's5', name: 'Hase Hopsi', icon: '🐰', desc: 'Flink wie der Blitz', category: 'Tiere' }, /* check-regeln:ignore */
+    { id: 's6', name: 'Rakete Apollo', icon: '🚀', desc: 'Auf zum Mond!', category: 'Weltall' }, /* check-regeln:ignore */
+    { id: 's7', name: 'Planet Saturn', icon: '🪐', desc: 'Mit goldenem Ring', category: 'Weltall' }, /* check-regeln:ignore */
+    { id: 's8', name: 'Sternschnuppe', icon: '⭐', desc: 'Wünsch dir was!', category: 'Weltall' }, /* check-regeln:ignore */
+    { id: 's9', name: 'T-Rex Rexi', icon: '🦖', desc: 'Der Urzeit-König', category: 'Dinos' }, /* check-regeln:ignore */
+    { id: 's10', name: 'Bronto Bruno', icon: '🦕', desc: 'Sanfter Riese', category: 'Dinos' }, /* check-regeln:ignore */
+    { id: 's11', name: 'Feuervulkan', icon: '🌋', desc: 'Voller Energie', category: 'Dinos' }, /* check-regeln:ignore */
+    { id: 's12', name: 'Sonnenpalme', icon: '🌴', desc: 'Traumhafte Ferien', category: 'Natur' }, /* check-regeln:ignore */
+    { id: 's13', name: 'Schultasche', icon: '🎒', desc: 'Vollgepackt mit Wissen', category: 'Schule' }, /* check-regeln:ignore */
+    { id: 's14', name: 'Goldmedaille', icon: '🥇', desc: 'Beste Leistung', category: 'Schule' }, /* check-regeln:ignore */
+    { id: 's15', name: 'Zauberhut', icon: '🎩', desc: 'Magische Ideen', category: 'Magie' }, /* check-regeln:ignore */
+    { id: 's16', name: 'Meister-Pokal', icon: '🏆', desc: 'Volksschul-Champion', category: 'Schule' } /* check-regeln:ignore */
   ];
 
   const TROPHIES = [
-    { id: 't_first', name: 'Erster Schritt', icon: '🌟', desc: 'Die erste Aufgabe richtig gelöst', check: (p) => Object.values(p.stars || {}).some(s => s > 0) },
-    { id: 't_math', name: 'Rechen-Profi', icon: '🧮', desc: 'In 3 Mathe-Themen Sterne gesammelt', check: (p) => countTopicsWithPrefix(p, 'math') >= 3 },
-    { id: 't_german', name: 'Wort-Detektiv', icon: '📖', desc: 'In 2 Deutsch-Themen geübt', check: (p) => countTopicsWithPrefix(p, 'german') >= 2 },
-    { id: 't_traffic', name: 'Fahrrad-Meister', icon: '🚲', desc: 'Radfahrprüfung gemeistert', check: (p) => Boolean(p.stars && ((p.stars['general-bike-test'] || 0) >= 2 || (p.stars['general-traffic'] || 0) >= 2)) },
-    { id: 't_brain', name: 'Superhirn', icon: '🧠', desc: 'Memory oder Musterreihe gemeistert', check: (p) => Boolean(p.stars && ((p.stars['brain-memory'] || 0) >= 2 || (p.stars['brain-pattern'] || 0) >= 2)) },
-    { id: 't_star50', name: 'Sterne-König', icon: '👑', desc: 'Mindestens 15 Sterne gesammelt', check: (p) => Object.values(p.stars || {}).reduce((a, b) => a + (b || 0), 0) >= 15 }
+    { id: 't_first', name: 'Erster Schritt', icon: '🌟', desc: 'Die erste Aufgabe richtig gelöst', check: (p) => Object.values(p.stars || {}).some(s => s > 0) }, /* check-regeln:ignore */
+    { id: 't_math', name: 'Rechen-Profi', icon: '🧮', desc: 'In 3 Mathe-Themen Sterne gesammelt', check: (p) => countTopicsWithPrefix(p, 'math') >= 3 }, /* check-regeln:ignore */
+    { id: 't_german', name: 'Wort-Detektiv', icon: '📖', desc: 'In 2 Deutsch-Themen geübt', check: (p) => countTopicsWithPrefix(p, 'german') >= 2 }, /* check-regeln:ignore */
+    { id: 't_traffic', name: 'Fahrrad-Meister', icon: '🚲', desc: 'Radfahrprüfung gemeistert', check: (p) => Boolean(p.stars && ((p.stars['general-bike-test'] || 0) >= 2 || (p.stars['general-traffic'] || 0) >= 2)) }, /* check-regeln:ignore */
+    { id: 't_brain', name: 'Superhirn', icon: '🧠', desc: 'Memory oder Musterreihe gemeistert', check: (p) => Boolean(p.stars && ((p.stars['brain-memory'] || 0) >= 2 || (p.stars['brain-pattern'] || 0) >= 2)) }, /* check-regeln:ignore */
+    { id: 't_star50', name: 'Sterne-König', icon: '👑', desc: 'Mindestens 15 Sterne gesammelt', check: (p) => Object.values(p.stars || {}).reduce((a, b) => a + (b || 0), 0) >= 15 } /* check-regeln:ignore */
   ];
 
   function countTopicsWithPrefix(profile, prefix) {
@@ -84,8 +84,8 @@ window.Schlaufuchs.Stickers = (function () {
       const totalStars = Object.values(profile.stars || {}).reduce((a, b) => a + (b || 0), 0);
       const nextThreshold = (profile.openedPacks || 0) * STARS_PER_PACK;
       const needed = Math.max(1, nextThreshold - totalStars);
-      const msg = `Sammle noch ${needed} weitere(n) Stern(e) ⭐, um dein nächstes Sticker-Päckchen freizuschalten! (Aktuell: ${totalStars} ⭐)`;
-      if (Dialog) Dialog.alert(msg, { icon: '⭐', title: 'Sticker-Päckchen' });
+      const msg = `Sammle noch ${needed} weitere(n) Stern(e) Sterne, um dein nächstes Sticker-Päckchen freizuschalten! (Aktuell: ${totalStars} Sterne)`;
+      if (Dialog) Dialog.alert(msg, { icon: 'stern', title: 'Sticker-Päckchen' });
       else alert(msg);
       return null;
     }
@@ -154,8 +154,8 @@ window.Schlaufuchs.Stickers = (function () {
       if (availablePacks > 0) {
         boosterBtn.classList.add('has-packs');
         boosterBtn.disabled = false;
-        boosterBtn.innerHTML = `<span>🎁</span> <span>Päckchen öffnen (${availablePacks} bereit)</span>`;
-        if (boosterInfoH4) boosterInfoH4.textContent = '🎁 Sammelpäckchen bereit!';
+        boosterBtn.innerHTML = `<span></span> <span>Päckchen öffnen (${availablePacks} bereit)</span>`;
+        if (boosterInfoH4) boosterInfoH4.textContent = 'Sammelpäckchen bereit!';
         if (boosterInfoP) {
           boosterInfoP.innerHTML = `Du hast <strong>${availablePacks}</strong> ungeöffnete(s) Päckchen! Tippe auf den Knopf, um Sticker zu sammeln.`;
         }
@@ -164,10 +164,10 @@ window.Schlaufuchs.Stickers = (function () {
         boosterBtn.disabled = false;
         const nextThreshold = (profile.openedPacks || 0) * STARS_PER_PACK;
         const needed = Math.max(1, nextThreshold - totalStars);
-        boosterBtn.innerHTML = `<span>🎁</span> <span>Noch ${needed} ⭐ nötig</span>`;
-        if (boosterInfoH4) boosterInfoH4.textContent = '🎁 Sammelpäckchen';
+        boosterBtn.innerHTML = `<span></span> <span>Noch ${needed} Sterne nötig</span>`;
+        if (boosterInfoH4) boosterInfoH4.textContent = 'Sammelpäckchen';
         if (boosterInfoP) {
-          boosterInfoP.innerHTML = `Noch <strong>${needed} ⭐</strong> bis zu deinem nächsten Sticker-Päckchen! (Aktuell: <strong>${totalStars} ⭐</strong>)`;
+          boosterInfoP.innerHTML = `Noch <strong>${needed} Sterne</strong> bis zu deinem nächsten Sticker-Päckchen! (Aktuell: <strong>${totalStars} Sterne</strong>)`;
         }
       }
     }
@@ -222,7 +222,7 @@ window.Schlaufuchs.Stickers = (function () {
         const tCard = document.createElement('div');
         tCard.className = `trophy-badge ${achieved ? 'achieved' : 'locked'}`;
         tCard.innerHTML = `
-          <div class="trophy-icon">${achieved ? t.icon : '🔒'}</div>
+          <div class="trophy-icon">${achieved ? t.icon : '-'}</div>
           <div class="trophy-details">
             <strong class="trophy-name">${t.name}</strong>
             <div class="trophy-desc">${t.desc}</div>
@@ -244,25 +244,25 @@ window.Schlaufuchs.Stickers = (function () {
 
     if (!overlay) {
       const msg = isNew
-        ? `🎉 Juhuu! Du hast einen neuen Sticker gezogen:\n${sticker.icon} ${sticker.name} (${sticker.desc})`
-        : `⭐ Du hast gezogen:\n${sticker.icon} ${sticker.name} (${sticker.desc}) – Diesen Sticker hast du schon im Album!`;
-      if (Dialog) Dialog.alert(msg, { icon: '🎉', title: 'Sticker-Päckchen' });
+        ? `Juhuu! Du hast einen neuen Sticker gezogen:\n${sticker.icon} ${sticker.name} (${sticker.desc})`
+        : `Sterne Du hast gezogen:\n${sticker.icon} ${sticker.name} (${sticker.desc}) – Diesen Sticker hast du schon im Album!`;
+      if (Dialog) Dialog.alert(msg, { icon: '', title: 'Sticker-Päckchen' });
       else alert(msg);
       return;
     }
 
-    const titleText = isNew ? '🎁 Neues Sammelbild freigeschaltet!' : '⭐ Sticker-Päckchen geöffnet!';
+    const titleText = isNew ? 'Neues Sammelbild freigeschaltet!' : 'Sterne Sticker-Päckchen geöffnet!';
     const tagHtml = isNew
-      ? '<span style="display:inline-block; background:#22c55e; color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:999px; margin-bottom:8px;">🌟 NEU IM ALBUM 🌟</span>'
-      : '<span style="display:inline-block; background:#64748b; color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:999px; margin-bottom:8px;">Bereits in deiner Sammlung</span>';
+      ? '<span style="display:inline-block; background:var(--sach, #2e7d32); color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:var(--radius); margin-bottom:8px;">NEU IM ALBUM</span>'
+      : '<span style="display:inline-block; background:var(--tinte-leise, #6f675e); color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:var(--radius); margin-bottom:8px;">Bereits in deiner Sammlung</span>';
 
     overlay.innerHTML = `
       <div class="booster-reveal-card">
-        <div style="font-size: 1.15rem; font-weight: 900; color: #1e3a8a; margin-bottom: 8px;">${titleText}</div>
+        <div style="font-size: 1.15rem; font-weight: 900; color: var(--mathe); margin-bottom: 8px;">${titleText}</div>
         ${tagHtml}
         <div class="booster-sticker-anim" style="font-size: 4.5rem; margin: 12px 0;">${sticker.icon}</div>
-        <h3 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 4px;">${sticker.name}</h3>
-        <p style="color: #64748b; font-weight: 700; margin-bottom: 20px;">„${sticker.desc}“</p>
+        <h3 style="font-size: 1.5rem; color: var(--tinte); margin-bottom: 4px;">${sticker.name}</h3>
+        <p style="color: var(--tinte-leise); font-weight: 700; margin-bottom: 20px;">„${sticker.desc}“</p>
         <button id="btn-collect-sticker" class="btn btn-primary" style="padding: 12px 28px; font-size: 1.1rem; min-height: 48px;">
           In mein Album kleben ➔
         </button>
@@ -346,7 +346,7 @@ window.Schlaufuchs.Stickers = (function () {
 
     return {
       success: true,
-      msg: `🎉 Fantastisch! Du hast das Geheimwort „${inputWord.trim().toUpperCase()}“ richtig gelöst! Als Belohnung für deinen Fleiß hast du 1 neues Sammelpäckchen erhalten!`
+      msg: `Fantastisch! Du hast das Geheimwort „${inputWord.trim().toUpperCase()}“ richtig gelöst! Als Belohnung für deinen Fleiß hast du 1 neues Sammelpäckchen erhalten!`
     };
   }
 
