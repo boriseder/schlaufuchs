@@ -101,8 +101,100 @@ test('Print: Arbeitsblatt-Druck erzeugt Knick-Lösungsstreifen standardmäßig',
   Print.generateAndPrintWorksheet('Addition bis 100', '2. Klasse', mockTasks);
   assert.ok(createdElement.innerHTML.includes('print-knick-wrapper'), 'Knick-Wrapper muss im DOM sein');
   assert.ok(createdElement.innerHTML.includes('HIER VOR DEM LÖSEN NACH HINTEN KNICKEN'), 'Falt-Indikator muss vorhanden sein');
-  assert.ok(!createdElement.innerHTML.includes('Schlaufuchs-Geheimwort'), 'Kein unnötiger Geheimwort-Bereich auf dem Arbeitsblatt');
   assert.ok(createdElement.innerHTML.includes('LÖSUNGEN'), 'Lösungs-Header muss vorhanden sein');
   assert.ok(createdElement.innerHTML.includes('Wie war das Blatt für dich?'), 'Selbsteinschätzung muss vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('print-stamp-badge'), 'Sammel-Stempelfeld als Papiermotivator muss vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('print-knick-secret'), 'Schatzkisten-Geheimwort muss auf dem Knickstreifen sein');
+  assert.ok(!createdElement.innerHTML.includes('www.schlaufuchs.at'), 'Keine externe URL auf dem Arbeitsblatt (Regel 10)');
+  assert.ok(createdElement.innerHTML.includes('Blatt-Nr.'), 'Blatt-Nr. (Seed) muss in der Fußzeile stehen (Regel 15)');
   assert.ok(!createdElement.innerHTML.includes('PIRLS'), 'Kein Prüfungsjargon (PIRLS)');
 });
+
+test('Print: Arbeitsblatt enthält niemals externe URLs, Tausenderpunkte oder unzulässige Rechenzeichen', () => {
+  let createdElement = { id: 'print-area', innerHTML: '' };
+  sandbox.document.getElementById = () => createdElement;
+  sandbox.window.print = () => {};
+
+  const mathTasks = [
+    {
+      type: 'equation',
+      schulstufe: 4,
+      symbol: '·',
+      num1: '1 250',
+      num2: '4',
+      answer: 5000
+    }
+  ];
+
+  Print.generateAndPrintWorksheet('Malrechnen bis 10 000', '4. Klasse', mathTasks);
+  const html = createdElement.innerHTML;
+
+  assert.ok(!/(https?:\/\/|www\.)/i.test(html), 'Keine externen Webadressen im Druck (Regel 10)');
+  assert.ok(!/\d\.\d{3}/.test(html), 'Kein Tausenderpunkt im Druck (Regel 1)');
+  assert.ok(!/\d\s*[\*\/]\s*\d/.test(html) && !html.includes('➗') && !html.includes(' * '), 'Keine verbotenen Rechenzeichen in Rechnungen (Regel 2)');
+});
+
+test('Print: buildTwoPageHtml erzeugt separates Lösungsblatt auf Seite 2 ohne Namensfeld (Regel 15)', () => {
+  const tasks = [
+    { type: 'equation', schulstufe: 2, symbol: '+', num1: '15', num2: '7', answer: 22 }
+  ];
+  const html = Print.buildTwoPageHtml('Plus bis 30', '2. Klasse', tasks);
+
+  assert.ok(html.includes('print-twopage-sheet'), 'Muss Seite 1 enthalten');
+  assert.ok(html.includes('print-twopage-solution'), 'Muss separates Lösungsblatt auf Seite 2 enthalten');
+  assert.ok(html.includes('LÖSUNGEN (Selbstkontrolle)'), 'Muss Lösungs-Header auf Seite 2 tragen');
+  assert.ok(html.includes('Seite 1 von 2'), 'Fußzeile Seite 1 muss Seitenzahl ausweisen');
+  assert.ok(html.includes('Seite 2 von 2'), 'Fußzeile Seite 2 muss Seitenzahl ausweisen');
+});
+
+test('Print: printCertificate druckt Urkunde mit tatsächlichem Lernstand des Profils', () => {
+  let createdElement = null;
+  sandbox.document.getElementById = (id) => {
+    if (id === 'print-area') {
+      if (!createdElement) {
+        createdElement = { id: 'print-area', innerHTML: '' };
+      }
+      return createdElement;
+    }
+    return null;
+  };
+  sandbox.window.print = () => {};
+
+  const profile = {
+    name: 'Felix',
+    stars: { 'math-addition': 3, 'german-reading': 2 },
+    unlockedStickers: ['s1', 's2', 's3']
+  };
+
+  Print.printCertificate(profile);
+
+  assert.ok(createdElement.innerHTML.includes('SCHLAUFUCHS-URKUNDE'), 'Muss Urkunden-Header enthalten');
+  assert.ok(createdElement.innerHTML.includes('Felix'), 'Name des Kindes muss enthalten sein');
+  assert.ok(createdElement.innerHTML.includes('>5</div>'), '5 Sterne müssen ausgewiesen werden');
+  assert.ok(createdElement.innerHTML.includes('3 / 16</div>'), '3 / 16 Sticker müssen ausgewiesen werden');
+});
+
+test('Print: printCertificate(options.full = true) druckt vollständige Urkunde mit allen 84 Sternen und 16/16 Stickern für Fremdgeräte', () => {
+  let createdElement = null;
+  sandbox.document.getElementById = (id) => {
+    if (id === 'print-area') {
+      if (!createdElement) {
+        createdElement = { id: 'print-area', innerHTML: '' };
+      }
+      return createdElement;
+    }
+    return null;
+  };
+  sandbox.window.print = () => {};
+
+  // Fremdgerät-Modus: Kein volles Profil lokal vorhanden, Name wird flexibel übergeben
+  Print.printCertificate({ name: 'Maya' }, { full: true });
+
+  assert.ok(createdElement.innerHTML.includes('SCHLAUFUCHS-URKUNDE'), 'Muss Urkunden-Header enthalten');
+  assert.ok(createdElement.innerHTML.includes('Maya'), 'Wunschname muss auf der Urkunde stehen');
+  assert.ok(createdElement.innerHTML.includes('>84</div>'), 'Muss alle 84 Sterne (28 Themen x 3) aufweisen');
+  assert.ok(createdElement.innerHTML.includes('16 / 16</div>'), 'Muss alle 16/16 Sammel-Sticker aufweisen');
+  assert.ok(createdElement.innerHTML.includes('Champion'), 'Muss Champion-Badge enthalten');
+  assert.ok(createdElement.innerHTML.includes('Unterschrift (Lehrkraft / Eltern)'), 'Muss Unterschriftszeile enthalten');
+});
+

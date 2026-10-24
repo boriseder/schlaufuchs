@@ -81,7 +81,7 @@ window.Schlaufuchs.Print = (function () {
       return;
     }
 
-    printContainer.innerHTML = buildKnickHtml(topicTitle, effectiveGradeText, tasks);
+    printContainer.innerHTML = chooseWorksheetHtml(topicTitle, effectiveGradeText, tasks);
 
     setTimeout(() => {
       window.print();
@@ -112,7 +112,7 @@ window.Schlaufuchs.Print = (function () {
     if (isMemory) {
       printContainer.innerHTML = buildMemoryCraftSheetHtml(title, gradeLabel, tasks[0]);
     } else {
-      printContainer.innerHTML = buildKnickHtml(title, gradeLabel, tasks);
+      printContainer.innerHTML = chooseWorksheetHtml(title, gradeLabel, tasks);
     }
 
     setTimeout(() => window.print(), 250);
@@ -131,7 +131,7 @@ window.Schlaufuchs.Print = (function () {
         if (tasks.length === 1 && tasks[0].type === 'memory') {
           allPagesHtml += buildMemoryCraftSheetHtml(topic.title, gradeLabel, tasks[0]);
         } else {
-          allPagesHtml += buildKnickHtml(topic.title, gradeLabel, tasks);
+          allPagesHtml += chooseWorksheetHtml(topic.title, gradeLabel, tasks);
         }
       }
     });
@@ -162,7 +162,7 @@ window.Schlaufuchs.Print = (function () {
     if (tasks.length === 1 && tasks[0].type === 'memory') {
       html = buildMemoryCraftSheetHtml(title, gradeLabel, tasks[0]);
     } else {
-      html = buildKnickHtml(title, gradeLabel, tasks);
+      html = chooseWorksheetHtml(title, gradeLabel, tasks);
     }
 
     const previewModal = document.getElementById('worksheet-preview-modal');
@@ -198,6 +198,8 @@ window.Schlaufuchs.Print = (function () {
   // --- 1. KNICK-LÖSUNGS-ARBEITSBLATT (1 SEITE) ---
 
   function buildKnickHtml(topicTitle, gradeText, tasks) {
+    const seed = tasks.seed || (tasks[0] && tasks[0].seed) || Math.floor(Math.random() * 900000) + 100000;
+    const secretWord = tasks.secretWord || (tasks.map(t => t.secretLetter).filter(Boolean).join('')) || pickSecretWord(tasks.length);
     const tasksHtml = renderStructuredTasks(tasks);
     let solutionsHtml = '';
 
@@ -246,22 +248,32 @@ window.Schlaufuchs.Print = (function () {
               ${tasksHtml}
             </div>
 
-            <!-- DEZENTE SELBSTEINSCHÄTZUNG AM FUSS -->
+            <!-- DEZENTE SELBSTEINSCHÄTZUNG & STEMPELFELD AM FUSS -->
             <div class="print-sheet-footer">
-              <div class="print-self-eval-inline">
-                <span class="print-eval-prompt">Wie war das Blatt für dich?</span>
-                <span class="print-eval-check">◯ Leicht</span>
-                <span class="print-eval-check">◯ Ging so</span>
-                <span class="print-eval-check">◯ Knifflig</span>
+              <div class="print-footer-left">
+                <div class="print-self-eval-inline">
+                  <span class="print-eval-prompt">Wie war das Blatt für dich?</span>
+                  <span class="print-eval-check">◯ Leicht</span>
+                  <span class="print-eval-check">◯ Ging so</span>
+                  <span class="print-eval-check">◯ Knifflig</span>
+                </div>
+                <div class="print-footer-sub">
+                  <span>Blatt-Nr. ${seed} · Seite 1 von 1 · Schlaufuchs</span>
+                </div>
               </div>
-              <div class="print-footer-sub">
-                <span>Schlaufuchs – Kostenlose Lernplattform für die Volksschule</span>
-                <span>www.schlaufuchs.at</span>
+              <div class="print-stamp-badge" title="Stempel- oder Stickerfeld für deinen Ordner">
+                <span class="print-stamp-label">Sammel-Stempel:</span>
+                <div class="print-stamp-box">
+                  <svg viewBox="0 0 36 36" width="26" height="26">
+                    <circle cx="18" cy="18" r="15" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <path d="M18,9 L20.5,14.5 L26.5,15.2 L22,19.3 L23.2,25.2 L18,22.2 L12.8,25.2 L14,19.3 L9.5,15.2 L15.5,14.5 Z" fill="none" stroke="#000000" stroke-width="1.2"/>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- RECHTER TEIL: KNICK-LÖSUNGSSTREIFEN -->
+          <!-- RECHTER TEIL: KNICK-LÖSUNGSSTREIFEN (MONTESSORI-SELBSTKONTROLLE) -->
           <div class="print-knick-col">
             <div class="print-knick-top-banner">
               <span>-- - - - -</span> <span>HIER VOR DEM LÖSEN NACH HINTEN KNICKEN</span> <span>- - - - --</span>
@@ -276,6 +288,13 @@ window.Schlaufuchs.Print = (function () {
               <div class="print-knick-solutions-list">
                 ${solutionsHtml}
               </div>
+
+              <!-- SCHATZKISTEN-GEHEIMWORT FÜR DAS SAMMELALBUM -->
+              <div class="print-knick-secret">
+                <span class="print-knick-secret-title">SCHATZKISTE</span>
+                <span class="print-knick-secret-word">${secretWord}</span>
+                <span class="print-knick-secret-sub">Geheimwort im Sticker-Album eingeben für dein Sammelbild!</span>
+              </div>
             </div>
           </div>
         </div>
@@ -288,19 +307,129 @@ window.Schlaufuchs.Print = (function () {
   }
 
   function buildTwoPageHtml(topicTitle, gradeText, tasks) {
+    const seed = tasks.seed || (tasks[0] && tasks[0].seed) || Math.floor(Math.random() * 900000) + 100000;
+    const secretWord = tasks.secretWord || (tasks.map(t => t.secretLetter).filter(Boolean).join('')) || pickSecretWord(tasks.length);
+    const tasksHtml = renderStructuredTasks(tasks);
+
+    let solutionsHtml = '';
+    if (tasks.length === 1 && tasks[0].type === 'reading' && tasks[0].questions) {
+      tasks[0].questions.forEach((q, qIdx) => {
+        const solText = q.options[q.correctIndex];
+        solutionsHtml += `
+          <div class="print-knick-item">
+            <span class="print-knick-num">${qIdx + 1}.</span>
+            <span class="print-knick-val">${solText}</span>
+          </div>
+        `;
+      });
+    } else {
+      tasks.forEach((task, idx) => {
+        solutionsHtml += renderKnickSolutionRow(task, idx);
+      });
+    }
+
+    return `
+      <div class="print-page print-twopage-sheet">
+        <div class="print-sheet-header">
+          <div class="print-header-left">
+            <div class="print-brand-line">
+              <span class="print-brand-logo"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"></span>
+              <span class="print-brand-title">SCHLAUFUCHS ARBEITSBLATT</span>
+            </div>
+            <div class="print-brand-sub">${topicTitle} • ${gradeText}</div>
+          </div>
+          <div class="print-header-right">
+            <div class="print-meta-row">
+              <span class="print-meta-label">Name:</span>
+              <span class="print-meta-line"></span>
+            </div>
+            <div class="print-meta-row">
+              <span class="print-meta-label">Datum:</span>
+              <span class="print-meta-line"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="print-tasks-container print-tasks-fullwidth">
+          ${tasksHtml}
+        </div>
+
+        <div class="print-sheet-footer">
+          <div class="print-footer-left">
+            <div class="print-self-eval-inline">
+              <span class="print-eval-prompt">Wie war das Blatt für dich?</span>
+              <span class="print-eval-check">◯ Leicht</span>
+              <span class="print-eval-check">◯ Ging so</span>
+              <span class="print-eval-check">◯ Knifflig</span>
+            </div>
+            <div class="print-footer-sub">
+              <span>Blatt-Nr. ${seed} · Seite 1 von 2 · Schlaufuchs</span>
+            </div>
+          </div>
+          <div class="print-stamp-badge" title="Stempel- oder Stickerfeld für deinen Ordner">
+            <span class="print-stamp-label">Sammel-Stempel:</span>
+            <div class="print-stamp-box">
+              <svg viewBox="0 0 36 36" width="26" height="26">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <path d="M18,9 L20.5,14.5 L26.5,15.2 L22,19.3 L23.2,25.2 L18,22.2 L12.8,25.2 L14,19.3 L9.5,15.2 L15.5,14.5 Z" fill="none" stroke="#000000" stroke-width="1.2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEITE 2: SEPARATES LÖSUNGSBLATT (REGEL 15) -->
+      <div class="print-page print-twopage-solution print-page-break">
+        <div class="print-sheet-header">
+          <div class="print-header-left">
+            <div class="print-brand-line">
+              <span class="print-brand-logo"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"></span>
+              <span class="print-brand-title">LÖSUNGEN (Selbstkontrolle)</span>
+            </div>
+            <div class="print-brand-sub">${topicTitle} • ${gradeText}</div>
+          </div>
+        </div>
+
+        <div class="print-solution-sheet-body">
+          <div class="print-knick-solutions-list print-solutions-grid">
+            ${solutionsHtml}
+          </div>
+
+          <div class="print-knick-secret" style="margin-top: 24px; max-width: 320px;">
+            <span class="print-knick-secret-title">SCHATZKISTE</span>
+            <span class="print-knick-secret-word">${secretWord}</span>
+            <span class="print-knick-secret-sub">Geheimwort im Sticker-Album eingeben für dein Sammelbild!</span>
+          </div>
+        </div>
+
+        <div class="print-sheet-footer">
+          <div class="print-footer-sub">
+            <span>Blatt-Nr. ${seed} · Seite 2 von 2 · Schlaufuchs</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function chooseWorksheetHtml(topicTitle, gradeText, tasks) {
+    const State = window.Schlaufuchs.State;
+    const settings = (State && typeof State.getPrintSettings === 'function') ? State.getPrintSettings() : { solutionMode: 'knick' };
+    if (settings && settings.solutionMode === 'two-page') {
+      return buildTwoPageHtml(topicTitle, gradeText, tasks);
+    }
     return buildKnickHtml(topicTitle, gradeText, tasks);
   }
 
   function renderTwoPageWorksheet(container, topicTitle, gradeText, tasks) {
-    container.innerHTML = buildKnickHtml(topicTitle, gradeText, tasks);
+    container.innerHTML = buildTwoPageHtml(topicTitle, gradeText, tasks);
   }
 
   function buildWorksheetOnlyHtml(topicTitle, gradeText, tasks) {
-    return buildKnickHtml(topicTitle, gradeText, tasks);
+    return chooseWorksheetHtml(topicTitle, gradeText, tasks);
   }
 
   function renderWorksheetOnly(container, topicTitle, gradeText, tasks) {
-    container.innerHTML = buildKnickHtml(topicTitle, gradeText, tasks);
+    container.innerHTML = chooseWorksheetHtml(topicTitle, gradeText, tasks);
   }
 
   // --- 4. MEMORY-AUSSCHNEIDEBOGEN ---
@@ -310,11 +439,11 @@ window.Schlaufuchs.Print = (function () {
     let cardsHtml = '';
 
     cards.forEach((card) => {
+      const cardSvg = card.svg || card.content;
       cardsHtml += `
         <div class="print-memory-card">
           <div class="print-mem-corner"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 14px; height: 14px;"></div>
-          <div class="print-mem-icon">${card.content}</div>
-          <div class="print-mem-label">${card.subtitle || ''}</div>
+          ${cardSvg}
         </div>
       `;
     });
@@ -343,7 +472,6 @@ window.Schlaufuchs.Print = (function () {
 
         <div class="print-sheet-footer">
           <span>Schlaufuchs – Ausschneidebogen für Partner- und Freiarbeit</span>
-          <span>www.schlaufuchs.at</span>
         </div>
       </div>
     `;
@@ -892,9 +1020,13 @@ window.Schlaufuchs.Print = (function () {
 
   // --- OFFZIELLE SCHLAUFUCHS-URKUNDE DRUCKEN ---
 
-  function printCertificate(profile) {
-    if (!profile) {
-      profile = window.Schlaufuchs.State.getActiveProfile();
+  function printCertificate(profile, options = {}) {
+    if (typeof profile === 'string') {
+      profile = { name: profile };
+    } else if (!profile) {
+      profile = (window.Schlaufuchs.State && window.Schlaufuchs.State.getActiveProfile)
+        ? window.Schlaufuchs.State.getActiveProfile()
+        : { name: 'Schlaufuchs-Schüler' };
     }
 
     let printContainer = document.getElementById('print-area');
@@ -904,8 +1036,10 @@ window.Schlaufuchs.Print = (function () {
       document.body.appendChild(printContainer);
     }
 
-    const totalStars = Object.values(profile.stars || {}).reduce((a, b) => a + b, 0);
-    const unlockedStickersCount = (profile.unlockedStickers || ['s1']).length;
+    const isFull = Boolean(options.full || options.all);
+    const childName = (options.name || profile.name || 'Schlaufuchs-Schüler').trim();
+    const totalStars = isFull ? 84 : Object.values(profile.stars || {}).reduce((a, b) => a + b, 0);
+    const unlockedStickersCount = isFull ? 16 : (profile.unlockedStickers || ['s1']).length;
     const now = new Date();
     const dateStr = `${now.getDate()}. ${['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][now.getMonth()]} ${now.getFullYear()}`;
 
@@ -920,7 +1054,7 @@ window.Schlaufuchs.Print = (function () {
 
           <div class="cert-body">
             <div class="cert-text">Diese Ehrenurkunde wird mit großem Stolz verliehen an</div>
-            <div class="cert-name">${profile.name}</div>
+            <div class="cert-name">${childName}</div>
             <div class="cert-text">
               für besonderen Fleiß, schlaues Köpfchen und große Begeisterung beim Rechnen, Lesen, Schreiben und Entdecken auf der Volksschul-Lernplattform Schlaufuchs.
             </div>
@@ -971,6 +1105,9 @@ window.Schlaufuchs.Print = (function () {
     printBatchWorksheets: printBatchWorksheets,
     previewTopicWorksheet: previewTopicWorksheet,
     printCertificate: printCertificate,
-    pickSecretWord: pickSecretWord
+    pickSecretWord: pickSecretWord,
+    buildKnickHtml: buildKnickHtml,
+    buildTwoPageHtml: buildTwoPageHtml,
+    chooseWorksheetHtml: chooseWorksheetHtml
   };
 })();

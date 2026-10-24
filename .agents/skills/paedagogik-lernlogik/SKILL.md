@@ -26,6 +26,7 @@ Generatoren erzeugen reine Datenobjekte. Keine DOM-Logik im Generator.
   fach: "mathe",              // mathe | deutsch | sachunterricht | denken
   schulstufe: 2,              // 1–4
   lehrplanRef: "M-2-Operationen",
+  lehrplanStatus: "RIS",      // RIS | SCHULUEBLICH (zum Beispiel Landeshauptstädte)
   thema: "add-zr100-zehnerueberschreitung",
   frage: { text: "37 + 8", vorlesen: "Sieben und dreißig plus acht" },
   antwortTyp: "zahl",          // zahl | auswahl | zuordnung | wort | reihenfolge
@@ -33,12 +34,15 @@ Generatoren erzeugen reine Datenobjekte. Keine DOM-Logik im Generator.
   hilfen: [ /* siehe 3 */ ],
   anschauung: "hunderterfeld", // optional
   schwierigkeit: 2,            // 1 leicht – 3 schwer, innerhalb der Schulstufe
-  seed: 123456
+  seed: 123456,
+  druck: "ja",                // ja | angepasst | nur-digital (siehe arbeitsblatt-druck)
+  druckHinweis: ""            // Pflicht, wenn druck != "ja"
 }
 ```
 
 - Jeder Generator nimmt einen **Seed** (reproduzierbare Tests) und garantiert Varianz: keine zwei gleiche Aufgaben in einer Serie.
 - Validatoren sind getrennt von der Darstellung und liegen unter `js/validators/`.
+- Jeder Aufgabentyp hat eine Druckentscheidung (`druck`). Der Druck nutzt dieselben Generatoren und Seeds, siehe `arbeitsblatt-druck`. Fehlt die Entscheidung, schlägt der Test fehl.
 - Antwortformate: `Auswahl` hat 3 bis 4 sinnvolle Distraktoren, die **typische Denkfehler** abbilden (zum Beispiel Zehnerfehler), nicht Zufallszahlen.
 
 ## 3. Feedback und Hilfen
@@ -62,9 +66,9 @@ Generatoren erzeugen reine Datenobjekte. Keine DOM-Logik im Generator.
 
 Ziel: Freude an der Arbeit, kein Sammelzwang.
 
-- Sterne zeigen **Fortschritt im Üben**, nicht Perfektion. Beispiel: 1 Stern für das Beenden einer Serie, 2 Sterne für eine Serie mit wenigen Hilfen, 3 Sterne für eine sichere Wiederholung an einem anderen Tag. Der Erfolg ist **nicht** an 100 % gebunden.
+- Sterne zeigen **Fortschritt im Üben**, nicht Perfektion. Beispiel: 1 Stern für das Beenden einer Serie, 2 Sterne für eine Serie mit wenigen Hilfen, 3 Sterne für eine sichere Wiederholung an einem anderen Tag. Der Erfolg ist **nicht** an 100 % gebunden. Das ist bewusst **kein** Streak: Es gibt keine Erinnerung, keine Serie von Tagen und keinen Verlust, wenn ein Tag ausfällt. Diese Regel ist eine fachliche Entscheidung und wird bei Änderungen mit der Lehrkraft abgestimmt.
 - Konfetti (Canvas, kürzer als 2 Sekunden, ohne Blitzen, abschaltbar) und Lob erscheinen auf der Abschlusskarte für **jede** beendete Serie.
-- Sammelbilder (Album): Werden sie verwendet, dann nur als **sichtbarer Lohn für abgeschlossene Serien**, nie zufällig verlost und nie mit Verlust. Leere Plätze zeigen eine neutrale Umrisszeichnung ohne Text wie „gesperrt“.
+- Sammelbilder (Album): Werden sie verwendet, dann nur als **sichtbarer Lohn für abgeschlossene Serien**, nie zufällig verlost und nie mit Verlust. Das Wort „Booster“ und Päckchen, die ein zufälliges Bild enthalten, sind nicht erlaubt. Das Bild, das eine Serie freischaltet, steht vorher fest. Leere Plätze zeigen eine neutrale Umrisszeichnung ohne Text wie „gesperrt“.
   Das Album darf keinen Druck erzeugen. Keine Zähler wie „3 von 16 fehlen noch“ als Hauptanzeige.
 - **Verboten:** Ranglisten, Streaks, tägliche Erinnerungen, Verlustangst („Dein Fortschritt verfällt“), Vergleich zwischen Kindern, zufällige Belohnungen.
 - Die Anzeige in der Übersicht nutzt Sterne und gefüllte Symbole. **Keine Prozentangaben**: Prozent ist kein Stoff der Volksschule.
@@ -102,6 +106,12 @@ Regel: Das Material **erklärt** die Operation. Es darf nicht zum Weiterzählen 
 - Drei flache Registerkarten genügen: Kinder, Inhalte, Einstellungen.
 - Hinweis an die Lehrkraft: Die Plattform ersetzt weder Kompetenzraster noch iKM-PLUS noch Leistungsbeurteilung.
 
+## 9. Arbeitsblätter (Papier)
+
+- Ein Arbeitsblatt ist keine Serie. Die Regel „5 bis 8 Aufgaben“ gilt nur für die App. Mengen, Lösungsblatt, Hilfen auf Papier und Schwarzweiß-Tauglichkeit regelt `arbeitsblatt-druck`.
+- Auf Papier gibt es keine Sterne, Punkte, Prozente oder Noten. Selbstkontrolle über das Lösungsblatt, freundlich formuliert.
+- Die Hilfestufen werden als Hilfekasten am Blattende gedruckt, nicht sofort sichtbar neben der Aufgabe.
+
 ## Checkliste
 
 - [ ] Serie hat 5 bis 8 Aufgaben, genau eine Aufgabe im Fokus
@@ -111,3 +121,4 @@ Regel: Das Material **erklärt** die Operation. Es darf nicht zum Weiterzählen 
 - [ ] Anschauungsmittel als SVG und passend zur Schulstufe
 - [ ] Vorlesen in Schulstufe 1 und 2 sichtbar, Stummschalter wirkt überall
 - [ ] Seed und Varianz getestet
+- [ ] `druck` und `lehrplanStatus` am Aufgabenmodell gesetzt

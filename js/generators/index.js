@@ -88,8 +88,7 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
         return BrainGen ? BrainGen.buildSequenceTasks(opts) : [];
 
       default:
-        console.warn(`Thema ${topicId} nicht erkannt, lade Addition.`);
-        return MathGen ? MathGen.buildAdditionTasks(opts) : [];
+        throw new Error(`Unbekanntes Lehrplanthema: ${topicId}`);
     }
   }
 

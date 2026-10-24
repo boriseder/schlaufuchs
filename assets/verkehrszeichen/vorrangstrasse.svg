@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Vorrangstraße">
+  <title>Beginn der Vorrangstraße (StVO § 53 Z 25a)</title>
+  <!-- StVO § 53 Z 25a: Gelbe Raute mit weißem Außenrand -->
+  <polygon points="50,6 94,50 50,94 6,50" fill="#ffffff" stroke="#cccccc" stroke-width="1.5" stroke-linejoin="round"/>
+  <polygon points="50,18 82,50 50,82 18,50" fill="#E5A800" stroke="#C68A00" stroke-width="1" stroke-linejoin="round"/>
+</svg>

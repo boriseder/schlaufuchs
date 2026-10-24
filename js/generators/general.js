@@ -11,11 +11,23 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.General = (function () {
   'use strict';
 
-  // Zentrale Hilfsfunktion aus Core (Zufallsmischen)
-  const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
+  // Zentrale Hilfsfunktionen aus Core (Zufall, deterministischer Seed)
+  function getRng(opts) {
+    const seed = (opts && opts.seed !== undefined) ? opts.seed : undefined;
+    if (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.erstelleZufall) {
+      return window.Schlaufuchs.Random.erstelleZufall(seed);
+    }
+    return {
+      int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+      mischen: (arr) => [...arr].sort(() => Math.random() - 0.5),
+      wahl: (arr) => arr[Math.floor(Math.random() * arr.length)]
+    };
+  }
+  const defaultShuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
 
   // 1. JAHRESKREIS & KALENDER (1. – 2. Klasse, inkl. Jänner!)
   function buildCalendarTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const pool = [
       {
         question: 'Wie heißt der erste Monat des Kalenderjahres in Österreich?',
@@ -93,6 +105,7 @@ window.Schlaufuchs.Generators.General = (function () {
 
   // 2. HEIMISCHE TIERE IM WINTER (3. Klasse – Winterschlaf, Winterruhe, Winterstarre, Zugvögel)
   function buildWinterTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const pool = [
       {
         animal: 'Igel',
@@ -181,6 +194,7 @@ window.Schlaufuchs.Generators.General = (function () {
 
   // 3. ÖSTERREICH & HAUPTSTÄDTE (4. Klasse – 9 Bundesländer, Flüsse, Berge, Nachbarn)
   function buildAustriaTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const states = [
       { state: 'Wien', capital: 'Wien' },
       { state: 'Niederösterreich', capital: 'St. Pölten' },
@@ -277,6 +291,7 @@ window.Schlaufuchs.Generators.General = (function () {
 
   // 4. FREIWILLIGE RADFAHRPRÜFUNG (4. Klasse – STRENG MIT ECHTEN STVO-SVGs!)
   function buildTrafficTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const signs = window.Schlaufuchs.Signs;
 
     const pool = [
@@ -451,6 +466,7 @@ window.Schlaufuchs.Generators.General = (function () {
 
   // 5. SICHERER SCHULWEG & VERKEHR (1. bis 3. Klasse – BMBWF Lehrplan, StVO Österreich)
   function buildSchoolWalkTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const signs = window.Schlaufuchs.Signs;
 
     const pool = [
@@ -783,11 +799,27 @@ window.Schlaufuchs.Generators.General = (function () {
     });
   }
 
+  function stampGeneralTasks(tasks, isAustria = false) {
+    if (!Array.isArray(tasks)) return tasks;
+    return tasks.map(t => {
+      if (!t || typeof t !== 'object') return t;
+      if (!t.fach) t.fach = 'sachunterricht';
+      if (!t.lehrplanStatus) t.lehrplanStatus = isAustria ? 'SCHULUEBLICH' : 'RIS';
+      if (!t.druck) {
+        t.druck = 'ja';
+        t.druckHinweis = '';
+      } else if (t.druck !== 'ja' && !t.druckHinweis) {
+        t.druckHinweis = 'Didaktisch angepasste Druckausgabe.';
+      }
+      return t;
+    });
+  }
+
   return {
-    buildCalendarTasks: buildCalendarTasks,
-    buildWinterTasks: buildWinterTasks,
-    buildAustriaTasks: buildAustriaTasks,
-    buildTrafficTasks: buildTrafficTasks,
-    buildSchoolWalkTasks: buildSchoolWalkTasks,
+    buildCalendarTasks: (opts) => stampGeneralTasks(buildCalendarTasks(opts), false),
+    buildWinterTasks: (opts) => stampGeneralTasks(buildWinterTasks(opts), false),
+    buildAustriaTasks: (opts) => stampGeneralTasks(buildAustriaTasks(opts), true),
+    buildTrafficTasks: (opts) => stampGeneralTasks(buildTrafficTasks(opts), false),
+    buildSchoolWalkTasks: (opts) => stampGeneralTasks(buildSchoolWalkTasks(opts), false),
   };
 })();

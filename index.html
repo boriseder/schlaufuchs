@@ -9,8 +9,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Schlaufuchs">
-  <link rel="stylesheet" href="css/tokens.css?v=3.0">
-  <link rel="stylesheet" href="css/base.css?v=3.0">
+  <link rel="stylesheet" href="css/tokens.css?v=3.1">
+  <link rel="stylesheet" href="css/tokens-druck.css?v=3.1">
+  <link rel="stylesheet" href="css/base.css?v=3.1">
   <link rel="stylesheet" href="css/layout.css?v=3.0">
   <link rel="stylesheet" href="css/components.css?v=3.0">
   <link rel="stylesheet" href="css/exercises.css?v=3.0">
@@ -52,7 +53,7 @@
           </button>
           <button class="header-tool-btn" id="btn-open-stickers" title="Mein Sticker-Album & Trophäen" aria-label="Mein Sticker-Album und Trophäen öffnen">
             <img src="assets/icons/album.svg" class="header-icon-svg" alt="Sammelheft">
-            <span class="sticker-badge" id="booster-count-badge" style="display: none;">0</span>
+            <span class="sticker-badge" id="sticker-reward-badge" style="display: none;">0</span>
           </button>
         </div>
 
@@ -465,12 +466,12 @@
             <div class="topic-card" data-topic-id="general-austria" data-grade="4">
               <div class="topic-header">
                 <div class="topic-icon-badge">
-                  <img src="assets/icons/themen/general/oesterreich.svg" class="topic-icon-svg" alt="Österreich">
+                  <img src="assets/icons/themen/general/oesterreich.svg" class="topic-icon-svg" alt="Bundesländer & Hauptstädte">
                 </div>
                 <span class="grade-pill">4. Klasse</span>
               </div>
               <div class="topic-body">
-                <h3>Österreich: Bundesländer & Hauptstädte</h3>
+                <h3>Bundesländer & Hauptstädte</h3>
               </div>
               <div class="topic-footer">
                 <span class="topic-stars" id="stars-general-austria"></span>
@@ -822,11 +823,23 @@
                     Schlaufuchs-Geheimwort & Rätsel aktivieren (belohnt Offline-Fleiß in der Schatzkiste)
                   </label>
                 </div>
-                <div class="admin-action-row" style="margin-top: 14px;">
-                  <button type="button" id="btn-admin-print-cert" class="btn btn-secondary">
-                    <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
-                    <span>Schlaufuchs-Urkunde drucken</span>
-                  </button>
+                <div class="admin-cert-print-box" style="margin-top: 16px; padding-top: 16px; border-top: 1.5px solid var(--linie-leise);">
+                  <div class="admin-form-group">
+                    <label for="admin-cert-child-name" class="admin-form-label">Name des Kindes für die Ehrenurkunde:</label>
+                    <input type="text" id="admin-cert-child-name" class="task-input" placeholder="Name des Kindes (z. B. Nils)" style="max-width: 320px; margin-bottom: 10px;" autocomplete="off" />
+                  </div>
+                  <div class="admin-action-row" style="gap: 10px; flex-wrap: wrap;">
+                    <button type="button" id="btn-admin-print-full-cert" class="btn btn-primary">
+                      <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+                      <span>Vollständige Urkunde drucken (alle Sterne &amp; Stempel)</span>
+                    </button>
+                    <button type="button" id="btn-admin-print-cert" class="btn btn-secondary">
+                      <span>Mit aktuellem Gerätestand drucken</span>
+                    </button>
+                  </div>
+                  <p class="admin-form-hint" style="margin-top: 8px;">
+                    Ideal für Fremdgeräte &amp; Lehrer-PCs: Druckt die Ehrenurkunde mit allen 84 Sternen und allen 16 Sammel-Stickern für das Kind aus, ohne den Stoff auf diesem Gerät durchspielen zu müssen.
+                  </p>
                 </div>
               </section>
 
@@ -916,14 +929,11 @@
           </div>
         </div>
         <div class="modal-body">
-          <div class="stickers-booster-banner">
-            <div class="booster-info">
-              <h4>Sammelpäckchen</h4>
-              <p>Für je 5 gesammelte Sterne erhältst du ein Überraschungs-Päckchen!</p>
+          <div class="stickers-hero-banner">
+            <div class="sticker-hero-info">
+              <h4>Sammelalbum</h4>
+              <p>Löse Übungsserien am Bildschirm oder Arbeitsblätter auf Papier, um deine Sammelbilder freizuschalten.</p>
             </div>
-            <button id="btn-open-booster" class="btn btn-primary btn-booster">
-              <span>Päckchen öffnen</span>
-            </button>
           </div>
 
           <!-- SCHLAUFUCHS-SCHATZKISTE (OFFLINE-LERN-BELOHNUNG) -->
@@ -944,10 +954,7 @@
           <div class="stickers-collection-header">
             <div class="stickers-collection-title-wrap">
               <h4 id="stickers-collection-title" class="stickers-collection-title"><img src="assets/icons/album.svg" class="icon-inline-svg" alt=""> Mein Sammelheft</h4>
-              <span id="stickers-collection-stats" class="stickers-collection-stats">1 von 16 eingeklebt</span>
-            </div>
-            <div class="stickers-progress-bar-bg">
-              <div id="stickers-progress-bar-fill" class="stickers-progress-bar-fill" style="width: 6%;"></div>
+              <span id="stickers-collection-stats" class="stickers-collection-stats"></span>
             </div>
           </div>
           <div id="stickers-album-grid" class="stickers-album-grid"></div>
@@ -961,8 +968,8 @@
       </div>
     </div>
 
-    <!-- OVERLAY: BOOSTER REVEAL CELEBRATION -->
-    <div id="booster-reveal-overlay" class="modal-overlay booster-reveal-overlay"></div>
+    <!-- OVERLAY: SAMMELBILD CELEBRATION -->
+    <div id="sticker-reveal-overlay" class="modal-overlay sticker-reveal-overlay"></div>
   </div>
 
   <!-- A4-Druckbereich für Arbeitsblätter & Urkunden -->

@@ -2,7 +2,7 @@
 // SCHLAUFUCHS – sw.js (Service Worker für 100% Offline-Betrieb)
 // =============================================================
 
-const CACHE_NAME = 'schlaufuchs-v3.00';
+const CACHE_NAME = 'schlaufuchs-v3.11';
 
 const PRECACHE_ASSETS = [
   './',
@@ -11,6 +11,7 @@ const PRECACHE_ASSETS = [
   'dokumentation.html',
   'manifest.webmanifest',
   'css/tokens.css',
+  'css/tokens-druck.css',
   'css/base.css',
   'css/layout.css',
   'css/components.css',
@@ -96,6 +97,24 @@ const PRECACHE_ASSETS = [
   'assets/icons/themen/brain/memory.svg',
   'assets/icons/themen/brain/muster.svg',
   'assets/icons/themen/brain/reihenfolge.svg',
+  'assets/verkehrszeichen/achtung-kinder.svg',
+  'assets/verkehrszeichen/begegnungszone.svg',
+  'assets/verkehrszeichen/einbahnstrasse.svg',
+  'assets/verkehrszeichen/einfahrt-verboten.svg',
+  'assets/verkehrszeichen/ende-vorrangstrasse.svg',
+  'assets/verkehrszeichen/fahrverbot.svg',
+  'assets/verkehrszeichen/fussgaengerzone.svg',
+  'assets/verkehrszeichen/gefahrenstelle.svg',
+  'assets/verkehrszeichen/geh-radweg.svg',
+  'assets/verkehrszeichen/gehweg.svg',
+  'assets/verkehrszeichen/haltestelle.svg',
+  'assets/verkehrszeichen/kreisverkehr.svg',
+  'assets/verkehrszeichen/radweg.svg',
+  'assets/verkehrszeichen/schutzweg.svg',
+  'assets/verkehrszeichen/stop.svg',
+  'assets/verkehrszeichen/vorrang-geben.svg',
+  'assets/verkehrszeichen/vorrangstrasse.svg',
+  'assets/verkehrszeichen/wohnstrasse.svg',
   'fonts/PrimaeText-Regular.otf',
   'fonts/PrimaeText-Bold.otf',
   'fonts/PrimaeText-Semibold.otf',

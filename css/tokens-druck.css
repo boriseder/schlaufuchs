@@ -1,0 +1,46 @@
+/* tokens-druck.css
+   Ergänzt css/tokens.css um Maße für den A4-Druck.
+   Einzige Quelle für Druckmaße (Linien, Kästchen, Schriftgrößen). Einheiten: mm und pt.
+   Alle Lineatur- und Kästchenwerte sind [VERLAG] oder [OFFEN],
+   siehe .agents/skills/arbeitsblatt-druck/lineatur.md. Nicht raten, nur nach Rücksprache ändern. */
+
+:root {
+  /* Blatt */
+  --druck-rand-links: 20mm;   /* Lochrand für den Ordner */
+  --druck-rand-rechts: 12mm;
+  --druck-rand-oben: 12mm;
+  --druck-rand-unten: 14mm;
+
+  /* Linien (nur Linien und Text tragen Information, nie Flächenfarbe) */
+  --druck-linie-fein: 0.35mm;
+  --druck-linie: 0.6mm;
+  --druck-linie-stark: 0.9mm;
+  --druck-tinte: #000;
+  --druck-grau-band: #e6e6e6;  /* nur Zusatz, nie einzige Orientierung */
+
+  /* Schriftgrößen Aufgabentext (Mindestwert 14pt) */
+  --druck-schrift-s1: 18pt;
+  --druck-schrift-s2: 16pt;
+  --druck-schrift-s3: 14pt;
+  --druck-schrift-s4: 14pt;
+
+  /* Rechenkästchen je Schulstufe [VERLAG]; Stufe 2 [OFFEN] */
+  --druck-kaestchen-s1: 10mm;
+  --druck-kaestchen-s2: 7mm;
+  --druck-kaestchen-s3: 5mm;
+  --druck-kaestchen-s4: 5mm;
+
+  /* Schreibzeilen: Oberband / Mittelband / Unterband [VERLAG], Stufe 4 [OFFEN] */
+  --druck-zeile-s1-oben: 8mm;  --druck-zeile-s1-mitte: 8mm;  --druck-zeile-s1-unten: 8mm;
+  --druck-zeile-s2-oben: 6mm;  --druck-zeile-s2-mitte: 6mm;  --druck-zeile-s2-unten: 6mm;
+  --druck-zeile-s3-oben: 12mm; --druck-zeile-s3-mitte: 6mm;  --druck-zeile-s3-unten: 0mm;
+  --druck-zeile-s4-oben: 8mm;  --druck-zeile-s4-mitte: 4mm;  --druck-zeile-s4-unten: 0mm;
+
+  /* Antwortfeld Zahl (Anzahl Kästchen = Stellen der Lösung, Minimum 3) */
+  --druck-antwort-min-kaestchen: 3;
+}
+
+@page {
+  size: A4 portrait;
+  margin: var(--druck-rand-oben) var(--druck-rand-rechts) var(--druck-rand-unten) var(--druck-rand-links);
+}

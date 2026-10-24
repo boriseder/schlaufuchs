@@ -37,7 +37,7 @@ Schlaufuchs dient dem **selbstständigen Festigen und Wiederholen** von im Unter
 
 ## 2. Fachbereiche und Kompetenzbereiche
 
-Jede Aufgabe ist einer Schulstufe (1–4) und einer verbindlichen Lehrplan-Referenz zugeordnet.
+Jede Aufgabe ist einer Schulstufe (1–4) und einer Lehrplan-Referenz (`lehrplanRef`) zugeordnet. Das Feld `lehrplanStatus` unterscheidet, ob der Inhalt im Lehrplan steht (`RIS`) oder schulüblich ist (`SCHULUEBLICH`, zum Beispiel Landeshauptstädte).
 
 ### Mathematik
 * **Zahlenräume & Grundrechenarten:**
@@ -65,6 +65,9 @@ Jede Aufgabe ist einer Schulstufe (1–4) und einer verbindlichen Lehrplan-Refer
 * **Gemeinschaft & Raum:** Österreichische Bundesländer, Landeshauptstädte, Nachbarstaaten, Wappen und Geografie.
 * **Natur:** Angepasste Verhaltensweisen heimischer Tiere im Winter (Winterschlaf, Winterruhe, Winterstarre).
 
+### Arbeitsblätter (alle Fächer)
+Für jedes Aufgabengebiet gibt es, wo sinnvoll, ein druckbares A4-Arbeitsblatt für den Ordner mit passendem Lösungsblatt. Aufgaben, die nur am Bildschirm sinnvoll sind (zum Beispiel Memory), sind als `nur-digital` mit Begründung markiert. Die Blätter sind in Schwarzweiß vollständig lösbar und enthalten weder Noten noch Punkte noch Prozente.
+
 ### Gehirntraining & Konzentration
 * **Muster-Meister:** Logische Reihen und Fortsetzungen.
 * **Zahlenfolgen:** Geordnete Zahlenreihen vorwärts und rückwärts.
@@ -85,9 +88,10 @@ Browser
  │    ├── layout.css              (App-Shell, Header, Themenauswahl-Grid, Fokus-Modus)
  │    ├── components.css          (Standard-Aufgabenkarten, Numpad, Scaffolding, Buttons)
  │    ├── exercises.css           (Didaktische Module: Mathe, Deutsch, Sachunterricht, Uhren)
- │    ├── stickers.css            (Panini-Sammelalbum, Booster & Trophäen-Vitrine)
+ │    ├── stickers.css            (Sammelalbum und Trophäen-Vitrine, Bilder werden nicht zufällig vergeben)
  │    ├── admin.css               (Eltern- & Lehrkraft-Bereich, PIN-Schutz, Diagnostik)
  │    └── print.css               (A4-Arbeitsblätter-Engine, Knickstreifen, Urkunden)
+ │    ├── tokens-druck.css        (Druck-Tokens: Lochrand, Linien, Lineatur, Kästchen, Schriftgrößen in mm und pt)
  ├── js/
  │    ├── core/                   (Zentrale Dienste: format.js, storage.js, random.js, texte.js)
  │    ├── generators/             (Reine, zustandslose Generatoren nach Lehrplan)
@@ -109,7 +113,7 @@ Browser
 
 ### Technische Eckdaten
 
-* **Laufzeit-Stack:** Reines ECMAScript 2022+ (ES Modules / IIFE-Namensraum `window.Schlaufuchs`).
+* **Laufzeit-Stack:** Reines ECMAScript 2022+ im IIFE-Namensraum `window.Schlaufuchs`, Skripte als klassische `<script>`-Tags in fester Reihenfolge. Ob später ES-Module mit Build-Schritt eingeführt werden, ist offen (siehe Skill `technik-offline-touch`).
 * **Offline-Engine:** Service Worker (`sw.js`) fängt alle internen Anfragen ab und bedient sie über die Cache Storage API (Cache-First). Nach einmaligem Aufruf ist die App 100 % autark offline nutzbar.
 * **Touch-Optimierung:** 
   * Alle interaktiven Schaltflächen haben ein Mindest-Touch-Target von $56 \times 56\,\text{px}$ (`--ziel-min: 56px`) mit mindestens $12\,\text{px}$ Abstand.
@@ -118,7 +122,7 @@ Browser
 * **Audio-Architektur:** 
   * *Klangeffekte:* Synthetisiert über die native Web Audio API (Oszillatoren mit Sinus-/Dreieckswellen, harmonische Dur-Akkorde) – keine externen Audio-Dateien notwendig.
   * *Vorlesefunktion:* Web Speech API (`SpeechSynthesisUtterance`) mit Priorisierung österreichischer Sprachprofile (`de-AT`).
-* **Druck-Zentrum:** Dedizierte `@media print`-Stylesheets zur Erzeugung sauberer, schwarz-weißer Arbeitsblätter und Urkunden direkt aus dem Browser ohne Druckertreiber-Plugins.
+* **Druck-Zentrum:** Dedizierte `@media print`-Stylesheets zur Erzeugung sauberer, schwarz-weißer A4-Arbeitsblätter (zum Abheften im Ordner) samt Lösungsblatt und Urkunden direkt aus dem Browser. Der Druck ist ein weiterer Renderer **desselben** Aufgabenmodells: gleiche Generatoren, gleiche Seeds, keine getrennten Druck-Generatoren. Jede Aufgabe trägt eine Druckentscheidung (`druck: ja | angepasst | nur-digital`). Maße für Lineatur und Kästchen stehen in `css/tokens-druck.css` und sind Schulpraxis, keine amtliche Norm (siehe Skill `arbeitsblatt-druck`).
 
 ---
 
@@ -127,9 +131,9 @@ Browser
 Schlaufuchs folgt einem strikten **Privacy-by-Design**- und **Zero-Data-Exfiltration**-Ansatz:
 
 * **Keine externen Netzwerk-Requests:** Keine Einbindung von CDNs, Google Fonts, Tracking-Pixeln, Analytics-Diensten oder Werbenetzwerken.
-* **Keine Klartext-Identitäten:** Kinderprofile bestehen ausschließlich aus einem Vornamen/Spitznamen und einem Avatar.
+* **Keine Klartext-Identitäten:** Kinderprofile bestehen ausschließlich aus einem frei gewählten Spitznamen und einem Avatar. Das Eingabefeld weist darauf hin, keinen echten Namen zu verwenden. Auf Arbeitsblättern schreibt das Kind seinen Namen selbst auf eine Schreiblinie.
 * **Lokale Datenspeicherung:** Sämtliche Lernstände, Sterne und Profile verbleiben im Browser-`localStorage` des Endgeräts.
-* **Datensicherung:** Eltern und Lehrkräfte können den Lernstand über das Diagnose-Panel als verschlüsselte/lesbare JSON-Datei exportieren und auf andere Geräte übertragen. Es werden keine Server-Datenbanken betrieben.
+* **Datensicherung:** Eltern und Lehrkräfte können den Lernstand über das Diagnose-Panel als lesbare (nicht verschlüsselte) JSON-Datei exportieren und auf andere Geräte übertragen. Es werden keine Server-Datenbanken betrieben.
 
 ---
 
@@ -141,9 +145,11 @@ Schlaufuchs/
 │   ├── icons/                   # Monochrome 3px-Vektor-Icons (SVG)
 │   └── verkehrszeichen/         # Vektorgrafiken offizieller StVO-Schilder
 ├── css/
-│   └── tokens.css               # Verbindliche Design-Tokens (Farben, Typo, Maße)
+│   ├── tokens.css               # Verbindliche Design-Tokens (Farben, Typo, Maße)
+│   └── tokens-druck.css         # Druck-Tokens (Lochrand, Lineatur, Kästchen, Schriftgrößen)
 ├── docs/
 │   ├── lehrplan/                # BMBWF-Lehrplandokumente
+│   ├── offene-lehrplanfragen.md # Sammelort aller TODO-LEHRPLAN-Fragen
 │   ├── technical.md             # Ausführliche technische Architekturdokumentation
 │   └── server-architektur-plan.md # Strategische Analyse zu Server-/Sync-Erweiterungen
 ├── fonts/                       # Lokale Schulschriften (Primae, PrimaeText)
@@ -164,6 +170,7 @@ Schlaufuchs/
 ├── tests/                       # Unit-Tests für Generatoren, Validatoren, Storage
 │   ├── format.test.mjs
 │   ├── generators.test.mjs
+│   ├── print.test.mjs           # Druck: Vollständigkeit, Lösungsblatt, Zahlenformat, Layout
 │   ├── storage.test.mjs
 │   └── validators.test.mjs
 ├── AGENTS.md                    # Verbindliche Coding- & Lehrplan-Vorgaben
@@ -197,7 +204,7 @@ caddy file-server --listen :8080
 npx serve -l 8080 .
 ```
 
-*Hinweis:* Das direkte Öffnen von `index.html` über das `file://`-Protokoll wird aufgrund der Sicherheitsrichtlinien für Service Worker und Web Worker nicht empfohlen; ein lokaler HTTP-Server ist erforderlich.
+*Hinweis:* Das direkte Öffnen von `index.html` über das `file://`-Protokoll wird nicht empfohlen: Der Service Worker funktioniert dort nicht und auf dem iPad ist es praktisch nicht nutzbar. Für Entwicklung genügt ein lokaler HTTP-Server. Wie Lehrkräfte Arbeitsblätter ohne Server erzeugen können, hängt von der offenen Auslieferungsentscheidung ab (siehe `docs/offene-lehrplanfragen.md`).
 
 ---
 
@@ -219,6 +226,7 @@ Geprüft werden u. a.:
 * Mathematische Rechenzeichen ($+$, $-$, $\cdot$, $:$).
 * Resilienz der Speicher-Engine (`storage.js`) bei vollem oder deaktiviertem LocalStorage.
 * Rechen-, Wort- und Multiple-Choice-Validatoren.
+* Druck: Antwortfeld und Lösungsblatt zu jeder druckbaren Aufgabe, gleicher Seed ergibt gleiches Blatt, Zahlenformat und Rechenzeichen im gerenderten HTML.
 
 ### 2. Prüfung der verbindlichen Coding-Regeln
 Ein projekteigener AST/Regex-Linter prüft die Codebasis gegen die Vorgaben aus `AGENTS.md`:
@@ -232,7 +240,8 @@ Der Linter erzwingt:
 * Kein Tausenderpunkt bei Zahlen.
 * Österreichische Rechtschreibung (z. B. Jänner statt Januar).
 * Einhaltung der Design-Tokens aus `css/tokens.css` (Ausschluss von Tailwind-Standardfarben und Schatten).
-* Vollständigkeit von `schulstufe` und `lehrplanRef` in Aufgabengeneratoren.
+* Vollständigkeit von `schulstufe`, `lehrplanRef`, `lehrplanStatus` und `druck` in Aufgabengeneratoren.
+* Druck-Dateien (`js/print.js`, `css/print.css`) unterliegen denselben Regeln wie die App (Farben nur aus Tokens, keine Schatten, kein Tausenderpunkt).
 
 ---
 

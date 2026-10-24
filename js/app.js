@@ -149,7 +149,9 @@ window.Schlaufuchs = window.Schlaufuchs || {};
         ? '1. – 4. Klasse'
         : sortedGrades.map(g => `${g}. Klasse`).join(', ');
       const esc = (window.Schlaufuchs && window.Schlaufuchs.escapeHtml) || (s => s);
-      const safeAvatar = esc(p.avatar);
+      const safeAvatar = (p.avatar === 'fuchs' || p.avatar === '\u{1F98A}')
+        ? '<img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width:40px;height:40px;">'
+        : esc(p.avatar);
       const safeName = esc(p.name);
 
       card.innerHTML = `
@@ -182,7 +184,13 @@ window.Schlaufuchs = window.Schlaufuchs || {};
     const starIcon = document.querySelector('.header-child-pill .star-icon');
     const divider = document.querySelector('.header-child-pill .pill-divider');
 
-    if (avatarEl) avatarEl.textContent = active.avatar;
+    if (avatarEl) {
+      if (active.avatar === 'fuchs' || active.avatar === '\u{1F98A}') {
+        avatarEl.innerHTML = '<img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width:24px;height:24px;">';
+      } else {
+        avatarEl.textContent = active.avatar;
+      }
+    }
     if (nameEl) nameEl.textContent = active.name;
     if (starsEl) {
       starsEl.textContent = State.getTotalStars();

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Einfahrt verboten">
+  <title>Einfahrt verboten (StVO § 52 Z 2)</title>
+  <!-- StVO § 52 Z 2: Roter Kreis mit waagrechtem weißem Balken -->
+  <circle cx="50" cy="50" r="45" fill="#C82828" stroke="#A31F1F" stroke-width="2"/>
+  <rect x="18" y="42" width="64" height="16" fill="#ffffff" rx="2"/>
+</svg>

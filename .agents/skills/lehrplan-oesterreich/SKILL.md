@@ -31,6 +31,7 @@ Jede Zuordnung in den Referenzdateien trägt einen Status:
 - `mathematik.md`: Zahlenräume, Operationen, Größen, Geometrie, Daten je Schulstufe
 - `deutsch.md`: Kompetenzbereiche, Fachbegriffe, österreichisches Deutsch
 - `sachunterricht-verkehr.md`: Sachunterricht, Österreich-Wissen, Radfahren, Verkehrszeichen-SVG
+- Für Maße auf Papier (Lineatur, Kästchen) siehe `../arbeitsblatt-druck/lineatur.md`. Diese Maße stehen **nicht** im Lehrplan.
 
 ## Zahlenschreibweise (verbindlich)
 
@@ -39,6 +40,7 @@ Jede Zuordnung in den Referenzdateien trägt einen Status:
 - Zeichen: U+202F (schmales geschütztes Leerzeichen). Fehlt es in `Primae`, ist U+00A0 der Fallback.
   Prüfe die Glyphen vor dem Einbau (siehe `technik-offline-touch`).
 - Dezimalzahlen mit **Komma**: `2,50 €`. Geld immer mit zwei Nachkommastellen, wenn Cent vorkommen.
+- Die Schreibweise gilt auch auf Arbeitsblättern (Druck).
 - Eine zentrale Funktion `formatZahl(n)` erledigt das. Direkte `toLocaleString`-Aufrufe sind verboten, weil das Ergebnis je Browser abweicht.
 - Eingaben der Kinder werden **tolerant** gelesen: `1000`, `1 000` und `1\u202F000` sind gleich richtig. Ein eingetippter Tausenderpunkt (`1.000`) wird als `1000` gelesen und nicht als Fehler gewertet. Angezeigt wird danach immer die richtige Schreibweise.
 - Rechenzeichen: `+`, `−` (Minuszeichen U+2212), `·` (Malpunkt), `:` (Doppelpunkt). Nur in der Bezeichnung „kleines 1×1“ ist `×` erlaubt.
@@ -55,7 +57,8 @@ Jede Zuordnung in den Referenzdateien trägt einen Status:
 
 ## Checkliste für Inhalte
 
-- [ ] `schulstufe` und `lehrplanRef` gesetzt, Status in der Referenzdatei geprüft
+- [ ] `schulstufe`, `lehrplanRef` und `lehrplanStatus` (`RIS` oder `SCHULUEBLICH`) gesetzt, Status in der Referenzdatei geprüft
+- [ ] Offene Fragen als `TODO-LEHRPLAN` im Code und in `docs/offene-lehrplanfragen.md`
 - [ ] Zahlen über `formatZahl()`, Rechenzeichen korrekt
 - [ ] Fachbegriffe wie im Unterricht (Doppelbezeichnungen siehe `deutsch.md`)
 - [ ] Österreichisches Deutsch (Jänner, Sessel, Klasse, Schultasche)

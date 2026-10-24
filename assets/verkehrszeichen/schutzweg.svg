@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Schutzweg (Zebrastreifen)">
+  <title>Kennzeichnung eines Schutzweges (StVO § 53 Z 2a)</title>
+  <!-- StVO § 53 Z 2a: Blaues Quadrat, weißes Dreieck, Längsstreifen und dynamisch schreitende Person -->
+  <rect x="5" y="5" width="90" height="90" rx="8" fill="#0066B3" stroke="#ffffff" stroke-width="2"/>
+  <polygon points="50,12 12,86 88,86" fill="#ffffff"/>
+  <!-- Zebrastreifen Längsbalken auf der Straße -->
+  <g fill="#0066B3">
+    <polygon points="26,84 31,84 33,70 29,70"/>
+    <polygon points="36,84 41,84 42,70 38,70"/>
+    <polygon points="47,84 52,84 52,70 48,70"/>
+    <polygon points="58,84 63,84 62,70 58,70"/>
+    <polygon points="69,84 74,84 71,70 67,70"/>
+  </g>
+  <!-- Schreitender Fußgänger nach links -->
+  <circle cx="49" cy="30" r="4.5" fill="#0066B3"/>
+  <path d="M 46 37 L 53 36 L 56 46 L 52 48 L 52 55 L 61 70 L 56 71 L 49 58 L 47 58 L 41 71 L 36 69 L 44 51 L 41 50 L 37 56 L 33 54 L 38 43 L 46 37 Z" fill="#0066B3"/>
+  <path d="M 48 39 L 55 45 L 58 43 L 51 38 Z" fill="#0066B3"/>
+</svg>

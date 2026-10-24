@@ -15,7 +15,7 @@ window.Schlaufuchs.State = (function () {
     SETTINGS: 'schlaufuchs_settings_v2'
   };
 
-  const AVATARS = ['🦊', '🐰', '🐻', '🦔', '🦉', '🦁', '🐼', '🐨', '🦄', '🐯']; /* check-regeln:ignore */
+  const AVATARS = ['fuchs', 'hase', 'baer', 'igel', 'eule', 'loewe', 'panda', 'koala', 'tiger', 'biber'];
 
   // Standard-Einstellungen
   const DEFAULT_SETTINGS = {
@@ -30,7 +30,7 @@ window.Schlaufuchs.State = (function () {
   const DEFAULT_PROFILE = {
     id: 'profile_default',
     name: 'Nils',
-    avatar: '🦊', /* check-regeln:ignore */
+    avatar: 'fuchs',
     grades: [1, 2, 3], // Am Kind hängende freigeschaltete Schulstufen (1., 2., 3. Klasse)
     stars: {}, // topicId -> number (0..3)
     unlockedStickers: ['s1'], // Fuchs Felix als Starter-Sticker im Album

@@ -10,6 +10,11 @@ window.Schlaufuchs.Confetti = (function () {
   'use strict';
 
   function triggerConfetti() {
+    // Harte Regel 8: prefers-reduced-motion beachten (Konfetti dann ganz weglassen)
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const canvas = document.getElementById('confetti-canvas');
     if (!canvas) return;
 
@@ -18,13 +23,14 @@ window.Schlaufuchs.Confetti = (function () {
     canvas.height = window.innerHeight;
 
     const pieces = [];
-    const colors = ['#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4'];
+    // Farben ausschließlich aus den Design-Tokens (Fuchs, Mathe, Sachunterricht, Denken, Richtig, Deutsch)
+    const colors = ['#D4621A', '#2255A4', '#1B8A44', '#7E4E96', '#E5A800', '#C24C2C'];
 
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 90; i++) {
       pieces.push({
         x: Math.random() * canvas.width,
         y: Math.random() * -canvas.height,
-        size: Math.random() * 9 + 6,
+        size: Math.random() * 8 + 6,
         color: colors[Math.floor(Math.random() * colors.length)],
         speed: Math.random() * 4 + 3,
         angle: Math.random() * 360,
@@ -50,8 +56,8 @@ window.Schlaufuchs.Confetti = (function () {
         ctx.restore();
       });
 
-      // Nach 3,5 Sekunden stoppen
-      if (Date.now() - startTime < 3500) {
+      // Nach 1,5 Sekunden stoppen (< 2 Sekunden, Regel 8 / kinder-ui-design)
+      if (Date.now() - startTime < 1500) {
         animationFrameId = requestAnimationFrame(render);
       } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

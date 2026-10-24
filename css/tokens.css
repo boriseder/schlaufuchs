@@ -55,7 +55,9 @@
 
   /* Rückmeldung: bewusst weder Rot noch Grün */
   --richtig:       #F2C14E;   /* Sonnengelb, dunkler Text darauf: 8,7 : 1 */
+  --richtig-hell:  #FDF6E2;   /* Zartgelb für Flächen */
   --nochmal:       #E6EAF0;   /* ruhiges Grau-Blau, 12 : 1 */
+  --nochmal-hell:  #F4F6F9;   /* Kiesel für Flächen */
   --fokus:         #1E2A36;   /* Fokus-Ring */
 
   /* Abstände (8-px-Raster) */

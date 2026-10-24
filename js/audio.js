@@ -37,7 +37,7 @@ window.Schlaufuchs.Audio = (function () {
     window.speechSynthesis.cancel(); // Vorherige Wiedergabe abbrechen
 
     const cleanText = (text || '')
-      .replace(/[➕➖✖️·:=?_]/g, ' ') /* check-regeln:ignore */
+      .replace(/[+\u2212\u2795\u2796\u2716\u00B7:=?_]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
 
@@ -166,13 +166,13 @@ window.Schlaufuchs.Audio = (function () {
     });
   }
 
-  function playBoosterOpen() {
+  function playStickerReward() {
     if (isMuted) return;
     const ctx = getAudioContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
-    // Glitzer-Effekt für Sticker-Päckchen
+    // Ruhiger, freundlicher Glitzer-Klang für Sammelbilder
     for (let i = 0; i < 7; i++) {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -211,7 +211,8 @@ window.Schlaufuchs.Audio = (function () {
     playSuccess: playSuccess,
     playPlop: playPlop,
     playFanfare: playFanfare,
-    playBoosterOpen: playBoosterOpen,
+    playStickerReward: playStickerReward,
+    playBoosterOpen: playStickerReward,
     setMuted: setMuted,
     toggleMute: toggleMute,
     isMuted: () => isMuted

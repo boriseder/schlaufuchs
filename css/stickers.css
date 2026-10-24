@@ -1,13 +1,13 @@
 /* Schlaufuchs – Sammelalbum & Gamification */
 /* =========================================
-   STICKER-ALBUM & BOOSTER-BANNER
+   STICKER-ALBUM & HERO-BANNER
    ========================================= */
 
-.stickers-booster-banner {
-  background: #eff6ff;
-  border: 2px solid #bfdbfe;
-  border-radius: 16px;
-  padding: 16px 20px;
+.stickers-hero-banner {
+  background: var(--mathe-hell);
+  border: var(--rahmen);
+  border-radius: var(--radius);
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,30 +15,24 @@
   margin-bottom: 16px;
 }
 
-.booster-info h4 {
+.sticker-hero-info h4 {
   font-size: 1.15rem;
   font-weight: 900;
-  color: #1e3a8a;
+  color: var(--mathe);
   margin-bottom: 4px;
 }
 
-.booster-info p {
+.sticker-hero-info p {
   font-size: 0.9rem;
-  color: var(--tinte-leise);
-  font-weight: 700;
-}
-
-.btn-booster {
-  background: #eab308;
-  border: 1.5px solid #ca8a04;
   color: var(--tinte);
-  font-weight: 900;
+  font-weight: 700;
+  margin: 0;
 }
 
 .stickers-treasure-banner {
-  background: var(--flaeche, #F3EEDF);
-  border: var(--rahmen, 2px solid #1E252B);
-  border-radius: var(--radius, 8px);
+  background: var(--flaeche);
+  border: var(--rahmen);
+  border-radius: var(--radius);
   padding: var(--abstand-3, 16px);
   display: flex;
   align-items: center;
@@ -52,14 +46,14 @@
   font-family: var(--schrift-text, inherit);
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--tinte, #1E252B);
+  color: var(--tinte);
   margin-bottom: var(--abstand-1, 4px);
 }
 
 .treasure-info p {
   font-family: var(--schrift-text, inherit);
   font-size: 0.9rem;
-  color: var(--tinte-leise, #4E5860);
+  color: var(--tinte-leise);
   margin: 0;
 }
 
@@ -87,7 +81,7 @@
 
 .treasure-feedback-msg {
   padding: var(--abstand-2, 8px) var(--abstand-3, 16px);
-  border-radius: var(--radius, 8px);
+  border-radius: var(--radius);
   font-family: var(--schrift-text, inherit);
   font-weight: 700;
   font-size: 0.95rem;
@@ -95,15 +89,15 @@
 }
 
 .treasure-feedback-msg.success {
-  background: var(--flaeche, #F3EEDF);
-  border: var(--rahmen, 2px solid #1E252B);
-  color: var(--tinte, #1E252B);
+  background: var(--flaeche);
+  border: var(--rahmen);
+  color: var(--tinte);
 }
 
 .treasure-feedback-msg.error {
-  background: var(--flaeche, #F3EEDF);
-  border: 2px solid var(--tinte-leise, #4E5860);
-  color: var(--tinte, #1E252B);
+  background: var(--flaeche);
+  border: 2px solid var(--tinte-leise);
+  color: var(--tinte);
 }
 
 /* ========================================================
@@ -130,22 +124,22 @@
 .stickers-collection-stats {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #2563eb;
+  color: var(--mathe);
 }
 
 .stickers-progress-bar-bg {
   width: 100%;
   height: 8px;
   background: var(--linie-leise);
-  border-radius: 999px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
 .stickers-progress-bar-fill {
   height: 100%;
-  background: #2563eb;
-  border-radius: 999px;
-  transition: width 0.4s ease;
+  background: var(--mathe);
+  border-radius: var(--radius);
+  transition: width 0.3s ease;
 }
 
 .stickers-album-grid {
@@ -163,7 +157,7 @@
 }
 
 .sticker-album-card {
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 12px 8px 10px;
   text-align: center;
   position: relative;
@@ -179,13 +173,13 @@
 }
 
 .sticker-album-card.owned {
-  background: #ffffff;
-  border: 2.5px solid #93c5fd;
+  background: var(--flaeche);
+  border: 2.5px solid var(--mathe-hell);
 }
 
 .sticker-album-card.owned:hover {
   transform: translateY(-3px);
-  border-color: #3b82f6;
+  border-color: var(--mathe);
 }
 
 .sticker-album-card.locked {
@@ -215,8 +209,8 @@
 }
 
 .sticker-slot-badge.owned {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: var(--mathe-hell);
+  color: var(--mathe);
 }
 
 .sticker-album-card .sticker-icon {
@@ -364,10 +358,12 @@
   color: var(--tinte-leise);
 }
 
+.sticker-reveal-overlay,
 .booster-reveal-overlay {
   z-index: 10001;
 }
 
+.sticker-reveal-card,
 .booster-reveal-card {
   background: var(--flaeche);
   border-radius: var(--radius);
@@ -376,14 +372,15 @@
   text-align: center;
   max-width: 400px;
   width: 90%;
-  animation: boosterPop 0.25s ease-out;
+  animation: stickerPop 0.25s ease-out;
 }
 
-@keyframes boosterPop {
+@keyframes stickerPop {
   0% { transform: scale(0.6); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
+.sticker-anim,
 .booster-sticker-anim {
   font-size: 4.5rem;
   margin: 12px 0;

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Begegnungszone">
+  <title>Begegnungszone (StVO § 53 Z 9e)</title>
+  <!-- StVO § 53 Z 9e: Blaues Rechteck, Personen, Fahrrad, Auto und Tempo 20 -->
+  <rect x="5" y="5" width="90" height="90" rx="8" fill="#0066B3" stroke="#ffffff" stroke-width="2"/>
+  <!-- Fußgänger links -->
+  <circle cx="25" cy="26" r="3.5" fill="#ffffff"/>
+  <path d="M 22 31 L 28 31 L 30 42 L 27 43 L 26 53 L 23 53 L 24 45 L 21 53 L 18 53 L 20 40 L 22 31 Z" fill="#ffffff"/>
+  <!-- Fahrrad in der Mitte -->
+  <g stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round">
+    <circle cx="44" cy="45" r="6"/>
+    <circle cx="60" cy="45" r="6"/>
+    <polyline points="44,45 50,45 55,36 60,45"/>
+    <polyline points="50,45 48,36 45,36"/>
+  </g>
+  <!-- Auto rechts -->
+  <path d="M 72 38 L 76 31 L 86 31 L 90 38 L 92 39 L 92 43 L 70 43 Z" fill="#ffffff"/>
+  <circle cx="75" cy="43" r="2.5" fill="#0066B3"/>
+  <circle cx="87" cy="43" r="2.5" fill="#0066B3"/>
+  <!-- Tempo 20 Kreis -->
+  <circle cx="50" cy="74" r="18" fill="#ffffff" stroke="#C82828" stroke-width="3.5"/>
+  <text x="50" y="75" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="18" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">20</text>
+</svg>

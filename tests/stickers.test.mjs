@@ -46,7 +46,7 @@ function createStickersSandbox(customProfile = null) {
   sandbox.window.Schlaufuchs = {
     Storage: mockStorage,
     State: mockState,
-    Audio: { playBoosterOpen: () => {} },
+    Audio: { playBoosterOpen: () => {}, playFanfare: () => {}, playStickerReward: () => {} },
     Dialog: { alert: () => {} }
   };
 
@@ -85,93 +85,52 @@ test('Stickers: Registrierte Sticker & Trophäen sind vollständig und wohlgefor
   });
 });
 
-test('Stickers: Päckchen-Mathematik (1 Starter + 1 je 5 Sterne)', () => {
-  const { Stickers, setProfile } = createStickersSandbox();
-
-  // 1. Neuer Nutzer mit 0 Sternen -> genau 1 Starter-Päckchen
-  setProfile({
+test('Stickers: Deterministische Freischaltung (unlockNextSticker garantiert neue Sticker bis zum vollen Album, Regel 6)', () => {
+  const { Stickers, getProfile } = createStickersSandbox({
     id: 'p1',
     stars: {},
     openedPacks: 0,
     bonusTreasurePacks: 0,
     unlockedStickers: ['s1']
   });
-  assert.equal(Stickers.getAvailablePacksCount(), 1, 'Start mit 1 Starter-Päckchen');
 
-  // 2. 4 Sterne gesammelt -> noch immer 1 Päckchen
-  setProfile({
-    id: 'p1',
-    stars: { 'math-addition': 4 },
-    openedPacks: 0,
-    bonusTreasurePacks: 0,
-    unlockedStickers: ['s1']
-  });
-  assert.equal(Stickers.getAvailablePacksCount(), 1, 'Bei 4 Sternen bleibt es bei 1 Päckchen');
-
-  // 3. 5 Sterne gesammelt -> 2 Päckchen
-  setProfile({
-    id: 'p1',
-    stars: { 'math-addition': 5 },
-    openedPacks: 0,
-    bonusTreasurePacks: 0,
-    unlockedStickers: ['s1']
-  });
-  assert.equal(Stickers.getAvailablePacksCount(), 2, 'Ab 5 Sternen schaltet 2. Päckchen frei');
-
-  // 4. 1 Päckchen bereits geöffnet -> 1 übrig
-  setProfile({
-    id: 'p1',
-    stars: { 'math-addition': 5 },
-    openedPacks: 1,
-    bonusTreasurePacks: 0,
-    unlockedStickers: ['s1', 's2']
-  });
-  assert.equal(Stickers.getAvailablePacksCount(), 1);
-
-  // 5. 14 Sterne gesammelt (Opened: 1) -> 1 + Math.floor(14/5) - 1 = 2 verfügbar
-  setProfile({
-    id: 'p1',
-    stars: { 'math-addition': 8, 'math-subtraction': 6 },
-    openedPacks: 1,
-    bonusTreasurePacks: 0,
-    unlockedStickers: ['s1', 's2']
-  });
-  assert.equal(Stickers.getAvailablePacksCount(), 2);
-
-  // 6. Bonus-Päckchen aus Offline-Schatzkiste
-  setProfile({
-    id: 'p1',
-    stars: { 'math-addition': 5 },
-    openedPacks: 2,
-    bonusTreasurePacks: 1, // Bonus aus Knick-Rätsel
-    unlockedStickers: ['s1', 's2']
-  });
-  assert.equal(Stickers.getAvailablePacksCount(), 1, 'Bonus-Schatzkiste erhöht Päckchenanzahl');
-});
-
-test('Stickers: Faire Ziehung (openBoosterPack garantiert neue Sticker bis zum vollen Album)', () => {
-  const { Stickers, getProfile } = createStickersSandbox({
-    id: 'p1',
-    stars: { 'all': 100 }, // viele Sterne für viele Päckchen
-    openedPacks: 0,
-    bonusTreasurePacks: 0,
-    unlockedStickers: ['s1']
-  });
-
-  // Ziehen bis alle 16 Sticker freigeschaltet sind
+  // Deterministisches Freischalten bis alle 16 Sticker im Album sind
   for (let i = 0; i < 15; i++) {
     const prevCount = getProfile().unlockedStickers.length;
-    const sticker = Stickers.openBoosterPack();
-    assert.ok(sticker, `Sticker muss gezogen werden (Durchlauf ${i + 1})`);
+    const res = Stickers.unlockNextSticker();
+    assert.ok(res && res.sticker, `Sticker muss freigeschaltet werden (Schritt ${i + 1})`);
+    assert.equal(res.isNew, true, 'Neuer Sticker muss als neu markiert sein');
     assert.equal(
       getProfile().unlockedStickers.length,
       prevCount + 1,
-      'Solange das Album nicht voll ist, muss jeder Zug einen NEUEN Sticker liefern (keine Nieten)'
+      'Solange das Album nicht voll ist, muss jede Freischaltung genau einen neuen Sticker hinzufügen'
     );
   }
 
   assert.equal(getProfile().unlockedStickers.length, 16, 'Alle 16 Sticker müssen freigeschaltet sein');
   assert.equal(new Set(getProfile().unlockedStickers).size, 16, 'Alle 16 Sticker müssen einzigartig sein');
+
+  // Nach 16 Stickern
+  const finalRes = Stickers.unlockNextSticker();
+  assert.equal(finalRes.isNew, false, 'Nach vollem Album keine Neu-Markierung');
+  assert.equal(finalRes.allCompleted, true, 'Sollte allCompleted signalisieren');
+});
+
+test('Stickers: Schatzkisten-Geheimwort schaltet deterministisch nächstes Sammelbild frei', () => {
+  const { Stickers, getProfile } = createStickersSandbox({
+    id: 'p1',
+    stars: {},
+    unlockedStickers: ['s1']
+  });
+
+  const res = Stickers.redeemTreasureWord('FUCHS');
+  assert.equal(res.success, true);
+  assert.equal(getProfile().unlockedStickers.length, 2, 'Geheimwort muss nächsten Sticker freischalten');
+  assert.equal(getProfile().redeemedTreasureWords.includes('FUCHS'), true);
+
+  // Doppelte Eingabe wird freundlich abgefangen
+  const resDup = Stickers.redeemTreasureWord('FUCHS');
+  assert.equal(resDup.success, false);
 });
 
 test('Stickers: Trophäen-Bedingungen schalten nach didaktischem Fortschritt frei', () => {

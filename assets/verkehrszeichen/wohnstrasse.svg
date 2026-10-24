@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Wohnstraße">
+  <title>Wohnstraße (StVO § 53 Z 9b)</title>
+  <!-- StVO § 53 Z 9b: Blaues Rechteck mit Haus, Auto, Erwachsenem und spielendem Kind -->
+  <rect x="5" y="5" width="90" height="90" rx="8" fill="#0066B3" stroke="#ffffff" stroke-width="2"/>
+  <!-- Haus links oben -->
+  <polygon points="18,36 30,22 42,36" fill="#ffffff"/>
+  <rect x="22" y="36" width="16" height="14" fill="#ffffff"/>
+  <!-- Auto rechts oben -->
+  <path d="M 58 42 L 64 33 L 78 33 L 84 42 L 87 43 L 87 47 L 55 47 L 55 43 Z" fill="#ffffff"/>
+  <circle cx="62" cy="47" r="3.5" fill="#0066B3"/>
+  <circle cx="80" cy="47" r="3.5" fill="#0066B3"/>
+  <!-- Gehender Erwachsener -->
+  <circle cx="30" cy="55" r="4" fill="#ffffff"/>
+  <path d="M 27 61 L 33 61 L 35 72 L 32 73 L 31 84 L 27 84 L 28 75 L 26 75 L 24 84 L 20 84 L 23 68 L 27 61 Z" fill="#ffffff"/>
+  <!-- Kind spielt mit Ball -->
+  <circle cx="56" cy="62" r="3.5" fill="#ffffff"/>
+  <path d="M 53 67 L 59 67 L 60 75 L 57 76 L 58 84 L 54 84 L 53 77 L 50 84 L 46 84 L 49 74 L 53 67 Z" fill="#ffffff"/>
+  <circle cx="68" cy="80" r="4" fill="#ffffff"/>
+</svg>

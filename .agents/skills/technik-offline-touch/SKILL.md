@@ -24,9 +24,10 @@ Die App muss offline laufen. Es gibt zwei Wege, und sie haben **unterschiedliche
 Beachte:
 
 - Module: Skripte werden als reguläre `<script>`-Tags geladen, im Namespace `window.Schlaufuchs`. Das erhält die Lauffähigkeit über `file://`.
-  Lade in fester Reihenfolge: `core`, `validators`, `generators`, `render`, `main`. Jede Datei hängt sich an den Namespace und liest nur, was oberhalb geladen ist.
-- Empfehlung (Entscheidung offen, siehe `docs/UMBAU-NOTIZEN.md`): ES-Module und JSDoc-Typen im Quellcode, ein Build-Schritt (zum Beispiel esbuild) erzeugt ein einzelnes Skript, das auch über `file://` läuft. „Keine externen Abhängigkeiten“ gilt für die Laufzeit, nicht für das Werkzeug.
+  Lade in fester Reihenfolge: `core`, `validators`, `generators`, `renderers`, `print`, `app` (maßgeblich ist die Projektstruktur in `AGENTS.md`). Jede Datei hängt sich an den Namespace und liest nur, was oberhalb geladen ist.
+- Empfehlung (Entscheidung offen, eingetragen in `docs/offene-lehrplanfragen.md` unter „Technik“; das README beschreibt derzeit den Ist-Zustand ohne Build): ES-Module und JSDoc-Typen im Quellcode, ein Build-Schritt (zum Beispiel esbuild) erzeugt ein einzelnes Skript, das auch über `file://` läuft. „Keine externen Abhängigkeiten“ gilt für die Laufzeit, nicht für das Werkzeug.
 - Service Worker: Precache aller Dateien mit Versionsnummer, alte Caches beim Aktivieren löschen. Ohne Netz darf nie ein Fehlerbild erscheinen.
+- **Update-Regel:** Jede Änderung an ausgelieferten Dateien erhöht die Cache-Version in `sw.js` (auch neue Dateien wie `js/print.js` oder `css/tokens-druck.css` kommen in den Precache). Sonst sehen Schulgeräte, die die App einmal installiert haben, veraltete Aufgaben und Arbeitsblätter. Ein ruhiger Hinweis „Neue Version verfügbar. Neu laden.“ gehört in den Eltern- und Lehrerbereich, nie in die Übungsansicht.
 
 ## 3. Speicherung (wichtig für den Lernstand)
 
@@ -135,9 +136,18 @@ Verfügbarkeit und Qualität der Stimmen unterscheiden sich je Gerät. Für fest
   - Varianz: In einer Serie keine zwei gleichen Aufgaben.
   - Validator akzeptiert `1000`, `1 000` und lehnt `abc` freundlich ab.
   - Distraktoren sind verschieden und enthalten nicht die Lösung doppelt.
+- Druck-Tests (`tests/print.test.mjs`): Vollständigkeit von Antwortfeld und Lösungsblatt, Zahlenformat und Rechenzeichen im gerenderten HTML, Reproduzierbarkeit mit Seed, Layout-Regeln (siehe `arbeitsblatt-druck`, Abschnitt 9).
 - Vor Abschluss: `node scripts/check-regeln.mjs` und `node --test`.
 
-## 9. Datenschutz (DSGVO)
+## 9. Druck (Technik)
+
+- Druck läuft über `window.print()` und `@media print`. Keine Bibliothek, kein Server, keine externe Schrift (Regel 10 in `AGENTS.md`).
+- `@page { size: A4 portrait; }` und Maße aus `css/tokens-druck.css` (Einheiten mm und pt).
+- Browser drucken Hintergrundfarben oft nicht. Verlasse dich nie auf `background-color`, wenn es Information trägt. Setze `print-color-adjust: exact` nur für reine Zusatzflächen wie das graue Mittelband.
+- Der Druck-Renderer liegt in `js/print.js`, nutzt `formatZahl()` und liest nur Datenobjekte aus den Generatoren (keine eigene Aufgabenlogik).
+- Prüfe vor dem Abschluss: Druckvorschau in Chrome und Safari, Schwarzweiß-Vorschau, Seitenumbrüche. Das tatsächliche Papier lässt sich nicht automatisch prüfen und wird im Bericht als geprüft oder nicht geprüft genannt.
+
+## 10. Datenschutz (DSGVO)
 
 - Solange nichts das Gerät verlässt, ist die Datenlage einfach. Das gilt nur, wenn die Regeln in Abschnitt 1 und 3 eingehalten werden.
 - Kommt später ein Konto, eine Cloud-Synchronisierung oder eine Auswertung, gelten Einwilligung der Erziehungsberechtigten, Datenminimierung, Auftragsverarbeitung und eine Datenschutz-Folgenabschätzung. Führe so etwas nicht ohne ausdrücklichen Auftrag ein.
@@ -151,3 +161,5 @@ Verfügbarkeit und Qualität der Stimmen unterscheiden sich je Gerät. Für fest
 - [ ] Vorlesen mit Fallback, Stummschalter wirkt überall
 - [ ] Tests mit Seed, Eigenschaften und Varianz
 - [ ] Auf iPad Safari geprüft
+- [ ] Cache-Version in `sw.js` erhöht, neue Dateien im Precache
+- [ ] Druck: A4, Schwarzweiß-Vorschau, `print.test.mjs` grün

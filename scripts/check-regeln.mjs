@@ -157,6 +157,12 @@ if (index) {
     funde.push({ datei: "index.html", zeile: 0, level: "warn", id: "sprache", msg: 'Fehlt: <html lang="de-AT">.' });
   if (!/<meta[^>]*name\s*=\s*["']viewport["']/i.test(index.text))
     funde.push({ datei: "index.html", zeile: 0, level: "warn", id: "viewport", msg: "Viewport-Meta fehlt." });
+  if (!index.text.includes("tokens-druck.css"))
+    funde.push({ datei: "index.html", zeile: 0, level: "error", id: "tokens-druck", msg: "tokens-druck.css fehlt in index.html (Regel 17)." });
+}
+const printJs = alles.find((d) => d.rel === "js/print.js");
+if (printJs && /(https?:\/\/|www\.)/i.test(printJs.text)) {
+  funde.push({ datei: "js/print.js", zeile: 0, level: "error", id: "druck-keine-urls", msg: "Druck-Seiten dürfen keine externen URLs enthalten (Regel 10)." });
 }
 
 /* ---------- Ausgabe ---------- */

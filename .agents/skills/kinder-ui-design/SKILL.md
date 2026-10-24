@@ -5,6 +5,8 @@ description: Verwende diesen Skill bei jeder Änderung an Oberfläche, Layout, F
 
 # Kinder-UI-Design (Schulbuch-Look statt SaaS-Look)
 
+Dieser Skill gilt für die **App am Bildschirm**. Für gedruckte Arbeitsblätter gilt `arbeitsblatt-druck` (eigene Tokens in `tokens-druck.css`, Maße in mm und pt, Schwarzweiß-Tauglichkeit). Der Look (Linien statt Schatten, keine Verläufe, Primae) bleibt gleich.
+
 Vorlage für die Tokens: `tokens.css` in diesem Ordner. Sie wird nach `css/tokens.css` kopiert und ist die **einzige Quelle** für Farben, Abstände und Rahmen.
 Schreibe keine Farbwerte, Radien oder Schatten direkt in Komponenten-CSS.
 
@@ -40,7 +42,7 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 - **Fächerfarben:** Mathematik `--mathe` (Blau), Deutsch `--deutsch` (Ziegel), Sachunterricht `--sach` (Grün), Denken `--denken` (Violett).
   Jedes Fach hat zusätzlich ein **Symbol** und den **Namen**. Farbe allein genügt nie (Farbsehschwäche betrifft etwa jeden zwölften Buben).
 - **Rückmeldung:** richtig = `--richtig` (Gelb) mit Haken-Symbol. Noch nicht = `--nochmal` (Grau-Blau) mit Symbol „Nochmal“. **Kein Rot, kein Grün** als Rückmeldung.
-- **Wortart-Farben** (Nomen blau, Verb rot, Adjektiv grün) sind Lehrmittelkonvention und nur in Wortart-Aufgaben erlaubt, immer mit Form-Symbol (siehe `lehrplan-oesterreich/deutsch.md`).
+- **Wortart-Farben** (Nomen blau, Verb rot, Adjektiv grün) sind Lehrmittelkonvention und nur in Wortart-Aufgaben erlaubt, immer mit Form-Symbol (siehe `lehrplan-oesterreich/deutsch.md`). Weil Mathematik ebenfalls blau, Sachunterricht grün und Deutsch ziegelrot ist, legt `tokens.css` die Wortart-Farben als eigene Gruppe `--wortart-*` an und nutzt sie nicht für Fächerflächen. Im Druck trägt Linienart plus Symbol die Bedeutung (siehe `arbeitsblatt-druck`).
 - Text auf Papier mindestens 4,5 : 1. Prüfe neue Farben, bevor sie ins Token-File kommen.
 - Dunkelmodus ist nicht vorgesehen.
 
@@ -59,7 +61,7 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 - Öffnet gefiltert auf die **freigeschalteten Schulstufen** des aktiven Kindes. Ein flaches Segmented Control wechselt die Schulstufe.
 - Kacheln **ohne Fließtext**: Symbol, Titel, kleine Schulstufenangabe, Sterne (0 bis 3). Keine Prozentangabe.
 - Beim Tippen auf den Titel liest eine Lautsprecher-Funktion den Namen vor (Schulstufe 1 und 2).
-- Kopfzeile aufgeräumt: links Kind (Avatar und Sterne), rechts die Werkzeuge (Ton, Album, Arbeitsblätter, Einstellungen).
+- Kopfzeile aufgeräumt: links Kind (Avatar und Sterne), rechts die Werkzeuge (Ton, Album, Arbeitsblätter, Einstellungen). „Arbeitsblätter“ öffnet die Druckauswahl (Fach, Schulstufe, Thema, Anzahl, Hilfen, Lösungsblatt) im Eltern- und Lehrerbereich-Stil, ohne Sterne und ohne Fortschrittsanzeige.
 - Maximal ca. 8 Kacheln sichtbar, der Rest per Fach-Auswahl. Keine Wand aus 27 Kacheln.
 
 ### Übungsansicht (Fokusmodus)
@@ -85,7 +87,7 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 
 ## 7. Bewegung
 
-- Erlaubt: kurze Reaktion (unter 300 ms) auf eine Berührung, Karte umdrehen, Konfetti am Ende.
+- Erlaubt: kurze Reaktion (unter 300 ms) auf eine Berührung, Karte umdrehen, Konfetti am Ende. Bei `prefers-reduced-motion` entfällt das Canvas-Konfetti ganz (CSS allein erfasst Canvas nicht).
 - Verboten: `animation-iteration-count: infinite`, Pulsieren, Wippen, Leuchten, Parallax, automatisch laufende Karussells, wandernde Hintergründe.
 - Nutze nur `transform` und `opacity`. Beachte `prefers-reduced-motion` (ist in `tokens.css` enthalten).
 - Kein Blinken, nichts, das mehr als dreimal pro Sekunde wechselt.
@@ -95,6 +97,11 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 - Du-Form, kurze Hauptsätze, aktiv. Schaltflächen sind Verben: „Weiter“, „Nochmal“, „Fertig“, „Vorlesen“.
 - Keine Fachbegriffe der Informatik („Profil“, „Einstellungen“ nur im Eltern- und Lehrerbereich).
 - Texte stehen zentral in `js/core/texte.js`.
+
+## 9. Druck
+
+- Nicht hier regeln, sondern in `arbeitsblatt-druck`: Blattaufbau, Lineatur, Kästchen, Schriftgröße in pt, Lochrand, Lösungsblatt.
+- Jede neue Eingabeform braucht eine Druckentscheidung (`druck` am Aufgabenmodell), bevor sie als fertig gilt.
 
 ## Checkliste
 
@@ -106,3 +113,4 @@ Der Maskottchen-Fuchs (falls verwendet) ist ein **statisches** SVG. Er bewegt si
 - [ ] Ziele mindestens 56 px, Abstand mindestens 12 px
 - [ ] Keine Dauer-Animation, Reduced Motion beachtet
 - [ ] Ziffernfeld in der App, Wort-Eingabe ohne Autokorrektur
+- [ ] Druckentscheidung für neue Aufgabentypen gesetzt (siehe `arbeitsblatt-druck`)

@@ -47,8 +47,8 @@ window.Schlaufuchs.DragDrop = (function () {
         dragGhost.style.pointerEvents = 'none';
         dragGhost.style.zIndex = '99999';
         dragGhost.style.opacity = '0.9';
-        dragGhost.style.transform = 'scale(1.08) rotate(3deg)';
-        dragGhost.style.boxShadow = '0 12px 28px rgba(0,0,0,0.25)';
+        dragGhost.style.transform = 'scale(1.05)';
+        dragGhost.style.border = '2px solid var(--linie, #3B4651)';
         dragGhost.style.margin = '0';
         dragGhost.style.transition = 'none';
 

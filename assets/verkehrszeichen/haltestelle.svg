@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Haltestelle">
+  <title>Haltestelle (StVO § 53 Z 3a)</title>
+  <!-- StVO § 53 Z 3a: Blaues Schild mit H-Symbol im grünen Kreis -->
+  <rect x="5" y="5" width="90" height="90" rx="8" fill="#0066B3" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="50" cy="50" r="34" fill="#ffffff"/>
+  <circle cx="50" cy="50" r="30" fill="#ffffff" stroke="#1B8A44" stroke-width="4"/>
+  <text x="50" y="52" font-family="system-ui, -apple-system, sans-serif, 'Arial Black'" font-weight="900" font-size="34" fill="#1B8A44" text-anchor="middle" dominant-baseline="central">H</text>
+</svg>

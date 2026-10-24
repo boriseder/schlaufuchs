@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Getrennter Geh- und Radweg">
+  <title>Getrennter Geh- und Radweg (StVO § 52 Z 17b)</title>
+  <!-- StVO § 52 Z 17b: Blauer Kreis mit Fußgänger links, Fahrrad rechts, weiße Trennlinie -->
+  <circle cx="50" cy="50" r="45" fill="#0066B3" stroke="#ffffff" stroke-width="3"/>
+  <line x1="50" y1="6" x2="50" y2="94" stroke="#ffffff" stroke-width="3"/>
+  <!-- Fußgänger links -->
+  <circle cx="28" cy="28" r="4" fill="#ffffff"/>
+  <path d="M 25 34 L 31 34 L 33 46 L 31 47 L 31 66 L 27 66 L 28 52 L 25 52 L 23 66 L 19 66 L 22 46 L 19 44 L 21 40 L 25 34 Z" fill="#ffffff"/>
+  <!-- Fahrrad rechts -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="62" cy="58" r="8"/>
+    <circle cx="84" cy="58" r="8"/>
+    <polyline points="62,58 71,58 78,46 84,58"/>
+    <polyline points="71,58 67,46 63,46"/>
+    <polyline points="78,46 81,46 83,43"/>
+  </g>
+</svg>

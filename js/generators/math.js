@@ -11,15 +11,29 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.Math = (function () {
   'use strict';
 
-  // Zentrale Hilfsfunktionen aus Core (Zufall, Zahlenformatierung, Stufen-Filter)
-  const rand = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.rand) || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
+  // Zentrale Hilfsfunktionen aus Core (Zufall, deterministischer Seed, Zahlenformatierung, Stufen-Filter)
+  function getRng(options) {
+    const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const seed = (opts && opts.seed !== undefined) ? opts.seed : undefined;
+    if (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.erstelleZufall) {
+      return window.Schlaufuchs.Random.erstelleZufall(seed);
+    }
+    return {
+      int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+      mischen: (arr) => [...arr].sort(() => Math.random() - 0.5),
+      wahl: (arr) => arr[Math.floor(Math.random() * arr.length)],
+      next: () => Math.random()
+    };
+  }
+  const defaultRand = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.rand) || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
   const formatAustrianNumber = (window.Schlaufuchs && window.Schlaufuchs.formatZahl) || (num => String(num));
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. ADDITION (1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   function buildAdditionTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
     const targetCount = opts.count || (opts.forPrint ? 12 : 6);
@@ -36,7 +50,7 @@ window.Schlaufuchs.Generators.Math = (function () {
 
       if (g === 1) {
         // 1. Klasse: ZR 20
-        if (Math.random() > 0.4) {
+        if (rng.next() > 0.4) {
           a = rand(5, 9);
           b = rand(3, 10);
         } else {
@@ -51,7 +65,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         if (a + b > 100) b = 100 - a;
       } else if (g === 3) {
         // 3. Klasse: ZR 1000
-        if (Math.random() > 0.5) {
+        if (rng.next() > 0.5) {
           // Rechnen mit Hundertern & Zehnern
           a = rand(12, 45) * 10;
           b = rand(15, 45) * 10;
@@ -71,7 +85,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         } else if (type === 2) {
           // Tausendersprünge (z.B. 3200 + 2000 = 5200 oder 5400 + 800 = 6200)
           a = rand(20, 55) * 100;
-          b = rand(1, 3) * 1000 + (Math.random() > 0.5 ? 0 : rand(1, 6) * 100);
+          b = rand(1, 3) * 1000 + (rng.next() > 0.5 ? 0 : rand(1, 6) * 100);
         } else {
           // Zehnerergänzung im ZR 1000 (z.B. 470 + 380 = 850)
           a = rand(25, 58) * 10;
@@ -112,7 +126,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // 2. SUBTRAKTION (1. bis 4. Klasse – stufenrein für eine Übungseinheit/Arbeitsblatt)
   function buildSubtractionTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const grades = getEffectiveGrades([1, 2, 3, 4]);
     const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
     const targetCount = opts.count || (opts.forPrint ? 12 : 6);
@@ -129,7 +144,7 @@ window.Schlaufuchs.Generators.Math = (function () {
 
       if (g === 1) {
         // 1. Klasse: ZR 20
-        if (Math.random() > 0.5) {
+        if (rng.next() > 0.5) {
           a = rand(11, 18);
           b = rand(a - 9, a - 2); // Zehnerunterschreitung
         } else {
@@ -154,7 +169,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         if (type === 1) {
           // Glatte Tausender vermindern (z.B. 5000 - 1500 = 3500 oder 10000 - 4000 = 6000)
           a = rand(4, 10) * 1000;
-          b = rand(1, Math.floor(a / 1000) - 1) * 1000 + (Math.random() > 0.5 ? 500 : 0);
+          b = rand(1, Math.floor(a / 1000) - 1) * 1000 + (rng.next() > 0.5 ? 500 : 0);
         } else if (type === 2) {
           // Hunderterabbau mit Tausenderüberschreitung (z.B. 4200 - 800 = 3400 oder 6300 - 1500 = 4800)
           const thousands = rand(3, 7) * 1000;
@@ -207,6 +222,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // Kind mit 2. Schulstufe erhält ausschließlich Kernaufgaben und kleines 1×1 bis 100!
   function buildMultiplicationTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const useGrades = getEffectiveGrades([2, 3, 4]);
     const targetGrade = opts.grade || (useGrades[rand(0, useGrades.length - 1)] || 2);
     const targetCount = opts.count || (opts.forPrint ? 12 : 6);
@@ -224,7 +241,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       if (g === 2) {
         // 2. Klasse: Kleines 1×1 (Kernaufgaben 2, 5, 10 und Reihen bis 10)
         // Niemals Zehnerrechnen wie 6 · 40!
-        if (Math.random() < 0.4) {
+        if (rng.next() < 0.4) {
           const coreFactors = [2, 5, 10];
           a = coreFactors[rand(0, coreFactors.length - 1)];
           b = rand(2, 10);
@@ -234,7 +251,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         }
       } else if (g === 3) {
         // 3. Klasse: Zehnereinmaleins (z.B. 6 · 40 oder 30 · 7)
-        if (Math.random() > 0.5) {
+        if (rng.next() > 0.5) {
           a = rand(2, 9);
           b = rand(2, 9) * 10;
         } else {
@@ -250,7 +267,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           b = rand(3, 7);
         } else if (type === 2) {
           // Zehner/Hunderter-Vielfache (z.B. 7 · 60 = 420, 8 · 50 = 400, 4 · 300 = 1200)
-          if (Math.random() > 0.5) {
+          if (rng.next() > 0.5) {
             a = rand(3, 9);
             b = rand(3, 9) * 10;
           } else {
@@ -300,7 +317,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // Kind mit 4. Schulstufe erhält altersgerechte halbschriftliche Divisionen!
   function buildDivisionTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
-    const rng = (window.Schlaufuchs && window.Schlaufuchs.Random) ? window.Schlaufuchs.Random.erstelleZufall(opts.seed) : { int: rand, next: Math.random };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const useGrades = getEffectiveGrades([2, 3, 4]);
     const targetGrade = opts.grade || (useGrades[rand(0, useGrades.length - 1)] || 2);
     const targetCount = opts.count || (opts.forPrint ? 12 : 6);
@@ -322,7 +340,7 @@ window.Schlaufuchs.Generators.Math = (function () {
         a = b * answer;
       } else if (g === 3) {
         // 3. Klasse: Zehnerdivision (z.B. 420 : 6 oder 350 : 50)
-        if (Math.random() > 0.5) {
+        if (rng.next() > 0.5) {
           b = rand(2, 9);
           answer = rand(2, 9) * 10;
           a = b * answer;
@@ -411,6 +429,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // 5. RECHENTÜRME / ZAHLENMAUERN (Stufengerecht: 1. Kl <= 20, 2. Kl <= 100, 3. Kl <= 1 000)
   function buildPyramidTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const grades = getEffectiveGrades([1, 2, 3]);
     const targetGrade = opts.grade || (grades[rand(0, grades.length - 1)] || 2);
     const targetCount = opts.count || (opts.forPrint ? 4 : 5);
@@ -473,7 +493,10 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 6. UHRZEIT (1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-    function buildClockTasks(opts) {
+  function buildClockTasks(opts) {
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
+    const shuffle = (arr) => rng.mischen(arr);
     if (opts && opts.forPrint) {
       const g = opts.grade || 2;
       const tasks = [];
@@ -482,7 +505,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       const describe = Clock ? Clock.describeTimeText : (h, m) => `${h}:${m}`;
 
       if (g === 1) {
-        const hoursPool = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5).slice(0, 6);
+        const hoursPool = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).slice(0, 6);
         for (let i = 0; i < 3; i++) {
           const h = hoursPool[i];
           tasks.push({
@@ -563,7 +586,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           });
         });
       } else if (g === 3) {
-        const mPool = [5, 10, 20, 25, 35, 40, 50, 55].sort(() => Math.random() - 0.5);
+        const mPool = shuffle([5, 10, 20, 25, 35, 40, 50, 55]);
         for (let i = 0; i < 3; i++) {
           const h12 = rand(1, 11);
           const m = mPool[i];
@@ -665,7 +688,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: nextH, minutes: 0, isCorrect: false },
           { hours: h, minutes: 30, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -712,7 +735,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: nextH, minutes: 0, isCorrect: false },
           { hours: prevH, minutes: 0, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -769,7 +792,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: nextH, minutes: 0, isCorrect: false },
           { hours: h, minutes: 15, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -820,7 +843,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: h, minutes: 45, isCorrect: false },
           { hours: h, minutes: 30, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -916,7 +939,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: (h % 12) + 1, minutes: m, isCorrect: false },
           { hours: h, minutes: (m + 30) % 60, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -1031,7 +1054,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           { hours: (endH % 12) + 1, minutes: endM, isCorrect: false },
           { hours: endH, minutes: (endM + 30) % 60, isCorrect: false }
         ];
-        const shuffled = rawOptions.sort(() => Math.random() - 0.5);
+        const shuffled = shuffle(rawOptions);
         const correctIndex = shuffled.findIndex(o => o.isCorrect);
 
         return {
@@ -1094,7 +1117,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       if (activePool.length === 0) activePool = poolGrade2;
     }
 
-    const shuffled = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const shuffled = (opts && opts.all) ? activePool : shuffle(activePool).slice(0, 5);
     shuffled.forEach(fn => {
       const t = fn();
       tasks.push({
@@ -1134,7 +1157,10 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 7. GELD & EURO (1. – 4. Klasse adaptiv nach BMBWF Lehrplan)
-    function buildMoneyTasks(opts) {
+  function buildMoneyTasks(opts) {
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
+    const shuffle = (arr) => rng.mischen(arr);
     if (opts && opts.forPrint) {
       const g = opts.grade || 2;
       return [
@@ -1339,7 +1365,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       if (activePool.length === 0) activePool = poolGrade3;
     }
 
-    const shuffled = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const shuffled = (opts && opts.all) ? activePool : shuffle(activePool).slice(0, 5);
     shuffled.forEach(fn => {
       const t = fn();
       tasks.push({
@@ -1366,8 +1392,10 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 7. ZAHLENRAUM 1 000 000 & STELLENWERTTAFEL (4. Klasse)
-    function buildMillionTasks(options) {
+  function buildMillionTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     if (opts && (opts.forPrint || opts.injective)) {
       const tasks = [];
       const usedAnswers = new Set();
@@ -1493,7 +1521,10 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 8. MASSE & GEWICHTE (3. & 4. Klasse mit kg, g, dag, t, hl, km)
-    function buildUnitsTasks(opts) {
+  function buildUnitsTasks(opts) {
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
+    const shuffle = (arr) => rng.mischen(arr);
     if (opts && opts.forPrint) {
       const g = opts.grade || 4;
       return [
@@ -1695,7 +1726,7 @@ window.Schlaufuchs.Generators.Math = (function () {
       if (activePool.length === 0) activePool = poolGrade4;
     }
 
-    const chosen = (opts && opts.all) ? activePool : activePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const chosen = (opts && opts.all) ? activePool : shuffle(activePool).slice(0, 5);
     chosen.forEach(fn => {
       const item = fn();
       tasks.push({
@@ -1717,7 +1748,9 @@ window.Schlaufuchs.Generators.Math = (function () {
   }
 
   // 9. GEOMETRIE: UMFANG & FLÄCHE (4. Klasse, 5 Aufgaben)
-    function buildGeometryTasks(opts) {
+  function buildGeometryTasks(opts) {
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     if (opts && opts.forPrint) {
       const g = opts.grade || 4;
       return [
@@ -1839,6 +1872,8 @@ window.Schlaufuchs.Generators.Math = (function () {
 
   // 10. RECHENGESCHICHTEN / TEXTAUFGABEN (2. – 4. Klasse mit F, R, A, 5 Aufgaben)
   function buildStoryTasks(opts) {
+    const rng = getRng(opts);
+    const shuffle = (arr) => rng.mischen(arr);
     const grades = getEffectiveGrades([2, 3, 4]);
 
     const storiesGrade2 = [
@@ -1993,7 +2028,7 @@ window.Schlaufuchs.Generators.Math = (function () {
     }
 
     const targetCount = (opts && opts.forPrint) ? 3 : ((opts && opts.all) ? pool.length : 5);
-    const chosen = pool.sort(() => 0.5 - Math.random()).slice(0, targetCount);
+    const chosen = (opts && opts.all) ? pool : shuffle(pool).slice(0, targetCount);
     return chosen.map(s => ({
       fach: 'mathe',
       schulstufe: s.schulstufe || (opts && opts.grade) || 3,
@@ -2016,6 +2051,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // 11. MENGEN- & ZWANZIGERFELD (1. Klasse mit blauen & roten Wendeplättchen)
   function buildTwentyFieldTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const targetCount = (opts && opts.forPrint) ? 4 : 5;
     const tasks = [];
     for (let i = 0; i < targetCount; i++) {
@@ -2050,6 +2087,8 @@ window.Schlaufuchs.Generators.Math = (function () {
   // 12. SCHRIFTLICHE RECHENVERFAHREN (3. & 4. Klasse: Untereinander mit Übertrag)
   function buildWrittenMathTasks(options) {
     const opts = (typeof options === 'object' && options !== null) ? options : { seed: options };
+    const rng = getRng(opts);
+    const rand = (min, max) => rng.int(min, max);
     const grades = getEffectiveGrades([3, 4]);
     const targetGrade = opts.grade || (grades.includes(4) ? 4 : 3);
     const isOnlyGrade3 = targetGrade === 3;
@@ -2129,6 +2168,9 @@ window.Schlaufuchs.Generators.Math = (function () {
       schulstufe: (num1 > 1000 || num2 > 1000) ? 4 : 3,
       grade: (num1 > 1000 || num2 > 1000) ? 4 : 3,
       lehrplanRef: "M-" + ((num1 > 1000 || num2 > 1000) ? 4 : 3) + "-Operationen-Schriftlich",
+      lehrplanStatus: "RIS",
+      druck: "ja",
+      druckHinweis: "",
       type: "written-calc",
       operation: op,
       num1: num1,
@@ -2148,21 +2190,45 @@ window.Schlaufuchs.Generators.Math = (function () {
     };
   }
 
+  function stampMathTasks(tasks) {
+    if (!Array.isArray(tasks)) return tasks;
+    return tasks.map(t => {
+      if (!t || typeof t !== 'object') return t;
+      if (!t.fach) t.fach = 'mathe';
+      if (!t.lehrplanStatus) t.lehrplanStatus = 'RIS';
+      if (!t.druck) {
+        if (t.type === 'twenty-field') {
+          t.druck = 'angepasst';
+          t.druckHinweis = 'Punkte im Zwanzigerfeld werden auf Papier mit Bleistift ausgemalt.';
+        } else if (t.type === 'clock-set') {
+          t.druck = 'angepasst';
+          t.druckHinweis = 'Zeiger werden auf dem Zifferblatt mit Bleistift eingezeichnet.';
+        } else {
+          t.druck = 'ja';
+          t.druckHinweis = '';
+        }
+      } else if (t.druck !== 'ja' && !t.druckHinweis) {
+        t.druckHinweis = 'Didaktisch angepasste Druckausgabe.';
+      }
+      return t;
+    });
+  }
+
   return {
     formatAustrianNumber: formatAustrianNumber,
-    buildAdditionTasks: buildAdditionTasks,
-    buildSubtractionTasks: buildSubtractionTasks,
-    buildMultiplicationTasks: buildMultiplicationTasks,
-    buildDivisionTasks: buildDivisionTasks,
-    buildPyramidTasks: buildPyramidTasks,
-    buildClockTasks: buildClockTasks,
-    buildMoneyTasks: buildMoneyTasks,
-    buildTimeMoneyTasks: buildTimeMoneyTasks,
-    buildMillionTasks: buildMillionTasks,
-    buildUnitsTasks: buildUnitsTasks,
-    buildGeometryTasks: buildGeometryTasks,
-    buildStoryTasks: buildStoryTasks,
-    buildTwentyFieldTasks: buildTwentyFieldTasks,
-    buildWrittenMathTasks: buildWrittenMathTasks,
+    buildAdditionTasks: (opts) => stampMathTasks(buildAdditionTasks(opts)),
+    buildSubtractionTasks: (opts) => stampMathTasks(buildSubtractionTasks(opts)),
+    buildMultiplicationTasks: (opts) => stampMathTasks(buildMultiplicationTasks(opts)),
+    buildDivisionTasks: (opts) => stampMathTasks(buildDivisionTasks(opts)),
+    buildPyramidTasks: (opts) => stampMathTasks(buildPyramidTasks(opts)),
+    buildClockTasks: (opts) => stampMathTasks(buildClockTasks(opts)),
+    buildMoneyTasks: (opts) => stampMathTasks(buildMoneyTasks(opts)),
+    buildTimeMoneyTasks: (opts) => stampMathTasks(buildTimeMoneyTasks(opts)),
+    buildMillionTasks: (opts) => stampMathTasks(buildMillionTasks(opts)),
+    buildUnitsTasks: (opts) => stampMathTasks(buildUnitsTasks(opts)),
+    buildGeometryTasks: (opts) => stampMathTasks(buildGeometryTasks(opts)),
+    buildStoryTasks: (opts) => stampMathTasks(buildStoryTasks(opts)),
+    buildTwentyFieldTasks: (opts) => stampMathTasks(buildTwentyFieldTasks(opts)),
+    buildWrittenMathTasks: (opts) => stampMathTasks(buildWrittenMathTasks(opts)),
   };
 })();

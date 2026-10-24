@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Halt! Vorrang geben">
+  <title>Halt! Vorrang geben (StVO § 52 Z 24)</title>
+  <!-- StVO § 52 Z 24: Rotes Achteck, weißer Innenrand, zentrierte Schrift STOP -->
+  <polygon points="29.3,5 70.7,5 95,29.3 95,70.7 70.7,95 29.3,95 5,70.7 5,29.3" fill="#C82828"/>
+  <polygon points="30.5,8.5 69.5,8.5 91.5,30.5 91.5,69.5 69.5,91.5 30.5,91.5 8.5,69.5 8.5,30.5" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="50" y="52" font-family="system-ui, -apple-system, sans-serif, 'Arial Black'" font-weight="900" font-size="26" fill="#ffffff" text-anchor="middle" dominant-baseline="central" letter-spacing="1.5">STOP</text>
+</svg>

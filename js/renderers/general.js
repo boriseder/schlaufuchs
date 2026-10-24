@@ -80,8 +80,7 @@ window.Schlaufuchs.Renderers = window.Schlaufuchs.Renderers || {};
               <span class="memory-brand"><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 32px; height: 32px;"></span>
             </div>
             <div class="memory-card-front">
-              <span class="memory-symbol">${c.content}</span>
-              ${c.subtitle ? `<span class="memory-subtitle">${c.subtitle}</span>` : ''}
+              ${c.svg ? c.svg : `<span class="memory-symbol">${c.content}</span>${c.subtitle ? `<span class="memory-subtitle">${c.subtitle}</span>` : ''}`}
             </div>
           </div>
         </div>

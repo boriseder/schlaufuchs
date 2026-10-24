@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Vorrang geben">
+  <title>Vorrang geben (StVO § 52 Z 23)</title>
+  <!-- StVO § 52 Z 23: Weißes Dreieck auf der Spitze, breiter roter Rand -->
+  <polygon points="50,92 6,12 94,12" fill="#C82828" stroke="#A31F1F" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="50,70 18,18 82,18" fill="#ffffff" stroke-linejoin="round"/>
+</svg>

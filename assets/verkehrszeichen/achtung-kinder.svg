@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Achtung Kinder">
+  <title>Kinder (StVO § 50 Z 10)</title>
+  <!-- StVO § 50 Z 10: Weißes Dreieck, roter Rand, zwei laufende Kinder -->
+  <polygon points="50,8 95,88 5,88" fill="#C82828" stroke="#A31F1F" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="50,26 82,82 18,82" fill="#ffffff" stroke-linejoin="round"/>
+  <!-- Großes Kind links -->
+  <circle cx="41" cy="46" r="4" fill="#1a1a1a"/>
+  <path d="M 38 52 L 44 52 L 46 62 L 44 63 L 43 76 L 39 76 L 40 66 L 37 66 L 34 76 L 30 76 L 33 60 L 30 58 L 32 55 L 38 52 Z" fill="#1a1a1a"/>
+  <!-- Kleines Kind mit Schultasche rechts -->
+  <circle cx="58" cy="53" r="3.5" fill="#1a1a1a"/>
+  <path d="M 55 58 L 61 58 L 62 66 L 60 67 L 59 76 L 56 76 L 57 68 L 54 68 L 52 76 L 49 76 L 51 64 L 46 60 L 48 57 L 55 58 Z" fill="#1a1a1a"/>
+  <rect x="61" y="60" width="4.5" height="6" rx="1" fill="#1a1a1a"/>
+</svg>

@@ -172,7 +172,7 @@ window.Schlaufuchs.Admin = (function () {
                 .map(p => ({
                   id: String(p.id || ('profile_' + Date.now())),
                   name: String(p.name || 'Nils').trim().slice(0, 50),
-                  avatar: String(p.avatar || '🦊').slice(0, 8), // check-regeln:ignore
+                  avatar: String(p.avatar || 'fuchs').slice(0, 16),
                   grades: Array.isArray(p.grades) ? p.grades.map(Number).filter(g => g >= 1 && g <= 4) : [1, 2, 3],
                   stars: (p.stars && typeof p.stars === 'object') ? Object.fromEntries(
                     Object.entries(p.stars).map(([k, v]) => [String(k), Math.max(0, Math.min(3, Number(v) || 0))])
@@ -424,6 +424,14 @@ window.Schlaufuchs.Admin = (function () {
     solutionModeSelect.value = printSettings.solutionMode;
     secretWordCheck.checked = printSettings.secretWord;
 
+    const nameInput = document.getElementById('admin-cert-child-name');
+    if (nameInput && !nameInput.value) {
+      const activeProfile = State.getActiveProfile ? State.getActiveProfile() : null;
+      if (activeProfile && activeProfile.name) {
+        nameInput.value = activeProfile.name;
+      }
+    }
+
     solutionModeSelect.addEventListener('change', () => {
       State.savePrintSettings({
         solutionMode: solutionModeSelect.value,
@@ -459,10 +467,26 @@ window.Schlaufuchs.Admin = (function () {
       });
     });
 
+    const nameInput = document.getElementById('admin-cert-child-name');
+    const fullCertBtn = document.getElementById('btn-admin-print-full-cert');
     const adminCertBtn = document.getElementById('btn-admin-print-cert');
+
+    if (fullCertBtn) {
+      fullCertBtn.addEventListener('click', () => {
+        const activeProfile = window.Schlaufuchs.State.getActiveProfile();
+        const inputVal = nameInput ? nameInput.value.trim() : '';
+        const name = inputVal || (activeProfile ? activeProfile.name : 'Schlaufuchs-Schüler');
+        if (window.Schlaufuchs.Print && window.Schlaufuchs.Print.printCertificate) {
+          window.Schlaufuchs.Print.printCertificate({ name }, { full: true });
+        }
+      });
+    }
+
     if (adminCertBtn) {
       adminCertBtn.addEventListener('click', () => {
-        const profile = window.Schlaufuchs.State.getActiveProfile();
+        const activeProfile = window.Schlaufuchs.State.getActiveProfile();
+        const inputVal = nameInput ? nameInput.value.trim() : '';
+        const profile = inputVal ? { ...activeProfile, name: inputVal } : activeProfile;
         if (window.Schlaufuchs.Print && window.Schlaufuchs.Print.printCertificate) {
           window.Schlaufuchs.Print.printCertificate(profile);
         }
@@ -525,7 +549,7 @@ window.Schlaufuchs.Admin = (function () {
           { id: 'general-calendar', name: 'Jahreskreis & Kalender' },
           { id: 'general-traffic', name: 'Sicherer Schulweg & Verkehr' },
           { id: 'general-animals', name: 'Tiere im Winter' },
-          { id: 'general-austria', name: 'Österreich: Bundesländer & Hauptstädte' },
+          { id: 'general-austria', name: 'Bundesländer & Hauptstädte' },
           { id: 'general-bike-test', name: 'Freiwillige Radfahrprüfung (StVO)' }
         ]
       },
@@ -661,7 +685,9 @@ window.Schlaufuchs.Admin = (function () {
 
       const esc = (window.Schlaufuchs && window.Schlaufuchs.escapeHtml) || (s => s);
       const safeName = esc(p.name);
-      const safeAvatar = esc(p.avatar);
+      const safeAvatar = (p.avatar === 'fuchs' || p.avatar === '\u{1F98A}')
+        ? '<img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width:24px;height:24px;">'
+        : esc(p.avatar);
 
       card.innerHTML = `
         <div class="admin-profile-header-row">
@@ -679,6 +705,10 @@ window.Schlaufuchs.Admin = (function () {
             </div>
           </div>
           <div class="admin-profile-actions">
+            <button type="button" class="btn btn-secondary btn-sm print-prof-cert-btn" data-pid="${p.id}" title="Vollständige Urkunde für ${safeName} drucken">
+              <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+              <span>Urkunde</span>
+            </button>
             ${!isActive ? `<button type="button" class="btn btn-secondary btn-sm select-prof-btn" data-pid="${p.id}">Als aktives Kind wählen</button>` : ''}
             ${profiles.length > 1 ? `<button type="button" class="btn btn-danger-outline btn-sm del-prof-btn" data-pid="${p.id}">Löschen</button>` : ''}
           </div>
@@ -699,6 +729,16 @@ window.Schlaufuchs.Admin = (function () {
           </div>
         </div>
       `;
+
+      // Vollständige Urkunde für dieses Kind drucken (Fremdgerät-fähig)
+      const certBtn = card.querySelector('.print-prof-cert-btn');
+      if (certBtn) {
+        certBtn.addEventListener('click', () => {
+          if (window.Schlaufuchs.Print && window.Schlaufuchs.Print.printCertificate) {
+            window.Schlaufuchs.Print.printCertificate({ name: p.name }, { full: true });
+          }
+        });
+      }
 
       // Profile umschalten
       const selBtn = card.querySelector('.select-prof-btn');

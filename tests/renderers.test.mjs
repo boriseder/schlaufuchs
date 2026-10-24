@@ -219,7 +219,7 @@ test('Renderer: Lesetext-Aufgabe (Reading) rendert Textabschnitt und getrennte F
     type: 'reading',
     fach: 'deutsch',
     schulstufe: 2,
-    icon: '📖',
+    icon: null,
     title: 'Der kleine Igel im Garten',
     text: 'Im Herbst sucht der kleine Igel nach bunten Blättern.',
     questions: [

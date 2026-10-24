@@ -64,7 +64,7 @@ window.Schlaufuchs.Dialog = (function () {
       iconEl.innerHTML = `<img src="${iconSvg}" class="icon-inline-svg" alt="" style="width: 48px; height: 48px;">`;
     }
     if (titleEl) titleEl.textContent = title;
-    if (msgEl) msgEl.textContent = message.replace(/^[✅⭐🎉💪⚠️💡]\s*/, ''); /* check-regeln:ignore */
+    if (msgEl) msgEl.textContent = message.replace(/^[\u2705\u2B50\u{1F389}\u{1F4AA}\u26A0\u{1F4A1}]\s*/u, '');
 
     if (actionsEl) {
       actionsEl.innerHTML = '';

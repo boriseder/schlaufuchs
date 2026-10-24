@@ -68,49 +68,49 @@
 }
 
 :root {
-  --primary-color: var(--mathe, #2D5E9E);
-  --primary-hover: #1d4ed8;
-  --primary-light: var(--mathe-hell, #DCE8F6);
+  --primary-color: var(--mathe);
+  --primary-hover: var(--mathe);
+  --primary-light: var(--mathe-hell);
   
-  --math-color: var(--mathe, #2D5E9E);
-  --math-light: var(--mathe-hell, #DCE8F6);
-  --math-border: #bfdbfe;
+  --math-color: var(--mathe);
+  --math-light: var(--mathe-hell);
+  --math-border: var(--linie-leise);
 
-  --german-color: var(--deutsch, #B5502B);
-  --german-light: var(--deutsch-hell, #F6E1D8);
-  --german-border: #fecaca;
+  --german-color: var(--deutsch);
+  --german-light: var(--deutsch-hell);
+  --german-border: var(--linie-leise);
 
-  --general-color: var(--sach, #2F7A4F);
-  --general-light: var(--sach-hell, #DCEFE3);
-  --general-border: #a7f3d0;
+  --general-color: var(--sach);
+  --general-light: var(--sach-hell);
+  --general-border: var(--linie-leise);
 
-  --brain-color: var(--denken, #6B4C9A);
-  --brain-light: var(--denken-hell, #E7DFF3);
-  --brain-border: #e9d5ff;
+  --brain-color: var(--denken);
+  --brain-light: var(--denken-hell);
+  --brain-border: var(--linie-leise);
 
-  --success-color: var(--richtig, #F2C14E);
-  --success-light: #fefce8;
-  --success-border: var(--linie, #3B4651);
+  --success-color: var(--richtig);
+  --success-light: var(--richtig-hell);
+  --success-border: var(--linie);
   
-  --error-color: var(--linie, #3B4651);
-  --error-light: var(--nochmal, #E6EAF0);
-  --error-border: var(--linie-leise, #6B6558);
+  --error-color: var(--linie);
+  --error-light: var(--nochmal-hell);
+  --error-border: var(--linie-leise);
 
-  --star-gold: var(--richtig, #F2C14E);
+  --star-gold: var(--richtig);
 
-  --bg-canvas: var(--papier, #FBF7EE);
-  --card-bg: var(--flaeche, #FFFFFF);
-  --text-main: var(--tinte, #1E2A36);
-  --text-muted: var(--tinte-leise, #4A5560);
-  --border-radius: var(--radius, 8px);
-  --border-radius-sm: var(--radius, 8px);
+  --bg-canvas: var(--papier);
+  --card-bg: var(--flaeche);
+  --text-main: var(--tinte);
+  --text-muted: var(--tinte-leise);
+  --border-radius: var(--radius);
+  --border-radius-sm: var(--radius);
 
   --shadow-sm: none;
   --shadow-md: none;
   --shadow-lg: none;
 
-  --font-family: var(--schrift-text, 'PrimaeText', sans-serif);
-  --font-display: var(--schrift-zahl, 'Primae', sans-serif);
+  --font-family: var(--schrift-text);
+  --font-display: var(--schrift-zahl);
   --font-cursive: 'PrimaeText-Cursive', 'PrimaeCursive', cursive;
 }
 

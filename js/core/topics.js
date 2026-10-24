@@ -18,6 +18,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Plusrechnen im Zahlenraum 20 bis 10 000',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'M-1/4-Operationen-Addition',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/addition.svg'
     },
@@ -28,6 +31,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Minusrechnen und Zehnerunterschreitung',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'M-1/4-Operationen-Subtraktion',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/subtraktion.svg'
     },
@@ -38,6 +44,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Einmaleins und Kernaufgaben',
       grades: [2, 3, 4],
       lehrplanRef: 'M-2/4-Operationen-Mal',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/multiplikation.svg'
     },
@@ -48,6 +57,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Teilen, Aufteilen und Umkehraufgaben',
       grades: [2, 3, 4],
       lehrplanRef: 'M-2/4-Operationen-Geteilt',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/division.svg'
     },
@@ -58,6 +70,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Operative Zusammenhänge und Bausteine',
       grades: [1, 2, 3],
       lehrplanRef: 'M-1/3-Strukturen-Zahlenmauern',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'structure-calc',
       icon: 'assets/icons/themen/math/zahlenmauer.svg'
     },
@@ -68,6 +83,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Volle Stunden, halbe Stunden, Viertel und Minuten',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'M-1/4-Groessen-Uhrzeit',
+      lehrplanStatus: 'RIS',
+      druck: 'angepasst',
+      druckHinweis: 'Zeiger werden auf gedruckten Zifferblättern mit Bleistift eingezeichnet.',
       archetype: 'clock',
       icon: 'assets/icons/themen/math/uhr.svg'
     },
@@ -78,6 +96,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Euro, Cent, Münzen und Wechselgeld',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'M-1/4-Groessen-Geld',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'story-problem',
       icon: 'assets/icons/themen/math/geld.svg'
     },
@@ -88,6 +109,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Stellenwerttafel, Runden und Vergleichen',
       grades: [4],
       lehrplanRef: 'M-4-Zahlenraum-Million',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/million.svg'
     },
@@ -98,6 +122,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Kilogramm, Gramm, Liter, Meter und Zentimeter',
       grades: [4],
       lehrplanRef: 'M-4-Groessen-Masseinheiten',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'story-problem',
       icon: 'assets/icons/themen/math/einheiten.svg'
     },
@@ -108,6 +135,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Umfang, Flächeninhalt, Rechteck und Quadrat',
       grades: [4],
       lehrplanRef: 'M-4-Geometrie-Flaechen',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'story-problem',
       icon: 'assets/icons/themen/math/geometrie.svg'
     },
@@ -118,6 +148,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Schriftliche Addition und Subtraktion',
       grades: [3, 4],
       lehrplanRef: 'M-3/4-Operationen-Schriftlich',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'compact-calc',
       icon: 'assets/icons/themen/math/schriftlich.svg'
     },
@@ -128,6 +161,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Mengen erfassen, Kraft der Fünf und Zehner',
       grades: [1],
       lehrplanRef: 'M-1-Zahlenraum-20',
+      lehrplanStatus: 'RIS',
+      druck: 'angepasst',
+      druckHinweis: 'Punkte im Zwanzigerfeld werden auf Papier mit Bleistift ausgemalt.',
       archetype: 'structure-calc',
       icon: 'assets/icons/themen/math/zwanzigerfeld.svg'
     },
@@ -138,6 +174,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Sachaufgaben mit Frage, Rechnung und Antwort',
       grades: [2, 3, 4],
       lehrplanRef: 'M-2/4-Sachrechnen-Modellieren',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'story-problem',
       icon: 'assets/icons/themen/math/sachrechnen.svg'
     },
@@ -150,6 +189,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Namenwörter, Tunwörter und Wiewörter',
       grades: [2, 3],
       lehrplanRef: 'D-2/3-Sprachbetrachtung-Wortarten',
+      lehrplanStatus: 'RIS',
+      druck: 'angepasst',
+      druckHinweis: 'Im Schwarzweißdruck mit Linienarten und Form-Symbolen (Quadrat, Kreis, Dreieck) statt reiner Farbe.',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/wortarten.svg'
     },
@@ -160,6 +202,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Satzanfänge und Namenwörter großschreiben',
       grades: [1, 2, 3],
       lehrplanRef: 'D-1/3-Rechtschreiben-Grossklein',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/gross-klein.svg'
     },
@@ -170,6 +215,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Satzglieder richtig anordnen und schreiben',
       grades: [1, 2, 3],
       lehrplanRef: 'D-1/3-Verfassen-Satzbau',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/schuettelsatz.svg'
     },
@@ -180,6 +228,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Verben in die Vergangenheit setzen',
       grades: [4],
       lehrplanRef: 'D-4-Sprachbetrachtung-Zeitformen',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/zeiten.svg'
     },
@@ -190,6 +241,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Wer, Wessen, Wem und Wen erforschen',
       grades: [4],
       lehrplanRef: 'D-4-Sprachbetrachtung-Faelle',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/faelle.svg'
     },
@@ -200,6 +254,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Silbenbögen zeichnen und Vokale krönen',
       grades: [1, 2],
       lehrplanRef: 'D-1/2-Rechtschreiben-Silben',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'language-writing',
       icon: 'assets/icons/themen/german/silben.svg'
     },
@@ -210,6 +267,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Sinnerfassendes Lesen und Fragen beantworten',
       grades: [3, 4],
       lehrplanRef: 'D-3/4-Lesen-Sinnerfassung',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/german/lesen.svg'
     },
@@ -222,6 +282,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Jänner bis Dezember, Tage und Zeitkreise',
       grades: [1, 2, 3],
       lehrplanRef: 'SU-1/3-Zeit-Kalender',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/general/kalender.svg'
     },
@@ -232,6 +295,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Winterschlaf, Winterruhe und Winterstarre',
       grades: [2, 3],
       lehrplanRef: 'SU-2/3-Natur-Tiere-Winter',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/general/igel.svg'
     },
@@ -242,16 +308,22 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Verkehrserziehung nach österreichischer StVO',
       grades: [1, 2, 3],
       lehrplanRef: 'SU-1/3-Gemeinschaft-Verkehr',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/general/verkehr.svg'
     },
     {
       id: 'general-austria',
       subject: 'general',
-      title: 'Österreich: Bundesländer & Hauptstädte',
-      subtitle: 'Geografie, 9 Bundesländer und Landeshauptstädte',
+      title: 'Bundesländer & Hauptstädte',
+      subtitle: 'Österreichs 9 Bundesländer und Landeshauptstädte',
       grades: [4],
       lehrplanRef: 'SU-4-Raum-Oesterreich',
+      lehrplanStatus: 'SCHULUEBLICH',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/general/oesterreich.svg'
     },
@@ -262,6 +334,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Vorrangregeln, Ausrüstung und StVO-Wissen',
       grades: [4],
       lehrplanRef: 'SU-4-Gemeinschaft-Radfahrpruefung',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'reading-knowledge',
       icon: 'assets/icons/themen/general/fahrrad.svg'
     },
@@ -274,6 +349,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Gedächtnis, Konzentration und Partnerarbeit',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'GT-1/4-Gedaechtnis-Memory',
+      lehrplanStatus: 'RIS',
+      druck: 'nur-digital',
+      druckHinweis: 'Memory erfordert das interaktive Aufdecken verdeckter Kartenpaare am Bildschirm und ist als Arbeitsblatt nicht sinnvoll.',
       archetype: 'craft-sheet',
       icon: 'assets/icons/themen/brain/memory.svg'
     },
@@ -284,6 +362,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Logische Muster und Gesetzmäßigkeiten',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'GT-1/4-Logik-Zahlenreihen',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'structure-calc',
       icon: 'assets/icons/themen/brain/folge.svg'
     },
@@ -294,6 +375,9 @@ window.Schlaufuchs.Topics = (function () {
       subtitle: 'Formen kombinieren und Reihen fortsetzen',
       grades: [1, 2, 3, 4],
       lehrplanRef: 'GT-1/4-Logik-Muster',
+      lehrplanStatus: 'RIS',
+      druck: 'ja',
+      druckHinweis: '',
       archetype: 'structure-calc',
       icon: 'assets/icons/themen/brain/muster.svg'
     }

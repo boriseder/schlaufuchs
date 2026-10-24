@@ -25,11 +25,19 @@ function createSandbox(activeGrades = [1, 2, 3, 4]) {
   vm.runInNewContext(readFileSync('js/generators/german.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/generators/general.js', 'utf8'), sandbox);
   vm.runInNewContext(readFileSync('js/generators/brain.js', 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync('js/generators/index.js', 'utf8'), sandbox);
 
   return sandbox.window.Schlaufuchs.Generators;
 }
 
-test('AGENTS.md: Alle Generatoren liefern Schulstufe, Fach und Lehrplan-Referenz', () => {
+test('Fail-Fast: Unbekanntes Thema wirft Fehler und hat keinen stillen Fallback', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  assert.throws(() => {
+    G.getTasksForTopic('unbekanntes-phantasie-thema');
+  }, /Unbekanntes Lehrplanthema/, 'Muss harten Fehler werfen statt still auf Addition zurückzufallen');
+});
+
+test('AGENTS.md: Alle Generatoren liefern Schulstufe, Fach, Lehrplan-Referenz, Lehrplan-Status und Druckentscheidung', () => {
   const G = createSandbox([1, 2, 3, 4]);
   const allBuilders = [
     ...Object.entries(G.Math).filter(([k]) => k.startsWith('build')).map(([k, fn]) => ['Math.' + k, fn]),
@@ -46,6 +54,11 @@ test('AGENTS.md: Alle Generatoren liefern Schulstufe, Fach und Lehrplan-Referenz
       assert.ok(['mathe', 'deutsch', 'sachunterricht', 'denken'].includes(t.fach), `${name} task ${i} hat ungültiges fach: ${t.fach}`);
       assert.ok([1, 2, 3, 4].includes(t.schulstufe), `${name} task ${i} hat ungültige schulstufe: ${t.schulstufe}`);
       assert.ok(typeof t.lehrplanRef === 'string' && t.lehrplanRef.length > 0, `${name} task ${i} fehlt lehrplanRef`);
+      assert.ok(['RIS', 'SCHULUEBLICH'].includes(t.lehrplanStatus), `${name} task ${i} hat ungültigen lehrplanStatus: ${t.lehrplanStatus}`);
+      assert.ok(['ja', 'angepasst', 'nur-digital'].includes(t.druck), `${name} task ${i} hat ungültige druck-Entscheidung: ${t.druck}`);
+      if (t.druck !== 'ja') {
+        assert.ok(typeof t.druckHinweis === 'string' && t.druckHinweis.trim().length > 0, `${name} task ${i} benötigt druckHinweis bei druck="${t.druck}"`);
+      }
     }
   }
 });
@@ -198,5 +211,32 @@ test('Mathematik: Geometrie- und Maßeinheiten-Aufgaben sind mathematisch exakt'
     for (const t of units) {
       assert.ok(typeof t.answer === 'number' && !isNaN(t.answer), `Ungültige Antwort in Maßeinheit: ${t.question}`);
     }
+  }
+});
+
+test('Gehirntraining: Tier-Memory erzeugt echte, vollflächige Tier- und Natur-SVGs', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+  const tasks = G.Brain.buildMemoryTasks();
+  assert.ok(tasks.length === 1, 'Liefert genau ein Memory-Task-Objekt');
+  const task = tasks[0];
+  assert.equal(task.type, 'memory');
+  assert.ok(task.cards.length >= 8, 'Mindestens 8 Karten (4 Paare)');
+  
+  // Prüfe jede Karte auf SVG-Vollflächigkeit und Naturbezug
+  for (const c of task.cards) {
+    assert.ok(typeof c.pairId === 'number', 'Karte muss pairId besitzen');
+    assert.ok(typeof c.content === 'string' && c.content.includes('<svg'), 'Karteninhalt muss ein valides SVG sein');
+    assert.ok(c.content.includes('viewBox="0 0 100 100"'), 'SVG muss volles 100x100 viewBox nutzen');
+    assert.ok(typeof c.subtitle === 'string' && c.subtitle.length > 0, 'Karte muss Tier-/Naturnamen tragen');
+    assert.ok(!['★', '●', '▲', '■', '◆', '✦'].includes(c.content), 'Keine sterilen geometrischen Symbole mehr!');
+  }
+
+  // Prüfe Paarbildung (jede pairId kommt exakt 2x vor)
+  const pairCounts = {};
+  for (const c of task.cards) {
+    pairCounts[c.pairId] = (pairCounts[c.pairId] || 0) + 1;
+  }
+  for (const [id, count] of Object.entries(pairCounts)) {
+    assert.equal(count, 2, `Paar ${id} muss exakt 2 Karten haben`);
   }
 });

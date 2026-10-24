@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Radweg">
+  <title>Radweg (StVO § 52 Z 16)</title>
+  <!-- StVO § 52 Z 16: Runder blauer Grund, weißes Fahrrad -->
+  <circle cx="50" cy="50" r="45" fill="#0066B3" stroke="#ffffff" stroke-width="3"/>
+  <g stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="58" r="13"/>
+    <circle cx="70" cy="58" r="13"/>
+    <polyline points="30,58 46,58 58,40 70,58"/>
+    <polyline points="46,58 40,38 33,38"/>
+    <line x1="58" y1="40" x2="67" y2="40"/>
+    <polyline points="65,35 70,40 65,40"/>
+  </g>
+</svg>

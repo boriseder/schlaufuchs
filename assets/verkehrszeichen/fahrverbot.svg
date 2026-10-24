@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Fahrverbot für alle Fahrzeuge">
+  <title>Fahrverbot für alle Fahrzeuge (StVO § 52 Z 1)</title>
+  <!-- StVO § 52 Z 1: Weißer Kreis mit rotem Rand -->
+  <circle cx="50" cy="50" r="45" fill="#C82828" stroke="#A31F1F" stroke-width="2"/>
+  <circle cx="50" cy="50" r="33" fill="#ffffff"/>
+</svg>

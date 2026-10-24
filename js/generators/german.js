@@ -10,12 +10,24 @@ window.Schlaufuchs.Generators = window.Schlaufuchs.Generators || {};
 window.Schlaufuchs.Generators.German = (function () {
   'use strict';
 
-  // Zentrale Hilfsfunktionen aus Core (Zufall, Stufen-Filter)
-  const shuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
+  // Zentrale Hilfsfunktionen aus Core (Zufall, Stufen-Filter, deterministischer Seed)
+  function getRng(opts) {
+    const seed = (opts && opts.seed !== undefined) ? opts.seed : undefined;
+    if (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.erstelleZufall) {
+      return window.Schlaufuchs.Random.erstelleZufall(seed);
+    }
+    return {
+      int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+      mischen: (arr) => [...arr].sort(() => Math.random() - 0.5),
+      wahl: (arr) => arr[Math.floor(Math.random() * arr.length)]
+    };
+  }
+  const defaultShuffle = (window.Schlaufuchs && window.Schlaufuchs.Random && window.Schlaufuchs.Random.mischen) || (arr => [...arr].sort(() => Math.random() - 0.5));
   const getEffectiveGrades = (window.Schlaufuchs && window.Schlaufuchs.getEffectiveGrades) || (g => g);
 
   // 1. WORTARTEN (Namenwort , Tunwort , Wiewort  – 25+ Sätze Pool)
   function buildWordTypesTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const grades = getEffectiveGrades([2, 3]);
     const isOnlyGrade2 = !grades.includes(3) && !grades.includes(4);
 
@@ -80,6 +92,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 2. GROSS & KLEIN (Namenwörter großschreiben – 25+ Sätze Pool)
   function buildCapitalizationTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const pool = [
       {
         words: [
@@ -257,6 +270,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 3. SCHÜTTELSÄTZE (Reihenfolge ordnen – 25+ Sätze Pool)
   function buildScrambleTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const pool = [
       'Der fleißige Biber fällt einen Baum',
       'Die kluge Eule fliegt durch die Nacht',
@@ -301,6 +315,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 4. DIE 4 FÄLLE DES NOMENS (4. Klasse – Wer-Fall, Wessen-Fall, Wem-Fall, Wen-Fall – 25+ Pool)
   function buildCasesTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     if (opts && opts.forPrint) {
       const printCases = [
         { sentence: 'Der schlaue Fuchs schleicht leise durch das Moos.', target: 'Der schlaue Fuchs', caseName: 'Werfall (1. Fall: Wer oder was?)', short: 'Werfall' },
@@ -406,6 +421,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 5. ZEITFORMEN (Gegenwart / Mitvergangenheit / Vergangenheit / Zukunft – 25+ Pool)
   function buildTensesTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     if (opts && opts.forPrint) {
       const printTenses = [
         { pres: 'Lukas läuft schnell zur Schule.', past: 'Lukas lief schnell zur Schule.' },
@@ -518,6 +534,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 6. SILBENSCHWINGEN & SILBENKÖNIGE (1. & 2. Klasse)
   function buildSyllableTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const pool = [
       { word: 'Schule', syllables: 'Schu - le', count: 2, vowels: 'u, e', hint: 'Sprich das Wort langsam und klatsche bei jedem Silbenbogen in die Hände!' },
       { word: 'Schmetterling', syllables: 'Schmet - ter - ling', count: 3, vowels: 'e, e, i', hint: 'Lege deine Hand unters Kinn: Wie oft geht dein Kinn beim Sprechen nach unten?' },
@@ -557,6 +574,7 @@ window.Schlaufuchs.Generators.German = (function () {
 
   // 7. LESEVERSTÄNDNIS (Sachtexte für 3. & 4. Klasse)
   function buildReadingTasks(opts) {
+    const shuffle = (opts && opts.seed !== undefined) ? (arr => getRng(opts).mischen(arr)) : defaultShuffle;
     const textsPool = [
       {
         id: 'eichhoernchen',
@@ -745,6 +763,9 @@ window.Schlaufuchs.Generators.German = (function () {
         schulstufe: 3,
         grade: 3,
         lehrplanRef: 'D-3-4-Lesen-Sachtexte',
+        lehrplanStatus: 'RIS',
+        druck: 'ja',
+        druckHinweis: '',
         type: 'reading',
         title: item.title,
         icon: item.icon,
@@ -756,13 +777,34 @@ window.Schlaufuchs.Generators.German = (function () {
     });
   }
 
+  function stampGermanTasks(tasks) {
+    if (!Array.isArray(tasks)) return tasks;
+    return tasks.map(t => {
+      if (!t || typeof t !== 'object') return t;
+      if (!t.fach) t.fach = 'deutsch';
+      if (!t.lehrplanStatus) t.lehrplanStatus = 'RIS';
+      if (!t.druck) {
+        if (t.type === 'word-types') {
+          t.druck = 'angepasst';
+          t.druckHinweis = 'Im Schwarzweißdruck mit Linienarten und Form-Symbolen (Quadrat, Kreis, Dreieck) statt reiner Farbe.';
+        } else {
+          t.druck = 'ja';
+          t.druckHinweis = '';
+        }
+      } else if (t.druck !== 'ja' && !t.druckHinweis) {
+        t.druckHinweis = 'Didaktisch angepasste Druckausgabe.';
+      }
+      return t;
+    });
+  }
+
   return {
-    buildWordTypesTasks: buildWordTypesTasks,
-    buildCapitalizationTasks: buildCapitalizationTasks,
-    buildScrambleTasks: buildScrambleTasks,
-    buildCasesTasks: buildCasesTasks,
-    buildTensesTasks: buildTensesTasks,
-    buildSyllableTasks: buildSyllableTasks,
-    buildReadingTasks: buildReadingTasks,
+    buildWordTypesTasks: (opts) => stampGermanTasks(buildWordTypesTasks(opts)),
+    buildCapitalizationTasks: (opts) => stampGermanTasks(buildCapitalizationTasks(opts)),
+    buildScrambleTasks: (opts) => stampGermanTasks(buildScrambleTasks(opts)),
+    buildCasesTasks: (opts) => stampGermanTasks(buildCasesTasks(opts)),
+    buildTensesTasks: (opts) => stampGermanTasks(buildTensesTasks(opts)),
+    buildSyllableTasks: (opts) => stampGermanTasks(buildSyllableTasks(opts)),
+    buildReadingTasks: (opts) => stampGermanTasks(buildReadingTasks(opts)),
   };
 })();

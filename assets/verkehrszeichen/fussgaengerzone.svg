@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="90" height="90" class="stvo-sign" role="img" aria-label="Fußgängerzone">
+  <title>Fußgängerzone (StVO § 53 Z 9a)</title>
+  <!-- StVO § 53 Z 9a: Blaues Rechteck mit weißem Kreis und Fußgängern -->
+  <rect x="5" y="5" width="90" height="90" rx="8" fill="#0066B3" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="50" cy="50" r="34" fill="#ffffff"/>
+  <circle cx="43" cy="33" r="3.5" fill="#0066B3"/>
+  <path d="M 40 38 L 46 38 L 48 49 L 45 50 L 45 65 L 41 65 L 42 54 L 38 65 L 34 65 L 37 47 L 40 38 Z" fill="#0066B3"/>
+  <circle cx="58" cy="42" r="3" fill="#0066B3"/>
+  <path d="M 55 47 L 60 47 L 61 56 L 58 57 L 58 66 L 55 66 L 55 58 L 52 66 L 49 66 L 51 54 L 55 47 Z" fill="#0066B3"/>
+</svg>

@@ -7,11 +7,13 @@
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#FBF7EE">
   <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/tokens-druck.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/exercises.css">
   <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/print.css">
   <style>
     /* Spezifische Layout-Stile für die Admin-QS-Seite (100 % Tokens, kein SaaS-Look) */
     .qa-page-container {
@@ -305,6 +307,10 @@
           <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
           <span>Drucken</span>
         </button>
+        <button id="btn-qa-print-cert" class="btn btn-primary" type="button" title="Vollständige Urkunde (alle Sterne &amp; Stempel) für ein Kind drucken">
+          <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
+          <span>Urkunde drucken</span>
+        </button>
       </div>
     </header>
 
@@ -360,6 +366,9 @@
 
   </div>
 
+  <!-- A4-Druckbereich für Urkunden & Arbeitsblätter -->
+  <div id="print-area"></div>
+
   <!-- CORE & LOGIK-SKRIPTE -->
   <script src="js/core/format.js"></script>
   <script src="js/core/storage.js"></script>
@@ -368,11 +377,15 @@
   <script src="js/core/topics.js"></script>
   <script src="js/clock.js"></script>
   <script src="js/signs.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/dialog.js"></script>
   <script src="js/generators/math.js"></script>
   <script src="js/generators/german.js"></script>
   <script src="js/generators/general.js"></script>
   <script src="js/generators/brain.js"></script>
   <script src="js/generators/index.js"></script>
+  <script src="js/print-engine.js"></script>
+  <script src="js/print.js"></script>
   <script src="js/admin-qa.js"></script>
 
   <!-- INTERAKTIVER CONTROLLER FÜR DIE ADMIN-SEITE -->
@@ -419,6 +432,21 @@
         regenerateBtn.addEventListener('click', () => {
           loadTopic(currentTopicId);
         });
+
+        const certBtn = document.getElementById('btn-qa-print-cert');
+        if (certBtn) {
+          certBtn.addEventListener('click', () => {
+            const State = window.Schlaufuchs.State;
+            const activeProfile = (State && State.getActiveProfile) ? State.getActiveProfile() : null;
+            const defaultName = activeProfile ? activeProfile.name : 'Nils';
+            const name = window.prompt('Name des Kindes für die vollständige Ehrenurkunde (alle 84 Sterne & 16 Stempel):', defaultName);
+            if (name && name.trim()) {
+              if (window.Schlaufuchs.Print && window.Schlaufuchs.Print.printCertificate) {
+                window.Schlaufuchs.Print.printCertificate({ name: name.trim() }, { full: true });
+              }
+            }
+          });
+        }
       }
 
       function populateTopicDropdown() {
