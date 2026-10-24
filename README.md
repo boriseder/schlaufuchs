@@ -81,7 +81,13 @@ Browser
  ├── index.html                   (Single Page Shell, semantisches HTML5)
  ├── css/
  │    ├── tokens.css              (Design-Tokens: Farben, Typografie, Radien, Touch-Maße)
- │    └── style.css               (Komponenten-Layouts, Print-Styles, Numpad)
+ │    ├── base.css                (Reset, Primae Typografie, Body-Defaults)
+ │    ├── layout.css              (App-Shell, Header, Themenauswahl-Grid, Fokus-Modus)
+ │    ├── components.css          (Standard-Aufgabenkarten, Numpad, Scaffolding, Buttons)
+ │    ├── exercises.css           (Didaktische Module: Mathe, Deutsch, Sachunterricht, Uhren)
+ │    ├── stickers.css            (Panini-Sammelalbum, Booster & Trophäen-Vitrine)
+ │    ├── admin.css               (Eltern- & Lehrkraft-Bereich, PIN-Schutz, Diagnostik)
+ │    └── print.css               (A4-Arbeitsblätter-Engine, Knickstreifen, Urkunden)
  ├── js/
  │    ├── core/                   (Zentrale Dienste: format.js, storage.js, random.js, texte.js)
  │    ├── generators/             (Reine, zustandslose Generatoren nach Lehrplan)
@@ -156,7 +162,7 @@ Schlaufuchs/
 ├── AGENTS.md                    # Verbindliche Coding- & Lehrplan-Vorgaben
 ├── index.html                   # Hauptseite (SPA)
 ├── manifest.webmanifest         # PWA Web App Manifest
-├── style.css                    # Globale Komponenten- und Layoutstile
+├── style.css                    # Aggregiertes Manifest (@import) für Legacy-Kompatibilität
 └── sw.js                        # Cache-First Service Worker
 ```
 

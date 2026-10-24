@@ -6,7 +6,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
 
 const formatCode = readFileSync('js/core/format.js', 'utf8');
@@ -16,7 +16,22 @@ const storageCode = readFileSync('js/core/storage.js', 'utf8');
 const topicsCode = readFileSync('js/core/topics.js', 'utf8');
 const printEngineCode = readFileSync('js/print-engine.js', 'utf8');
 const printCode = readFileSync('js/print.js', 'utf8');
-const styleCss = readFileSync('style.css', 'utf8');
+
+const cssModules = [
+  'style.css',
+  'css/tokens.css',
+  'css/base.css',
+  'css/layout.css',
+  'css/components.css',
+  'css/exercises.css',
+  'css/stickers.css',
+  'css/admin.css',
+  'css/print.css'
+];
+const styleCss = cssModules
+  .filter(f => existsSync(f))
+  .map(f => readFileSync(f, 'utf8'))
+  .join('\n');
 
 function setupIntegrationSandbox() {
   const sandbox = {

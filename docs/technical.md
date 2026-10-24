@@ -57,8 +57,15 @@ Das System folgt einer strikten Trennung der Zuständigkeiten (Separation of Con
 ├── manifest.webmanifest        # W3C Web App Manifest (PWA)
 ├── sw.js                       # Service Worker (Cache-First Offline Engine)
 ├── css/
-│   └── tokens.css              # Single Source of Truth für Design-Tokens (Farben, Maße)
-├── style.css                   # Anwendungs-Styles (Anti-KI, Druck-Optimierung, Numpad)
+│   ├── tokens.css              # Single Source of Truth für Design-Tokens (Farben, Maße)
+│   ├── base.css                # Schulschrift Primae, Resets & Body-Defaults
+│   ├── layout.css              # App-Shell, Header, Menü-Grid & Fokus-Modus
+│   ├── components.css          # Standard-Aufgabenkarten, 64px Numpad, Scaffolding
+│   ├── exercises.css           # Didaktische Fachmodule (Mathe, Deutsch, StVO, Uhren)
+│   ├── stickers.css            # Panini-Sammelalbum, Booster & Trophäen-Vitrine
+│   ├── admin.css               # Eltern- & Lehrerbereich, PIN-Schutz, Diagnostik
+│   └── print.css               # A4-Arbeitsblatt-Engine, Knickstreifen, Urkunden
+├── style.css                   # Aggregiertes Manifest (@import) für Abwärtskompatibilität
 ├── fonts/                      # Lokale Schulschriften (Primae-Regular, PrimaeText)
 ├── assets/
 │   ├── icons/                  # 3px-Monochrom-SVG-Icons (keine Emojis in Bedienteilen)

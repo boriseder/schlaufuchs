@@ -1,0 +1,919 @@
+/* Schlaufuchs – Layout & Navigation */
+
+.app-container {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ========================================================
+   IMMERSIVER FOKUS-MODUS BEIM ÜBEN (KEIN DOPPEL-HEADER!)
+   ======================================================== */
+body.in-exercise .main-header {
+  display: none;
+}
+
+body.in-exercise {
+  padding-top: 12px;
+}
+
+body.in-exercise .app-container {
+  gap: 12px;
+  max-width: 960px;
+}
+
+/* ========================================================
+   HEADER & TOP BAR (Sanfte, ruhige Kachel-Ästhetik)
+   ======================================================== */
+.main-header {
+  background: var(--card-bg, #ffffff);
+  border-radius: var(--border-radius, 16px);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.brand:hover {
+  opacity: 0.85;
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
+}
+
+.brand-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.brand-text h1 {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.brand-sub {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted, #64748b);
+}
+
+/* Zentrierte Kind-Identität (Sanfte Kachel-Ästhetik) */
+.header-center-identity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-child-pill,
+.header-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.header-child-pill:hover,
+.header-profile-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.header-child-pill:focus-visible,
+.header-profile-btn:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
+}
+
+.pill-divider {
+  color: #94a3b8;
+  font-weight: 400;
+  margin: 0 4px;
+}
+
+.user-avatar {
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.profile-caret {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-left: 2px;
+}
+
+.stars-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 44px;
+}
+
+.star-icon {
+  color: var(--star-gold, #F2C14E);
+  font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Werkzeuge & Aktionen (Luftige freie Icons ohne Boxen-Flut) */
+.header-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-tools-subgroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-tools-divider {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: #cbd5e1;
+  margin: 0 4px;
+}
+
+.header-tool-btn {
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.15s ease;
+  min-height: 44px;
+  min-width: 44px;
+  color: #475569;
+}
+
+.header-tool-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.header-tool-btn:focus-visible {
+  outline: 2px solid var(--mathe, #2255A4);
+  outline-offset: 2px;
+}
+
+.header-tool-btn.has-packs {
+  border-color: #d97706;
+  background: #fffbeb;
+}
+
+.header-tool-btn.active {
+  background: var(--mathe-hell, #DCE8F6);
+  border-color: var(--mathe, #2255A4);
+  color: var(--mathe, #2255A4);
+}
+
+/* Views toggling */
+.view-section {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.view-section.active {
+  display: flex;
+}
+
+/* =========================================
+   MENÜ / THEMENAUSWAHL
+   ========================================= */
+
+.grade-segmented-control,
+.class-filter-bar {
+  display: inline-flex;
+  align-self: center;
+  margin: 6px auto 16px auto;
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  max-width: 100%;
+  overflow-x: auto;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.filter-label {
+  display: none;
+}
+
+.filter-btn {
+  font-family: var(--font-family);
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 8px 18px;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.filter-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Fachbereichs-Sektionen */
+.subjects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.subject-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subject-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.subject-icon-svg {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.subject-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-math { background: var(--math-light); color: var(--math-color); }
+.badge-german { background: var(--german-light); color: var(--german-color); }
+.badge-general { background: var(--general-light); color: var(--general-color); }
+.badge-brain { background: var(--brain-light); color: var(--brain-color); }
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+/* Kompakte, warme Kacheln (Schulbuch-Eleganz) */
+.topic-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-height: 110px;
+}
+
+/* Sanfter Startimpuls (Pfeil unten rechts) */
+.topic-card::after {
+  content: '→';
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #94a3b8;
+  opacity: 0.35;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1;
+}
+
+.topic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.topic-card:hover::after {
+  opacity: 1;
+  transform: translateX(3px);
+  color: #1e293b;
+}
+
+.subject-group[data-subject="math"] .topic-card:hover {
+  border-color: #2D5E9E;
+}
+.subject-group[data-subject="math"] .topic-card:hover::after {
+  color: #2D5E9E;
+}
+
+.subject-group[data-subject="german"] .topic-card:hover {
+  border-color: #B5502B;
+}
+.subject-group[data-subject="german"] .topic-card:hover::after {
+  color: #B5502B;
+}
+
+.subject-group[data-subject="general"] .topic-card:hover {
+  border-color: #2F7A4F;
+}
+.subject-group[data-subject="general"] .topic-card:hover::after {
+  color: #2F7A4F;
+}
+
+.subject-group[data-subject="brain"] .topic-card:hover {
+  border-color: #6B4C9A;
+}
+.subject-group[data-subject="brain"] .topic-card:hover::after {
+  color: #6B4C9A;
+}
+
+.topic-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.topic-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.topic-card:hover .topic-icon-badge {
+  transform: scale(1.06);
+}
+
+.subject-group[data-subject="math"] .topic-icon-badge {
+  background: #EEF4FC;
+  border: 1px solid #D4E3F8;
+}
+
+.subject-group[data-subject="german"] .topic-icon-badge {
+  background: #FDF2ED;
+  border: 1px solid #FAD7C7;
+}
+
+.subject-group[data-subject="general"] .topic-icon-badge {
+  background: #EDF7F1;
+  border: 1px solid #CAEBD6;
+}
+
+.subject-group[data-subject="brain"] .topic-icon-badge {
+  background: #F6F0FC;
+  border: 1px solid #EDDCF9;
+}
+
+.topic-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.topic-icon-svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+.topic-icon.topic-icon-colon {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2.1rem;
+  color: var(--math-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  line-height: 0.8;
+}
+
+.grade-pill {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  letter-spacing: 0.2px;
+}
+
+.topic-body h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.topic-footer {
+  display: none; /* Ruhiger Kachelboden wenn 0 Sterne */
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4px;
+}
+
+.topic-footer.has-stars {
+  display: flex;
+}
+
+.topic-stars {
+  color: #D97706;
+  display: inline-flex;
+  gap: 3px;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* =========================================
+   ÜBUNGS-ANSICHT (IMMERSIVER FOKUS-MODUS)
+   ========================================= */
+
+.exercise-focus-topbar,
+.exercise-topbar {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+}
+
+.focus-topbar-left,
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-focus-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #334155;
+  cursor: pointer;
+  min-height: 40px;
+  transition: all 0.15s ease;
+}
+
+.btn-focus-back:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.back-icon {
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.focus-topbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.focus-topbar-right,
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.focus-tool-btn {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 40px;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.focus-tool-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+/* Mehr-Optionen Dropdown für Lehrkräfte & Eltern */
+.focus-options-menu-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.focus-options-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  min-width: 210px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+}
+
+.focus-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+  width: 100%;
+}
+
+.focus-dropdown-btn:hover {
+  background: #f1f5f9;
+}
+
+.dropdown-icon-svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   STICKER-BADGE & VORLESE-BUTTON
+   ========================================= */
+
+.sticker-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--nochmal, #dc2626);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 900;
+  border-radius: 999px;
+  padding: 2px 7px;
+  min-width: 20px;
+  text-align: center;
+  border: 1px solid var(--papier, #ffffff);
+}
+
+.btn-speaker {
+  background: var(--flaeche, #F3EEDF);
+  border: var(--rahmen, 2px solid #1E252B);
+  color: var(--mathe, #2255A4);
+  border-radius: var(--radius, 12px);
+  width: var(--ziel-min, 56px);
+  height: var(--ziel-min, 56px);
+  min-width: 48px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+.btn-speaker:hover {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--mathe, #2255A4);
+}
+
+/* =========================================
+   MODAL WINDOWS (PROFILE & ADMIN)
+   ========================================= */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 42, 54, 0.7);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-overlay.active {
+  display: flex;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  border: 1.5px solid #e2e8f0;
+}
+
+.modal-card-lg {
+  max-width: 760px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.profile-pick-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.profile-pick-card:hover {
+  border-color: #2563eb;
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+}
+
+.profile-pick-card.active-profile {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.admin-grade-label:hover {
+  border-color: var(--mathe, #2D5E9E);
+  background: var(--mathe-hell, #DCE8F6);
+}
+
+/* =========================================
+   RESPONSIVES DESIGN / IPAD OPTIMIERUNG
+   ========================================= */
+
+/* Tablets / iPad Portrait & Landscape */
+@media (max-width: 920px) {
+  body {
+    padding: 14px 12px 60px;
+  }
+
+  .app-container {
+    gap: 16px;
+  }
+
+  .main-header {
+    padding: 14px 18px;
+  }
+
+  .brand h1 {
+    font-size: 1.4rem;
+  }
+
+  .topics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+/* Mobile & kleine iPad-Ansichten */
+@media (max-width: 640px) {
+  .main-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .brand {
+    justify-content: center;
+  }
+
+  .stars-badge {
+    justify-content: center;
+  }
+}
+
+.exercise-focus-topbar,
+.exercise-topbar {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+}
+
+.focus-topbar-left,
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-focus-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #334155;
+  cursor: pointer;
+  min-height: 40px;
+  transition: all 0.15s ease;
+}
+
+.btn-focus-back:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.back-icon {
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.focus-topbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.focus-topbar-right,
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.focus-tool-btn {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 40px;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.focus-tool-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+

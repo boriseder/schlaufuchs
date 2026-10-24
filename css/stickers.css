@@ -1,0 +1,393 @@
+/* Schlaufuchs – Sammelalbum & Gamification */
+/* =========================================
+   STICKER-ALBUM & BOOSTER-BANNER
+   ========================================= */
+
+.stickers-booster-banner {
+  background: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.booster-info h4 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  margin-bottom: 4px;
+}
+
+.booster-info p {
+  font-size: 0.9rem;
+  color: #475569;
+  font-weight: 700;
+}
+
+.btn-booster {
+  background: #eab308;
+  border: 1.5px solid #ca8a04;
+  color: #1e293b;
+  font-weight: 900;
+}
+
+.stickers-treasure-banner {
+  background: var(--flaeche, #F3EEDF);
+  border: var(--rahmen, 2px solid #1E252B);
+  border-radius: var(--radius, 8px);
+  padding: var(--abstand-3, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--abstand-3, 16px);
+  margin-bottom: var(--abstand-3, 16px);
+  flex-wrap: wrap;
+}
+
+.treasure-info h4 {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+  margin-bottom: var(--abstand-1, 4px);
+}
+
+.treasure-info p {
+  font-family: var(--schrift-text, inherit);
+  font-size: 0.9rem;
+  color: var(--tinte-leise, #4E5860);
+  margin: 0;
+}
+
+.treasure-form {
+  display: flex;
+  align-items: center;
+  gap: var(--abstand-2, 8px);
+}
+
+.treasure-input {
+  font-family: var(--schrift-titel, inherit);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  width: 160px;
+  text-align: center;
+  min-height: var(--ziel-min, 56px);
+  font-size: 1.1rem;
+}
+
+.btn-treasure {
+  min-height: var(--ziel-min, 56px);
+  padding: 0 20px;
+}
+
+.treasure-feedback-msg {
+  padding: var(--abstand-2, 8px) var(--abstand-3, 16px);
+  border-radius: var(--radius, 8px);
+  font-family: var(--schrift-text, inherit);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: var(--abstand-3, 16px);
+}
+
+.treasure-feedback-msg.success {
+  background: var(--flaeche, #F3EEDF);
+  border: var(--rahmen, 2px solid #1E252B);
+  color: var(--tinte, #1E252B);
+}
+
+.treasure-feedback-msg.error {
+  background: var(--flaeche, #F3EEDF);
+  border: 2px solid var(--tinte-leise, #4E5860);
+  color: var(--tinte, #1E252B);
+}
+
+/* ========================================================
+   STICKER-ALBUM (PANINI-SAMMELHEFT-PRINZIP & VITRINE)
+   ======================================================== */
+
+.stickers-collection-header {
+  margin: 18px 0 12px;
+}
+
+.stickers-collection-title-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.stickers-collection-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.stickers-collection-stats {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.stickers-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stickers-progress-bar-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.stickers-album-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 680px) {
+  .stickers-album-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+.sticker-album-card {
+  border-radius: 16px;
+  padding: 12px 8px 10px;
+  text-align: center;
+  position: relative;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+}
+
+.sticker-album-card.owned {
+  background: #ffffff;
+  border: 2.5px solid #93c5fd;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+}
+
+.sticker-album-card.owned:hover {
+  transform: translateY(-3px);
+  border-color: #3b82f6;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+.sticker-album-card.locked {
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+}
+
+.sticker-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.sticker-slot-badge {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.sticker-slot-badge.owned {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sticker-album-card .sticker-icon {
+  font-size: 2.8rem;
+  margin: 14px 0 6px;
+  line-height: 1;
+}
+
+.sticker-album-card .sticker-name {
+  font-weight: 900;
+  font-size: 0.92rem;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.sticker-album-card .sticker-desc {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  line-height: 1.25;
+}
+
+.sticker-card-empty {
+  justify-content: center;
+}
+
+.sticker-silhouette-placeholder {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1.5px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0 8px;
+}
+
+.sticker-silhouette-star {
+  font-size: 1.8rem;
+  color: #cbd5e1;
+}
+
+.sticker-category-tag {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+/* Trophäen-Vitrine */
+.trophies-section-header {
+  margin: 20px 0 10px;
+}
+
+.trophies-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.trophies-subtitle {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.trophies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.trophy-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--abstand-2);
+  padding: var(--abstand-2) var(--abstand-3);
+  border-radius: var(--radius);
+  border: var(--rahmen);
+  background: var(--flaeche);
+  min-height: 64px;
+}
+
+.trophy-badge.achieved {
+  background: var(--papier);
+  border-color: var(--richtig);
+}
+
+.trophy-badge.locked {
+  background: var(--papier);
+  border: 1.5px dashed var(--linie-leise);
+  opacity: 0.75;
+}
+
+.trophy-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.trophy-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.trophy-name {
+  display: block;
+  font-family: var(--schrift-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tinte);
+  margin-bottom: 2px;
+}
+
+.trophy-badge.achieved .trophy-name {
+  color: var(--tinte);
+}
+
+.trophy-desc {
+  font-family: var(--schrift-text);
+  font-size: 0.8rem;
+  color: var(--tinte-leise);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.trophy-status-pill {
+  font-family: var(--schrift-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+.trophy-status-pill.achieved {
+  background: var(--sach-hell);
+  color: var(--sach);
+  border: 1px solid var(--sach);
+}
+
+.trophy-status-pill.locked {
+  background: var(--nochmal);
+  color: var(--tinte-leise);
+}
+
+.booster-reveal-overlay {
+  z-index: 10001;
+}
+
+.booster-reveal-card {
+  background: var(--flaeche);
+  border-radius: var(--radius);
+  border: var(--rahmen);
+  padding: var(--abstand-4);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: boosterPop 0.25s ease-out;
+}
+
+@keyframes boosterPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.booster-sticker-anim {
+  font-size: 4.5rem;
+  margin: 12px 0;
+}
+

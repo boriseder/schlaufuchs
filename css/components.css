@@ -1,0 +1,722 @@
+/* Schlaufuchs – Komponenten & Bedienteile */
+/* =========================================
+   AUFGABEN-CONTAINER & KARTEN
+   ========================================= */
+
+.exercise-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-card {
+  background: var(--papier, #FBF7EE);
+  border: var(--rahmen, 2px solid #1E252B);
+  border-radius: var(--radius, 12px);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.15s ease;
+}
+
+.task-card:hover {
+  border-color: var(--tinte, #1E252B);
+}
+
+.task-card.correct {
+  background-color: var(--erfolg-hell, #F0FDF4);
+  border-color: var(--erfolg, #2E7D32);
+}
+
+.task-card.incorrect {
+  background-color: var(--nochmal-hell, #FDE8E8);
+  border-color: var(--nochmal, #C83232);
+}
+
+/* =========================================
+   STANDARDISIERTE 3-ZONEN AUFGABENKARTE
+   ========================================= */
+
+.task-card-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.task-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.task-index {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--tinte-leise, #64748B);
+  min-width: 28px;
+  flex-shrink: 0;
+  padding-top: 0;
+  line-height: 1.4;
+  display: inline-flex;
+  align-items: center;
+}
+
+.task-question-title {
+  font-family: var(--schrift-titel, inherit);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+  line-height: 1.4;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 0;
+}
+
+.task-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 2px solid var(--linie-leise, #C8C2B4);
+  padding-top: 14px;
+  margin-top: 6px;
+  gap: 12px;
+}
+
+.task-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-submit-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Rechnungszeile für Grundrechnungen */
+.task-equation {
+  font-family: var(--font-display, inherit);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--tinte, #1E252B);
+  width: 100%;
+}
+
+.task-op {
+  color: var(--mathe, #2255A4);
+  font-weight: 900;
+  font-size: 2.2rem;
+}
+
+.task-equals {
+  color: var(--tinte-leise, #64748B);
+  font-weight: 800;
+}
+
+/* Touch-optimierte Zahleneingabe für iPad */
+.task-input {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.8rem;
+  font-weight: 800;
+  width: 110px;
+  height: var(--ziel-min, 56px);
+  text-align: center;
+  border: var(--rahmen, 2px solid #1E252B);
+  border-radius: var(--radius, 12px);
+  background-color: var(--papier, #FBF7EE);
+  color: var(--tinte, #1E252B);
+  outline: none;
+  transition: all 0.15s ease;
+  -moz-appearance: textfield;
+}
+
+.task-input::-webkit-outer-spin-button,
+.task-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.task-input::placeholder {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--tinte-leise, #4A5560);
+  opacity: 0.45;
+}
+
+.exercise-focus-wrapper .task-input::placeholder {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--tinte-leise, #4A5560);
+  opacity: 0.45;
+}
+
+.task-input:focus {
+  border-color: var(--mathe, #2255A4);
+  background-color: #FFFFFF;
+}
+
+.task-card.correct .task-input {
+  border-color: var(--erfolg, #2E7D32);
+  background-color: #FFFFFF;
+  color: var(--erfolg, #2E7D32);
+}
+
+.task-card.incorrect .task-input {
+  border-color: var(--nochmal, #C83232);
+  background-color: #FFFFFF;
+  color: var(--nochmal, #C83232);
+}
+
+/* Feedback & Aktionen */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: flex-end;
+}
+
+.task-feedback {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: 800;
+  min-width: 120px;
+}
+
+.task-feedback.correct {
+  color: #047857;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.task-feedback.incorrect {
+  color: #b91c1c;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* =========================================
+   KLASSENZIMMER-MODUS / MUTE BUTTON
+   ========================================= */
+
+.header-sound-btn {
+  background: var(--flaeche, #F3EEDF);
+  border: var(--rahmen, 2px solid #1E252B);
+  border-radius: var(--radius, 12px);
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ziel-min, 56px);
+  min-width: var(--ziel-min, 56px);
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.header-sound-btn:hover {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--mathe, #2255A4);
+}
+
+.header-sound-btn.is-muted {
+  background: var(--nochmal-hell, #FDE8E8);
+  border-color: var(--nochmal, #dc2626);
+}
+
+/* =========================================
+   FACHBEREICHS-THEMEN (ACCENTS FÜR ÜBUNGEN)
+   ========================================= */
+
+/* Fach: Mathematik (Blau) */
+#view-exercise.theme-math .exercise-focus-topbar, #view-exercise.theme-math .exercise-topbar {
+  border-bottom: 3px solid var(--mathe);
+}
+#view-exercise.theme-math #exercise-badge {
+  background: var(--mathe-hell);
+  color: var(--mathe);
+  border: 1.5px solid var(--mathe);
+}
+#view-exercise.theme-math .progress-fill {
+  background: var(--mathe);
+}
+#view-exercise.theme-math .progress-counter {
+  color: var(--mathe);
+}
+#view-exercise.theme-math .btn-check {
+  background: var(--mathe);
+}
+#view-exercise.theme-math .btn-check:hover {
+  background: var(--tinte);
+}
+
+/* Fach: Deutsch (Ziegel/Orange nach Token-Farbe) */
+#view-exercise.theme-german .exercise-focus-topbar, #view-exercise.theme-german .exercise-topbar {
+  border-bottom: 3px solid var(--deutsch);
+}
+#view-exercise.theme-german #exercise-badge {
+  background: var(--deutsch-hell);
+  color: var(--deutsch);
+  border: 1.5px solid var(--deutsch);
+}
+#view-exercise.theme-german .progress-fill {
+  background: var(--deutsch);
+}
+#view-exercise.theme-german .progress-counter {
+  color: var(--deutsch);
+}
+#view-exercise.theme-german .btn-check {
+  background: var(--deutsch);
+}
+#view-exercise.theme-german .btn-check:hover {
+  background: var(--tinte);
+}
+
+/* Fach: Sachunterricht (Grün nach Token-Farbe) */
+#view-exercise.theme-general .exercise-focus-topbar, #view-exercise.theme-general .exercise-topbar {
+  border-bottom: 3px solid var(--sach);
+}
+#view-exercise.theme-general #exercise-badge {
+  background: var(--sach-hell);
+  color: var(--sach);
+  border: 1.5px solid var(--sach);
+}
+#view-exercise.theme-general .progress-fill {
+  background: var(--sach);
+}
+#view-exercise.theme-general .progress-counter {
+  color: var(--sach);
+}
+#view-exercise.theme-general .btn-check {
+  background: var(--sach);
+}
+#view-exercise.theme-general .btn-check:hover {
+  background: var(--tinte);
+}
+
+/* Fach: Gehirntraining (Violett nach Token-Farbe) */
+#view-exercise.theme-brain .exercise-focus-topbar, #view-exercise.theme-brain .exercise-topbar {
+  border-bottom: 3px solid var(--denken);
+}
+#view-exercise.theme-brain #exercise-badge {
+  background: var(--denken-hell);
+  color: var(--denken);
+  border: 1.5px solid var(--denken);
+}
+#view-exercise.theme-brain .progress-fill {
+  background: var(--denken);
+}
+#view-exercise.theme-brain .progress-counter {
+  color: var(--denken);
+}
+#view-exercise.theme-brain .btn-check {
+  background: var(--denken);
+}
+#view-exercise.theme-brain .btn-check:hover {
+  background: var(--tinte);
+}
+
+
+.child-numpad {
+  position: fixed;
+  bottom: var(--abstand-3);
+  right: var(--abstand-3);
+  width: 280px;
+  background: var(--flaeche);
+  border: var(--rahmen);
+  border-radius: var(--radius);
+  padding: var(--abstand-2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--abstand-1);
+  animation: numpadSlideUp 0.2s ease-out;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+@keyframes numpadSlideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.child-numpad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--linie-leise);
+  padding-bottom: 4px;
+}
+
+.child-numpad-title {
+  font-family: var(--schrift-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tinte);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.child-numpad-close {
+  background: var(--papier);
+  border: 1.5px solid var(--linie-leise);
+  border-radius: var(--radius);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tinte-leise);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.child-numpad-close:hover {
+  background: var(--nochmal);
+  color: var(--tinte);
+}
+
+.child-numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--abstand-1);
+}
+
+.numpad-btn {
+  font-family: var(--schrift-zahl);
+  font-size: 1.5rem;
+  font-weight: 700;
+  height: var(--ziel-min, 56px);
+  min-width: var(--ziel-min, 56px);
+  border-radius: var(--radius);
+  border: var(--rahmen);
+  background: var(--papier);
+  color: var(--tinte);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s ease;
+  touch-action: manipulation;
+}
+
+.numpad-btn:hover {
+  background: var(--flaeche);
+  border-color: var(--mathe);
+  color: var(--mathe);
+}
+
+.numpad-btn:active {
+  background: var(--nochmal);
+  transform: scale(0.96);
+}
+
+.numpad-btn-clear {
+  background: var(--papier);
+  border-color: var(--linie-leise);
+  color: var(--deutsch);
+  font-size: 1.25rem;
+}
+
+.numpad-btn-clear:hover {
+  background: var(--deutsch-hell);
+  border-color: var(--deutsch);
+}
+
+.numpad-btn-backspace {
+  background: var(--papier);
+  border-color: var(--linie-leise);
+  color: var(--tinte);
+  font-size: 1.35rem;
+}
+
+.numpad-btn-backspace:hover {
+  background: var(--nochmal);
+  border-color: var(--linie);
+}
+
+.child-numpad-footer {
+  display: flex;
+  width: 100%;
+}
+
+.numpad-btn-check {
+  width: 100%;
+  height: var(--ziel-min, 56px);
+  min-height: var(--ziel-min, 56px);
+  background: var(--mathe);
+  color: #FFFFFF;
+  border: var(--rahmen);
+  border-radius: var(--radius);
+  font-family: var(--schrift-text);
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.numpad-btn-check:hover {
+  background: var(--tinte);
+}
+
+.numpad-btn-check:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+  .child-numpad {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 8px;
+  }
+}
+
+/* =========================================
+   FACHDIDAKTISCHES SCAFFOLDING & RECHENSTRICH
+   ========================================= */
+
+.task-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-hint-scaffold {
+  background: var(--flaeche, #F3EEDF);
+  border: var(--rahmen, 2px solid #1E252B);
+  border-radius: var(--radius, 12px);
+  color: var(--tinte, #1E252B);
+  font-family: var(--schrift-text, inherit);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  min-height: var(--ziel-min, 56px);
+  min-width: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+
+.btn-hint-scaffold:hover {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--mathe, #2255A4);
+}
+
+.btn-hint-scaffold.active {
+  background: var(--mathe, #2255A4);
+  color: #FFFFFF;
+  border-color: var(--mathe, #2255A4);
+}
+
+.scaffolding-box {
+  display: none;
+  margin-top: 14px;
+  background: var(--flaeche, #F3EEDF);
+  border: 2px solid var(--linie-leise, #C8C2B4);
+  border-radius: var(--radius, 12px);
+  padding: 16px;
+  width: 100%;
+}
+
+.scaffolding-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scaffolding-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--linie-leise, #C8C2B4);
+}
+
+.scaffolding-step:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.scaffolding-step-badge {
+  font-family: var(--schrift-text, inherit);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--mathe, #2255A4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scaffolding-impulse {
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+  line-height: 1.5;
+}
+
+.scaffolding-numberline-box {
+  background: var(--papier, #FBF7EE);
+  border: 1px solid var(--linie-leise, #C8C2B4);
+  border-radius: var(--radius, 12px);
+  padding: 10px 14px;
+  margin-top: 4px;
+  overflow-x: auto;
+}
+
+.scaffolding-numberline-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+  margin-bottom: 4px;
+}
+
+.numberline-svg {
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.scaffolding-substeps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--papier, #FBF7EE);
+  border: 1px solid var(--linie-leise, #C8C2B4);
+  border-radius: var(--radius, 12px);
+  padding: 12px 16px;
+  font-family: var(--schrift-titel, inherit);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+}
+
+.substep-line {
+  letter-spacing: 0.05em;
+}
+
+.scaffolding-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.btn-scaffolding-close {
+  background: transparent;
+  border: none;
+  color: var(--tinte, #1E252B);
+  font-family: var(--schrift-text, inherit);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 12px;
+  min-height: 44px;
+  border-radius: var(--radius, 12px);
+}
+
+.btn-scaffolding-close:hover {
+  background: var(--linie-leise, #C8C2B4);
+}
+
+.scaffolding-rule-text {
+  background: var(--papier, #FBF7EE);
+  border: 1px solid var(--linie-leise, #C8C2B4);
+  border-radius: var(--radius, 12px);
+  padding: 12px 16px;
+  font-family: var(--schrift-text, inherit);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--tinte, #1E252B);
+  line-height: 1.6;
+}
+
+.scramble-token.cap-active {
+  border-color: var(--mathe, #2255A4);
+  background: var(--mathe-hell, #EFF6FF);
+  color: var(--mathe, #2255A4);
+  font-weight: 900;
+}
+
+.scramble-token.cap-inactive {
+  background: var(--papier, #FBF7EE);
+  border-color: var(--linie-leise, #C8C2B4);
+  color: var(--tinte, #1E252B);
+  font-weight: 800;
+}
+
+/* =========================================
+   RENDERER COMPONENT & UTILITY CLASSES
+   ========================================= */
+
+.task-stage-stretch {
+  align-items: stretch;
+}
+
+.pyramid-subtext {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--tinte-leise, #4A5560);
+}
+
+.story-box.sentence-preview {

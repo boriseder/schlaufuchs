@@ -1,0 +1,159 @@
+/* Schlaufuchs – Base & Typografie (100% Offline & Design-Tokens) */
+
+/* ========================================================
+   ÖSTERREICHISCHE SCHULSCHRIFT „PRIMAE“ (100% OFFLINE)
+   ======================================================== */
+@font-face {
+  font-family: 'PrimaeText';
+  src: url('../fonts/PrimaeText-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PrimaeText';
+  src: url('../fonts/PrimaeText-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PrimaeText';
+  src: url('../fonts/PrimaeText-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PrimaeText';
+  src: url('../fonts/PrimaeText-Cursive.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Primae';
+  src: url('../fonts/Primae-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Primae';
+  src: url('../fonts/Primae-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Primae';
+  src: url('../fonts/Primae-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PrimaeCursive';
+  src: url('../fonts/Primae-Cursive.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --primary-color: var(--mathe, #2D5E9E);
+  --primary-hover: #1d4ed8;
+  --primary-light: var(--mathe-hell, #DCE8F6);
+  
+  --math-color: var(--mathe, #2D5E9E);
+  --math-light: var(--mathe-hell, #DCE8F6);
+  --math-border: #bfdbfe;
+
+  --german-color: var(--deutsch, #B5502B);
+  --german-light: var(--deutsch-hell, #F6E1D8);
+  --german-border: #fecaca;
+
+  --general-color: var(--sach, #2F7A4F);
+  --general-light: var(--sach-hell, #DCEFE3);
+  --general-border: #a7f3d0;
+
+  --brain-color: var(--denken, #6B4C9A);
+  --brain-light: var(--denken-hell, #E7DFF3);
+  --brain-border: #e9d5ff;
+
+  --success-color: var(--richtig, #F2C14E);
+  --success-light: #fefce8;
+  --success-border: var(--linie, #3B4651);
+  
+  --error-color: var(--linie, #3B4651);
+  --error-light: var(--nochmal, #E6EAF0);
+  --error-border: var(--linie-leise, #6B6558);
+
+  --star-gold: var(--richtig, #F2C14E);
+
+  --bg-canvas: var(--papier, #FBF7EE);
+  --card-bg: var(--flaeche, #FFFFFF);
+  --text-main: var(--tinte, #1E2A36);
+  --text-muted: var(--tinte-leise, #4A5560);
+  --border-radius: var(--radius, 8px);
+  --border-radius-sm: var(--radius, 8px);
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+
+  --font-family: var(--schrift-text, 'PrimaeText', sans-serif);
+  --font-display: var(--schrift-zahl, 'Primae', sans-serif);
+  --font-cursive: 'PrimaeText-Cursive', 'PrimaeCursive', cursive;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  touch-action: manipulation; /* Verhindert Double-Tap-Zoom auf iPads */
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  padding: 16px 16px 60px;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   STANDARD-ICONS & SYMBOL-SKALIERUNG
+   ========================================= */
+
+.header-icon-svg,
+.focus-icon-svg,
+.speaker-icon-svg,
+.icon-inline-svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.brand-icon-svg {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
