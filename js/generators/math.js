@@ -976,7 +976,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           answer: h24,
           answerText: `${h24}:${mStr} Uhr`,
           unit: 'Uhr',
-          hint: `Nach 12 Uhr mittags zählen wir weiter: 12 + ${h12} = ${h24} Uhr.`
+          hint: `Nach 12 Uhr mittags zählen wir weiter: Zähle 12 Stunden zur Uhrzeit am Nachmittag dazu.`
         };
       },
       () => {
@@ -1070,7 +1070,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: 'Welche Uhr zeigt die richtige Ankunftszeit?',
           options: shuffled,
           correctIndex: correctIndex,
-          hint: `Rechne zur Abfahrtszeit (${startH}:00 Uhr) die ${durMin} Minuten Fahrtzeit hinzu: ${endH}:${mStr} Uhr.`
+          hint: `Rechne zur Abfahrtszeit (${startH}:00 Uhr) die ${durMin} Minuten Fahrtzeit schrittweise hinzu.`
         };
       },
       () => {
@@ -1219,7 +1219,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `In deiner Spardose liegen ${e1}\u00A0€ und ${e2}\u00A0€. Wie viel Euro sind das zusammen?`,
           unit: '€',
           answer: e1 + e2,
-          hint: 'Zähle die beiden Euro-Beträge zusammen: ' + e1 + ' + ' + e2 + '.'
+          hint: 'Zähle die beiden Euro-Beträge mit einer Plusrechnung (+) zusammen.'
         };
       },
       () => {
@@ -1234,7 +1234,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Buch kostet ${kosten}\u00A0€. Du zahlst mit einem 10-€-Schein. Wie viel Euro Rückgeld bekommst du?`,
           unit: '€',
           answer: gegeben - kosten,
-          hint: 'Rechne: 10 − ' + kosten + ' = ?'
+          hint: 'Ziehe den Preis des Einkaufs mit Minus (−) vom 10-Euro-Schein ab.'
         };
       }
     ];
@@ -1253,7 +1253,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Euro sind ${euro1}\u00A0€ und ${euro2}\u00A0€ zusammen?`,
           unit: '€',
           answer: euro1 + euro2,
-          hint: 'Rechne: ' + euro1 + ' + ' + euro2 + '.'
+          hint: 'Addiere die Werte der beiden Euro-Münzen.'
         };
       },
       () => {
@@ -1280,7 +1280,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Malblock kostet ${kosten}\u00A0Cent. Wie viele Cent fehlen noch auf 1\u00A0Euro (100 Cent)?`,
           unit: 'Cent',
           answer: 100 - kosten,
-          hint: '1\u00A0Euro hat 100 Cent. Rechne: 100 − ' + kosten + '.'
+          hint: '1\u00A0Euro entspricht 100\u00A0Cent. Ziehe die Kosten in Cent davon ab.'
         };
       }
     ];
@@ -1299,7 +1299,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Wie viel Cent sind ${euro1}\u00A0€ und ${cent1}\u00A0c zusammen?`,
           unit: 'Cent',
           answer: euro1 * 100 + cent1,
-          hint: '1\u00A0Euro = 100\u00A0Cent. Rechne: ' + euro1 + ' · 100 + ' + cent1 + '.'
+          hint: 'Wandle die Euro in Cent um (1\u00A0Euro = 100\u00A0Cent) und zähle die Cent dazu.'
         };
       },
       () => {
@@ -1315,7 +1315,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein Heft kostet ${kostenCents}\u00A0Cent. Du zahlst mit einer 2-Euro-Münze. Wie viel Cent Rückgeld bekommst du?`,
           unit: 'Cent',
           answer: rueckgeld,
-          hint: 'Eine 2-Euro-Münze hat 200 Cent. Rechne: 200 − ' + kostenCents + '.'
+          hint: 'Eine 2-Euro-Münze entspricht 200\u00A0Cent. Ziehe die Kosten in Cent davon ab.'
         };
       }
     ];
@@ -1334,7 +1334,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Für die Schulbibliothek werden Bücher um ${e1}\u00A0€ und Spiele um ${e2}\u00A0€ gekauft. Wie viel Euro kostet das insgesamt?`,
           unit: '€',
           answer: e1 + e2,
-          hint: 'Addiere die beiden Beträge: ' + e1 + ' + ' + e2 + '.'
+          hint: 'Zähle die beiden Euro-Beträge zusammen.'
         };
       },
       () => {
@@ -1349,7 +1349,7 @@ window.Schlaufuchs.Generators.Math = (function () {
           question: `Ein T-Shirt für den Schulsport kostet ${preis1}\u00A0€. Wie viel Euro kosten ${menge} solche T-Shirts?`,
           unit: '€',
           answer: preis1 * menge,
-          hint: 'Rechne: ' + menge + ' · ' + preis1 + '\u00A0€.'
+          hint: 'Multipliziere die Stückzahl mit dem Preis pro Stück (Malrechnung ·).'
         };
       }
     ];
@@ -1876,155 +1876,1219 @@ window.Schlaufuchs.Generators.Math = (function () {
     const shuffle = (arr) => rng.mischen(arr);
     const grades = getEffectiveGrades([2, 3, 4]);
 
-    const storiesGrade2 = [
-      {
-        grade: 2,
-        schulstufe: 2,
-        lehrplanRef: 'M-2-Sachaufgaben',
-        story: 'Felix hat 36 bunte Murmeln gesammelt. Zum Geburtstag bekommt er von seiner Oma noch 18 Murmeln geschenkt.',
-        question: 'Wie viele Murmeln hat Felix jetzt zusammen?',
-        calculation: '36 + 18',
-        answer: 54,
-        unit: 'Murmeln',
-        answerText: 'Felix hat jetzt 54 Murmeln.',
-        hint: 'Überlege: Werden es mehr oder weniger Murmeln? Welche Rechenart passt?'
-      },
-      {
-        grade: 2,
-        schulstufe: 2,
-        lehrplanRef: 'M-2-Sachaufgaben',
-        story: 'In der 2. Klasse sind 24 Kinder. Heute sind 7 Kinder wegen einer Erkältung krank zu Hause.',
-        question: 'Wie viele Kinder sind heute in der Schule anwesend?',
-        calculation: '24 − 7',
-        answer: 17,
-        unit: 'Kinder',
-        answerText: 'Es sind heute 17 Kinder in der Schule.',
-        hint: 'Lies genau: Die kranken Kinder sind heute nicht da. Welche Rechenart musst du anwenden?'
-      },
-      {
-        grade: 2,
-        schulstufe: 2,
-        lehrplanRef: 'M-2-Sachaufgaben',
-        story: 'Eine Eintrittskarte für den Tiergarten Schönbrunn kostet 8\u00A0Euro. Eine Familie kauft 4 Karten.',
-        question: 'Wie viel Euro muss die Familie an der Kasse insgesamt bezahlen?',
-        calculation: '4 · 8',
-        answer: 32,
-        unit: 'Euro',
-        answerText: 'Die Familie bezahlt 32 Euro.',
-        hint: 'Jede der 4 Karten kostet gleich viel. Mit welcher Rechenart berechnest du den Gesamtpreis?'
-      },
-      {
-        grade: 2,
-        schulstufe: 2,
-        lehrplanRef: 'M-2-Sachaufgaben',
-        story: 'Die Lehrerin hat 28 neue Buntstifte gekauft und verteilt sie gleichmäßig auf 4 Gruppentische.',
-        question: 'Wie viele Buntstifte bekommt jeder Tisch?',
-        calculation: '28 : 4',
-        answer: 7,
-        unit: 'Buntstifte',
-        answerText: 'Jeder Tisch bekommt 7 Buntstifte.',
-        hint: 'Verteilen bedeutet: Aufteilen in gleich große Mengen. Welche Rechenart hilft dir?'
-      }
-    ];
-
-    const storiesGrade3 = [
-      {
-        grade: 3,
-        schulstufe: 3,
-        lehrplanRef: 'M-3-Sachaufgaben',
-        story: 'Ein Bäcker in Wien backt frühmorgens 120 frische Semmeln. Am Vormittag verkauft er 85 Semmeln.',
-        question: 'Wie viele Semmeln sind am Mittag noch übrig?',
-        calculation: '120 − 85',
-        answer: 35,
-        unit: 'Semmeln',
-        answerText: 'Es sind noch 35 Semmeln übrig.',
-        hint: 'Überlege: Wie viele Semmeln bleiben nach dem Verkauf noch in der Bäckerei übrig?'
-      },
-      {
-        grade: 3,
-        schulstufe: 3,
-        lehrplanRef: 'M-3-Sachaufgaben',
-        story: 'Lukas spart für ein neues Fahrrad, das 180\u00A0Euro kostet. Er hat bereits 125\u00A0Euro in seiner Spardose.',
-        question: 'Wie viel Euro fehlen Lukas noch zum Kauf des Fahrrads?',
-        calculation: '180 − 125',
-        answer: 55,
-        unit: 'Euro',
-        answerText: 'Lukas fehlen noch 55 Euro.',
-        hint: 'Wie viel Geld fehlt Lukas noch auf den vollen Betrag des Fahrrads?'
-      },
-      {
-        grade: 3,
-        schulstufe: 3,
-        lehrplanRef: 'M-3-Sachaufgaben',
-        story: 'In der Schulbibliothek stehen 6 Regale mit jeweils 40 spannenden Büchern.',
-        question: 'Wie viele Bücher stehen insgesamt in den Regalen?',
-        calculation: '6 · 40',
-        answer: 240,
-        unit: 'Bücher',
-        answerText: 'Es stehen insgesamt 240 Bücher in den Regalen.',
-        hint: 'In jedem Regal stehen gleich viele Bücher. Welche Rechenart rechnet gleiche Mengen zusammen?'
-      },
-      {
-        grade: 3,
-        schulstufe: 3,
-        lehrplanRef: 'M-3-Sachaufgaben',
-        story: 'Anna hat 45\u00A0Euro gespart. Sie kauft ein spannendes Buch um 28\u00A0Euro.',
-        question: 'Wie viel Euro hat Anna nach dem Kauf noch übrig?',
-        calculation: '45 − 28',
-        answer: 17,
-        unit: 'Euro',
-        answerText: 'Anna hat noch 17 Euro übrig.',
-        hint: 'Wie viel Geld bleibt von 45 Euro nach Abzug von 28 Euro übrig?'
-      }
-    ];
-
-    const storiesGrade4 = [
-      {
-        grade: 4,
-        schulstufe: 4,
-        lehrplanRef: 'M-4-Sachaufgaben',
-        story: 'Für ein Schulfest kauft die 4. Klasse 5 Packungen Mehl zu je 100\u00A0dag und 2 Packungen Zucker zu je 50\u00A0dag.',
-        question: 'Wie viel Dekagramm (dag) wiegen die Einkäufe insgesamt?',
-        calculation: '500 + 100',
-        answer: 600,
-        unit: 'dag',
-        answerText: 'Die Einkäufe wiegen 600 dag.',
-        hint: 'Berechne zuerst das Gewicht vom Mehl, dann das vom Zucker, und zähle beides zusammen.'
-      },
-      {
-        grade: 4,
-        schulstufe: 4,
-        lehrplanRef: 'M-4-Sachaufgaben',
-        story: 'Ein Wanderer geht am Vormittag 12\u00A0km und am Nachmittag 9\u00A0km auf dem Weitwanderweg.',
-        question: 'Wie viele Meter (m) ist der Wanderer an diesem Tag insgesamt gewandert?',
-        calculation: '21 · 1000',
-        answer: 21000,
-        unit: 'm',
-        answerText: 'Der Wanderer ist 21 000 m gewandert.',
-        hint: 'Rechne zuerst die gesamten Kilometer aus und wandle sie anschließend in Meter um.'
-      },
-      {
-        grade: 4,
-        schulstufe: 4,
-        lehrplanRef: 'M-4-Sachaufgaben',
-        story: 'Ein Lastwagen transportiert 4\u00A0Tonnen Sand. Auf der ersten Baustelle werden 1\u00A0500\u00A0kg abgeladen.',
-        question: 'Wie viel Kilogramm (kg) Sand verbleiben auf dem Lastwagen?',
-        calculation: '4000 − 1500',
-        answer: 2500,
-        unit: 'kg',
-        answerText: 'Es verbleiben 2 500 kg Sand auf dem Lastwagen.',
-        hint: '1 Tonne = 1 000 kg. Wandle zuerst 4 Tonnen in kg um (4 000 kg) und ziehe dann ab.'
-      }
-    ];
+    const STORIES_POOL = [
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Felix hat 36 bunte Murmeln gesammelt. Zum Geburtstag bekommt er von seiner Oma noch 18 Murmeln geschenkt.",
+    "question": "Wie viele Murmeln hat Felix jetzt zusammen?",
+    "calculation": "36 + 18",
+    "answer": 54,
+    "unit": "Murmeln",
+    "answerText": "Felix hat jetzt 54 Murmeln.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "In der 2. Klasse sind 24 Kinder. Heute sind 7 Kinder wegen einer Erkältung krank zu Hause.",
+    "question": "Wie viele Kinder sind heute in der Schule anwesend?",
+    "calculation": "24 − 7",
+    "answer": 17,
+    "unit": "Kinder",
+    "answerText": "Es sind heute 17 Kinder in der Schule.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Eine Eintrittskarte für den Tiergarten Schönbrunn kostet 8 Euro. Eine Familie kauft 4 Karten.",
+    "question": "Wie viel Euro muss die Familie an der Kasse insgesamt bezahlen?",
+    "calculation": "4 · 8",
+    "answer": 32,
+    "unit": "Euro",
+    "answerText": "Die Familie bezahlt 32 Euro.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Die Lehrerin hat 28 neue Buntstifte gekauft und verteilt sie gleichmäßig auf 4 Gruppentische.",
+    "question": "Wie viele Buntstifte bekommt jeder Tisch?",
+    "calculation": "28 : 4",
+    "answer": 7,
+    "unit": "Buntstifte",
+    "answerText": "Jeder Tisch bekommt 7 Buntstifte.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Im Schulgarten pflanzen die Kinder 45 rote Tulpen und 27 gelbe Narzissen.",
+    "question": "Wie viele Blumen pflanzen die Kinder insgesamt?",
+    "calculation": "45 + 27",
+    "answer": 72,
+    "unit": "Blumen",
+    "answerText": "Die Kinder pflanzen 72 Blumen.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Am Obststand liegen 63 Äpfel. Eine Kundin kauft 15 Äpfel für ein Schulfest.",
+    "question": "Wie viele Äpfel bleiben am Obststand noch übrig?",
+    "calculation": "63 − 15",
+    "answer": 48,
+    "unit": "Äpfel",
+    "answerText": "Es bleiben 48 Äpfel übrig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Bäcker legt auf jedes Backblech 6 frische Semmeln. Er schiebt 5 Bleche in den Ofen.",
+    "question": "Wie viele Semmeln backt der Bäcker auf den 5 Blechen zusammen?",
+    "calculation": "5 · 6",
+    "answer": 30,
+    "unit": "Semmeln",
+    "answerText": "Der Bäcker backt 30 Semmeln.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Opa verteilt 35 Euro Taschengeld gleichmäßig an seine 5 Enkelkinder.",
+    "question": "Wie viel Euro bekommt jedes Enkelkind?",
+    "calculation": "35 : 5",
+    "answer": 7,
+    "unit": "Euro",
+    "answerText": "Jedes Enkelkind bekommt 7 Euro.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Auf dem Pausenhof hüpfen 19 Mädchen und 26 Buben mit dem Springseil.",
+    "question": "Wie viele Kinder hüpfen dort insgesamt Seil?",
+    "calculation": "19 + 26",
+    "answer": 45,
+    "unit": "Kinder",
+    "answerText": "Es hüpfen insgesamt 45 Kinder.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Lukas hat 50 Euro in seiner Spardose. Er kauft ein tolles Buch um 18 Euro.",
+    "question": "Wie viel Euro bleiben Lukas nach dem Kauf noch übrig?",
+    "calculation": "50 − 18",
+    "answer": 32,
+    "unit": "Euro",
+    "answerText": "Lukas bleiben noch 32 Euro übrig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "In einer Schachtel Pralinen liegen 7 Reihen mit jeweils 4 Pralinen.",
+    "question": "Wie viele Pralinen sind insgesamt in der Schachtel?",
+    "calculation": "7 · 4",
+    "answer": 28,
+    "unit": "Pralinen",
+    "answerText": "Es sind insgesamt 28 Pralinen in der Schachtel.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Sportlehrer hat 36 Tennisbälle. Er teilt sie gleichmäßig in 6 Dosen auf.",
+    "question": "Wie viele Bälle kommen in jede Dose?",
+    "calculation": "36 : 6",
+    "answer": 6,
+    "unit": "Tennisbälle",
+    "answerText": "In jede Dose kommen 6 Tennisbälle.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Auf einer Blumenwiese flattern 28 Zitronenfalter und 34 Schwalbenschwänze.",
+    "question": "Wie viele Schmetterlinge sind das insgesamt?",
+    "calculation": "28 + 34",
+    "answer": 62,
+    "unit": "Schmetterlinge",
+    "answerText": "Es sind insgesamt 62 Schmetterlinge.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Bauer hat 84 Eier gesammelt. Auf dem Markt verkauft er 49 Eier.",
+    "question": "Wie viele Eier hat der Bauer noch übrig?",
+    "calculation": "84 − 49",
+    "answer": 35,
+    "unit": "Eier",
+    "answerText": "Der Bauer hat noch 35 Eier übrig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Kaninchen frisst jeden Tag 3 Karotten. Wie viele Karotten frisst es in einer Woche (7 Tage)?",
+    "question": "Wie viele Karotten frisst das Kaninchen in 7 Tagen?",
+    "calculation": "7 · 3",
+    "answer": 21,
+    "unit": "Karotten",
+    "answerText": "Das Kaninchen frisst 21 Karotten.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "4 Freunde teilen sich die Kosten für ein Spielzeug um 24 Euro zu gleichen Teilen.",
+    "question": "Wie viel Euro muss jedes Kind bezahlen?",
+    "calculation": "24 : 4",
+    "answer": 6,
+    "unit": "Euro",
+    "answerText": "Jedes Kind muss 6 Euro bezahlen.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Im Bus sitzen 38 Fahrgäste. An der nächsten Haltestelle steigen noch 16 Fahrgäste ein.",
+    "question": "Wie viele Fahrgäste fahren jetzt im Bus mit?",
+    "calculation": "38 + 16",
+    "answer": 54,
+    "unit": "Fahrgäste",
+    "answerText": "Jetzt fahren 54 Fahrgäste mit.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Buch hat 92 Seiten. Anna hat bereits 56 Seiten mit Begeisterung gelesen.",
+    "question": "Wie viele Seiten muss Anna noch lesen, um das Buch zu beenden?",
+    "calculation": "92 − 56",
+    "answer": 36,
+    "unit": "Seiten",
+    "answerText": "Anna muss noch 36 Seiten lesen.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "In einem Klassenzimmer stehen 8 Gruppentische mit jeweils 3 Sesseln.",
+    "question": "Wie viele Sessel stehen insgesamt an den Gruppentischen?",
+    "calculation": "8 · 3",
+    "answer": 24,
+    "unit": "Sessel",
+    "answerText": "Es stehen 24 Sessel an den Tischen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Eine Mutter verteilt 40 Weintrauben gleichmäßig an ihre 4 Kinder.",
+    "question": "Wie viele Weintrauben bekommt jedes Kind?",
+    "calculation": "40 : 4",
+    "answer": 10,
+    "unit": "Weintrauben",
+    "answerText": "Jedes Kind bekommt 10 Weintrauben.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Im Turnsaal liegen 47 kleine Matten und 35 große Weichböden.",
+    "question": "Wie viele Turnmatten liegen insgesamt im Turnsaal?",
+    "calculation": "47 + 35",
+    "answer": 82,
+    "unit": "Matten",
+    "answerText": "Es liegen 82 Matten im Turnsaal.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Vogelhäuschen enthielt 75 Sonnenblumenkerne. Die Meisen haben 38 Kerne weggepickt.",
+    "question": "Wie viele Kerne sind jetzt noch im Futterhäuschen?",
+    "calculation": "75 − 38",
+    "answer": 37,
+    "unit": "Kerne",
+    "answerText": "Es sind noch 37 Kerne im Häuschen.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Blumenstrauß besteht aus 9 bunten Tulpen. Ein Florist bindet 4 gleiche Sträuße.",
+    "question": "Wie viele Tulpen benötigt der Florist für alle 4 Sträuße?",
+    "calculation": "4 · 9",
+    "answer": 36,
+    "unit": "Tulpen",
+    "answerText": "Er benötigt 36 Tulpen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Förster pflanzt 30 kleine Tannenbäume in 5 gleich langen Reihen an.",
+    "question": "Wie viele Tannenbäume stehen in jeder Reihe?",
+    "calculation": "30 : 5",
+    "answer": 6,
+    "unit": "Bäume",
+    "answerText": "In jeder Reihe stehen 6 Bäume.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Auf einem Parkplatz stehen am Morgen 58 Autos. Am Vormittag kommen 27 Autos dazu.",
+    "question": "Wie viele Autos stehen jetzt auf dem Parkplatz?",
+    "calculation": "58 + 27",
+    "answer": 85,
+    "unit": "Autos",
+    "answerText": "Es stehen jetzt 85 Autos auf dem Parkplatz.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "In einer Kiste mit 100 Bausteinen fehlen 34 Bausteine.",
+    "question": "Wie viele Bausteine sind noch in der Kiste?",
+    "calculation": "100 − 34",
+    "answer": 66,
+    "unit": "Bausteine",
+    "answerText": "Es sind noch 66 Bausteine in der Kiste.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Auf jedem Ast eines Apfelbaumes hängen 7 reife Äpfel. Es gibt 6 tragende Äste.",
+    "question": "Wie viele Äpfel hängen an den 6 Ästen zusammen?",
+    "calculation": "6 · 7",
+    "answer": 42,
+    "unit": "Äpfel",
+    "answerText": "Es hängen 42 Äpfel an den Ästen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Schäfer verteilt 45 Schafe gleichmäßig auf 5 verschiedene Koppeln.",
+    "question": "Wie viele Schafe grasen auf jeder Koppel?",
+    "calculation": "45 : 5",
+    "answer": 9,
+    "unit": "Schafe",
+    "answerText": "Auf jeder Koppel grasen 9 Schafe.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Lisa sammelt Sticker. Sie hat 64 Sticker im Album und klebt heute noch 29 neue Sticker ein.",
+    "question": "Wie viele Sticker hat Lisa jetzt in ihrem Album?",
+    "calculation": "64 + 29",
+    "answer": 93,
+    "unit": "Sticker",
+    "answerText": "Lisa hat jetzt 93 Sticker im Album.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Imker hat 72 Gläser Honig abgefüllt. Er verschenkt 28 Gläser an Verwandte.",
+    "question": "Wie viele Gläser Honig hat der Imker noch?",
+    "calculation": "72 − 28",
+    "answer": 44,
+    "unit": "Gläser",
+    "answerText": "Der Imker hat noch 44 Gläser Honig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Eine Katze fängt in einer Woche jeden Tag 2 Mäuse. Wie viele Mäuse fängt sie in 7 Tagen?",
+    "question": "Wie viele Mäuse fängt die Katze in einer Woche?",
+    "calculation": "7 · 2",
+    "answer": 14,
+    "unit": "Mäuse",
+    "answerText": "Die Katze fängt 14 Mäuse.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Lehrer teilt 27 Schulkinder in 3 gleich große Mannschaften für Völkerball auf.",
+    "question": "Wie viele Kinder spielen in jeder Mannschaft?",
+    "calculation": "27 : 3",
+    "answer": 9,
+    "unit": "Kinder",
+    "answerText": "In jeder Mannschaft spielen 9 Kinder.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Im Hallenbad schwimmen 43 Kinder im großen Becken und 28 Kinder im Nichtschwimmerbecken.",
+    "question": "Wie viele Kinder schwimmen insgesamt im Hallenbad?",
+    "calculation": "43 + 28",
+    "answer": 71,
+    "unit": "Kinder",
+    "answerText": "Es schwimmen 71 Kinder im Hallenbad.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Eine Packung Kreide enthält 50 Stück. Die Lehrerin hat 23 Stück verbraucht.",
+    "question": "Wie viele Kreidestücke sind noch in der Schachtel?",
+    "calculation": "50 − 23",
+    "answer": 27,
+    "unit": "Stück",
+    "answerText": "Es sind noch 27 Kreidestücke in der Schachtel.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 2,
+    "schulstufe": 2,
+    "lehrplanRef": "M-2-Sachaufgaben",
+    "story": "Ein Bäcker backt 8 Bleche mit jeweils 6 Semmeln. Wie viele Semmeln sind das?",
+    "question": "Wie viele Semmeln backt der Bäcker insgesamt?",
+    "calculation": "8 · 6",
+    "answer": 48,
+    "unit": "Semmeln",
+    "answerText": "Der Bäcker backt 48 Semmeln.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Bäcker in Wien backt frühmorgens 320 frische Semmeln. Am Vormittag verkauft er 245 Semmeln.",
+    "question": "Wie viele Semmeln sind am Mittag noch übrig?",
+    "calculation": "320 − 245",
+    "answer": 75,
+    "unit": "Semmeln",
+    "answerText": "Es sind noch 75 Semmeln übrig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Lukas spart für ein neues Mountainbike, das 450 Euro kostet. Er hat bereits 315 Euro in seiner Spardose.",
+    "question": "Wie viel Euro fehlen Lukas noch zum Kauf des Fahrrads?",
+    "calculation": "450 − 315",
+    "answer": 135,
+    "unit": "Euro",
+    "answerText": "Lukas fehlen noch 135 Euro.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "In der Schulbibliothek stehen 8 Regale mit jeweils 60 spannenden Büchern.",
+    "question": "Wie viele Bücher stehen insgesamt in diesen Regalen?",
+    "calculation": "8 · 60",
+    "answer": 480,
+    "unit": "Bücher",
+    "answerText": "Es stehen insgesamt 480 Bücher in den Regalen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Bauer erntet 360 kg Äpfel. Er füllt sie gleichmäßig in 6 große Holzkisten.",
+    "question": "Wie viel Kilogramm (kg) Äpfel sind in jeder Holzkiste?",
+    "calculation": "360 : 6",
+    "answer": 60,
+    "unit": "kg",
+    "answerText": "In jeder Holzkiste sind 60 kg Äpfel.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Eine Schule hat 248 Schulkinder. Für den Herbstausflug melden sich noch 37 neue Vorschulkinder an.",
+    "question": "Wie viele Kinder nehmen insgesamt am Ausflug teil?",
+    "calculation": "248 + 37",
+    "answer": 285,
+    "unit": "Kinder",
+    "answerText": "Es nehmen 285 Kinder am Ausflug teil.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Wanderer geht einen 750 Meter langen Weg hinauf und hat bereits 420 Meter geschafft.",
+    "question": "Wie viele Meter (m) muss der Wanderer noch gehen?",
+    "calculation": "750 − 420",
+    "answer": 330,
+    "unit": "m",
+    "answerText": "Der Wanderer muss noch 330 m gehen.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Kinosaal hat 9 Reihen mit jeweils 30 bequemen Sesseln.",
+    "question": "Wie viele Sessel hat der Kinosaal insgesamt?",
+    "calculation": "9 · 30",
+    "answer": 270,
+    "unit": "Sessel",
+    "answerText": "Der Kinosaal hat 270 Sessel.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Saftladen presst 400 Liter frischen Apfelsaft und füllt ihn in 4 große Fässer gleichmäßig ab.",
+    "question": "Wie viel Liter (l) Saft enthält jedes Fass?",
+    "calculation": "400 : 4",
+    "answer": 100,
+    "unit": "l",
+    "answerText": "Jedes Fass enthält 100 l Saft.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Zoo füttert den Elefanten am Vormittag mit 135 kg Heu und am Nachmittag mit 145 kg Heu.",
+    "question": "Wie viel Kilogramm (kg) Heu frisst der Elefant an diesem Tag?",
+    "calculation": "135 + 145",
+    "answer": 280,
+    "unit": "kg",
+    "answerText": "Der Elefant frisst 280 kg Heu.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Zug fährt eine Strecke von 500 Kilometern. Nach 340 Kilometern legt er einen Zwischenstopp ein.",
+    "question": "Wie viele Kilometer (km) verbleiben noch bis zum Zielbahnhof?",
+    "calculation": "500 − 340",
+    "answer": 160,
+    "unit": "km",
+    "answerText": "Es verbleiben noch 160 km.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "In einer Druckerei werden 7 Pakete mit Schulheften verpackt. Jedes Paket enthält 50 Hefte.",
+    "question": "Wie viele Schulhefte sind insgesamt verpackt worden?",
+    "calculation": "7 · 50",
+    "answer": 350,
+    "unit": "Hefte",
+    "answerText": "Es sind insgesamt 350 Hefte verpackt.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Verein hat 540 Euro für Sportgeräte gesammelt und kauft 9 neue Fußbälle zum gleichen Preis.",
+    "question": "Wie viel Euro kostet ein einzelner Fußball?",
+    "calculation": "540 : 9",
+    "answer": 60,
+    "unit": "Euro",
+    "answerText": "Ein Fußball kostet 60 Euro.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Auf einer Almhütte trinken Wanderer am Wochenende 265 Liter Milch und 380 Liter Wasser.",
+    "question": "Wie viel Liter Getränke wurden an diesem Wochenende getrunken?",
+    "calculation": "265 + 380",
+    "answer": 645,
+    "unit": "l",
+    "answerText": "Es wurden 645 l Getränke getrunken.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Händler hat 800 Packungen Mehl im Lager. Er liefert 520 Packungen an Supermärkte aus.",
+    "question": "Wie viele Packungen Mehl lagern noch im Lager?",
+    "calculation": "800 − 520",
+    "answer": 280,
+    "unit": "Packungen",
+    "answerText": "Es lagern noch 280 Packungen Mehl.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Waldarbeiter pflanzt an 4 Tagen jeweils 80 junge Lärchenbäume.",
+    "question": "Wie viele Lärchenbäume pflanzt der Waldarbeiter in diesen 4 Tagen?",
+    "calculation": "4 · 80",
+    "answer": 320,
+    "unit": "Bäume",
+    "answerText": "Er pflanzt 320 Bäume.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Eine Bäckerei teilt 210 Kipferl gleichmäßig auf 3 Verkaufskörbe auf.",
+    "question": "Wie viele Kipferl liegen in jedem Korb?",
+    "calculation": "210 : 3",
+    "answer": 70,
+    "unit": "Kipferl",
+    "answerText": "In jedem Korb liegen 70 Kipferl.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Auf einer Baustelle werden 350 kg Zement am Montag und 420 kg Zement am Dienstag verbraucht.",
+    "question": "Wie viel Kilogramm Zement wurden an beiden Tagen zusammen verarbeitet?",
+    "calculation": "350 + 420",
+    "answer": 770,
+    "unit": "kg",
+    "answerText": "Es wurden 770 kg Zement verarbeitet.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein LKW hat 950 Flaschen Mineralwasser geladen. Bei der ersten Raststätte lädt er 380 Flaschen ab.",
+    "question": "Wie viele Flaschen Mineralwasser bleiben auf der Ladefläche?",
+    "calculation": "950 − 380",
+    "answer": 570,
+    "unit": "Flaschen",
+    "answerText": "Es bleiben noch 570 Flaschen auf der Ladefläche.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Eine Schule kauft 6 neue Tablet-Schutzhüllen zu je 40 Euro.",
+    "question": "Wie viel Euro kosten die 6 Schutzhüllen insgesamt?",
+    "calculation": "6 · 40",
+    "answer": 240,
+    "unit": "Euro",
+    "answerText": "Die Schutzhüllen kosten 240 Euro.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Imker gewinnt 320 kg Waldhonig und füllt ihn in Gläser zu je 1 kg ab. Er packt sie in 8 Kisten.",
+    "question": "Wie viele Gläser Honig kommen in jede Kiste?",
+    "calculation": "320 : 8",
+    "answer": 40,
+    "unit": "Gläser",
+    "answerText": "In jede Kiste kommen 40 Gläser Honig.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Gärtner erntet 180 kg Erdbeeren im Juni und 240 kg Erdbeeren im Juli.",
+    "question": "Wie viel Kilogramm Erdbeeren erntet der Gärtner in beiden Monaten?",
+    "calculation": "180 + 240",
+    "answer": 420,
+    "unit": "kg",
+    "answerText": "Der Gärtner erntet 420 kg Erdbeeren.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Von einer 600 Meter langen Stoffrolle schneidet die Schneiderin 270 Meter für Vorhänge ab.",
+    "question": "Wie viele Meter Stoff bleiben auf der Rolle übrig?",
+    "calculation": "600 − 270",
+    "answer": 330,
+    "unit": "m",
+    "answerText": "Es bleiben 330 m Stoff übrig.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Fahrradgeschäft verkauft 5 Helme zu je 70 Euro.",
+    "question": "Wie viel Euro nimmt das Geschäft mit diesen 5 Helmen ein?",
+    "calculation": "5 · 70",
+    "answer": 350,
+    "unit": "Euro",
+    "answerText": "Das Geschäft nimmt 350 Euro ein.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "480 Schüler einer Schule reisen mit 8 Reisebussen zum Wandertag.",
+    "question": "Wie viele Schüler sitzen in jedem Reisebus, wenn alle gleich voll sind?",
+    "calculation": "480 : 8",
+    "answer": 60,
+    "unit": "Schüler",
+    "answerText": "In jedem Bus sitzen 60 Schüler.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "In einer Halle lagern 430 kg Äpfel und 390 kg Birnen.",
+    "question": "Wie viel Kilogramm Obst lagern insgesamt in der Halle?",
+    "calculation": "430 + 390",
+    "answer": 820,
+    "unit": "kg",
+    "answerText": "Es lagern 820 kg Obst in der Halle.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Wasserbehälter fasst 1 000 Liter. Es werden 450 Liter zur Bewässerung entnommen.",
+    "question": "Wie viel Liter Wasser verbleiben im Behälter?",
+    "calculation": "1000 − 450",
+    "answer": 550,
+    "unit": "l",
+    "answerText": "Es verbleiben 550 l Wasser im Behälter.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Holzhändler stapelt 8 Reihen mit jeweils 90 Holzscheiten.",
+    "question": "Wie viele Holzscheite liegen in diesem Stapel?",
+    "calculation": "8 · 90",
+    "answer": 720,
+    "unit": "Holzscheite",
+    "answerText": "Es liegen 720 Holzscheite im Stapel.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Schulchor verteilt 350 Notenblätter gleichmäßig auf 5 Stimmgruppen.",
+    "question": "Wie viele Notenblätter erhält jede Gruppe?",
+    "calculation": "350 : 5",
+    "answer": 70,
+    "unit": "Notenblätter",
+    "answerText": "Jede Gruppe erhält 70 Notenblätter.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Eine Bergsteigergruppe bewältigt vormittags 340 Höhenmeter und nachmittags 280 Höhenmeter.",
+    "question": "Wie viele Höhenmeter ist die Gruppe insgesamt gewandert?",
+    "calculation": "340 + 280",
+    "answer": 620,
+    "unit": "Höhenmeter",
+    "answerText": "Die Gruppe ist 620 Höhenmeter gewandert.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "In einer Schafherde mit 520 Schafen werden 180 Schafe auf die Nachbarweide getrieben.",
+    "question": "Wie viele Schafe verbleiben auf der ursprünglichen Weide?",
+    "calculation": "520 − 180",
+    "answer": 340,
+    "unit": "Schafe",
+    "answerText": "Es verbleiben 340 Schafe.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Sportgeschäft verkauft 7 Paar Skistöcke zu je 30 Euro.",
+    "question": "Wie viel Euro kosten die 7 Paar Skistöcke zusammen?",
+    "calculation": "7 · 30",
+    "answer": 210,
+    "unit": "Euro",
+    "answerText": "Die Skistöcke kosten 210 Euro.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Bauer füllt 630 Liter Milch in 9 Milchkannen gleicher Größe.",
+    "question": "Wie viel Liter Milch passen in eine Kanne?",
+    "calculation": "630 : 9",
+    "answer": 70,
+    "unit": "l",
+    "answerText": "In eine Kanne passen 70 l Milch.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "In einer Bibliothek wurden 560 Bücher im Frühjahr und 290 Bücher im Sommer ausgeliehen.",
+    "question": "Wie viele Bücher wurden in beiden Jahreszeiten zusammen ausgeliehen?",
+    "calculation": "560 + 290",
+    "answer": 850,
+    "unit": "Bücher",
+    "answerText": "Es wurden 850 Bücher ausgeliehen.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Zirkus hat 700 Sitzplätze. 460 Plätze sind bereits von Zuschauern belegt.",
+    "question": "Wie viele Sitzplätze sind im Zirkuszelt noch frei?",
+    "calculation": "700 − 460",
+    "answer": 240,
+    "unit": "Plätze",
+    "answerText": "Es sind noch 240 Plätze frei.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 3,
+    "schulstufe": 3,
+    "lehrplanRef": "M-3-Sachaufgaben",
+    "story": "Ein Bäckermeister backt 9 Bleche mit je 40 Krapfen für den Faschingsdienstag.",
+    "question": "Wie viele Krapfen backt der Bäcker auf allen 9 Blechen zusammen?",
+    "calculation": "9 · 40",
+    "answer": 360,
+    "unit": "Krapfen",
+    "answerText": "Der Bäcker backt 360 Krapfen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Für ein Schulfest kauft die 4. Klasse 5 Packungen Mehl zu je 100 dag und 2 Packungen Zucker zu je 50 dag.",
+    "question": "Wie viel Dekagramm (dag) wiegen die Einkäufe insgesamt?",
+    "calculation": "500 + 100",
+    "answer": 600,
+    "unit": "dag",
+    "answerText": "Die Einkäufe wiegen 600 dag.",
+    "hint": "Wandle zuerst beide Zutaten in dag um (5 · 100 dag und 2 · 50 dag) und zähle die beiden Mengen zusammen."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Wanderer geht am Vormittag 12 km und am Nachmittag 9 km auf dem Weitwanderweg.",
+    "question": "Wie viele Meter (m) ist der Wanderer an diesem Tag insgesamt gewandert?",
+    "calculation": "21 · 1000",
+    "answer": 21000,
+    "unit": "m",
+    "answerText": "Der Wanderer ist 21 000 m gewandert.",
+    "hint": "Zähle zuerst die Kilometer beider Etappen zusammen (12 km + 9 km) und wandle das Ergebnis in Meter um (1 km = 1 000 m)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Lastwagen transportiert 4 Tonnen Sand. Auf der ersten Baustelle werden 1 500 kg abgeladen.",
+    "question": "Wie viel Kilogramm (kg) Sand verbleiben auf dem Lastwagen?",
+    "calculation": "4000 − 1500",
+    "answer": 2500,
+    "unit": "kg",
+    "answerText": "Es verbleiben 2 500 kg Sand auf dem Lastwagen.",
+    "hint": "Wandle zuerst die Tonnen in Kilogramm um (1 Tonne = 1 000 kg) und ziehe die abgeladene Menge ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Wassertank fasst 6 Hektoliter (hl) Wasser. Es werden 250 Liter zur Gartenbewässerung entnommen.",
+    "question": "Wie viel Liter (l) Wasser bleiben im Tank übrig?",
+    "calculation": "600 − 250",
+    "answer": 350,
+    "unit": "l",
+    "answerText": "Es bleiben 350 l Wasser übrig.",
+    "hint": "Wandle zuerst die Hektoliter in Liter um (1 hl = 100 Liter) und ziehe das entnommene Wasser ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Flugzeug fliegt in der ersten Stunde 650 km und in der zweiten Stunde 720 km.",
+    "question": "Wie viele Kilometer (km) hat das Flugzeug in beiden Stunden zurückgelegt?",
+    "calculation": "650 + 720",
+    "answer": 1370,
+    "unit": "km",
+    "answerText": "Das Flugzeug hat 1 370 km zurückgelegt.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Eine Stadt plant einen neuen Spielplatz für 45 000 Euro. Das Land fördert das Projekt mit 18 000 Euro.",
+    "question": "Wie viel Euro muss die Stadtgemeinde selbst für den Spielplatz bezahlen?",
+    "calculation": "45000 − 18000",
+    "answer": 27000,
+    "unit": "Euro",
+    "answerText": "Die Stadtgemeinde muss 27 000 Euro bezahlen.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Frachtschiff auf der Donau transportiert 8 Container mit jeweils 25 Tonnen Getreide.",
+    "question": "Wie viele Tonnen (t) Getreide transportiert das Schiff insgesamt?",
+    "calculation": "8 · 25",
+    "answer": 200,
+    "unit": "t",
+    "answerText": "Das Schiff transportiert 200 t Getreide.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Schotterwerk teilt 3 600 Tonnen Kies gleichmäßig auf 6 Güterzüge auf.",
+    "question": "Wie viele Tonnen (t) Kies lädt jeder Güterzug?",
+    "calculation": "3600 : 6",
+    "answer": 600,
+    "unit": "t",
+    "answerText": "Jeder Güterzug lädt 600 t Kies.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "In einem Waldgebiet wurden im Frühjahr 12 500 Tannen und im Herbst 8 300 Fichten gepflanzt.",
+    "question": "Wie viele Bäume wurden in diesem Jahr insgesamt gepflanzt?",
+    "calculation": "12500 + 8300",
+    "answer": 20800,
+    "unit": "Bäume",
+    "answerText": "Es wurden 20 800 Bäume gepflanzt.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Bauunternehmer hat ein Budget von 80 000 Euro. Er bezahlt Rechnungen in Höhe von 53 000 Euro.",
+    "question": "Wie viel Euro verbleiben noch in seinem Budget?",
+    "calculation": "80000 − 53000",
+    "answer": 27000,
+    "unit": "Euro",
+    "answerText": "Es verbleiben noch 27 000 Euro.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Solarkraftwerk erzeugt an einem sonnigen Tag in jeder Stunde 150 Kilowattstunden Strom. Es scheint 8 Stunden lang die Sonne.",
+    "question": "Wie viele Kilowattstunden (kWh) Strom erzeugt das Kraftwerk an diesem Tag?",
+    "calculation": "8 · 150",
+    "answer": 1200,
+    "unit": "kWh",
+    "answerText": "Das Kraftwerk erzeugt 1 200 kWh Strom.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Eine Molkerei füllt 15 000 Liter Milch in Großkanister zu je 50 Liter ab.",
+    "question": "Wie viele Kanister werden vollständig gefüllt?",
+    "calculation": "15000 : 50",
+    "answer": 300,
+    "unit": "Kanister",
+    "answerText": "Es werden 300 Kanister gefüllt.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Museum verzeichnete am Samstag 1 450 Besucher und am Sonntag 1 850 Besucher.",
+    "question": "Wie viele Besucher kamen an diesem Wochenende insgesamt ins Museum?",
+    "calculation": "1450 + 1850",
+    "answer": 3300,
+    "unit": "Besucher",
+    "answerText": "Es kamen 3 300 Besucher ins Museum.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Stausee fasst maximal 50 000 Hektoliter Wasser. Aktuell sind 32 000 Hektoliter enthalten.",
+    "question": "Wie viele Hektoliter (hl) Wasser fehlen noch zur Vollfüllung?",
+    "calculation": "50000 − 32000",
+    "answer": 18000,
+    "unit": "hl",
+    "answerText": "Es fehlen noch 18 000 hl Wasser.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Großhändler liefert 25 Kisten Orangen zu je 40 kg.",
+    "question": "Wie viel Kilogramm (kg) Orangen liefert der Händler insgesamt?",
+    "calculation": "25 · 40",
+    "answer": 1000,
+    "unit": "kg",
+    "answerText": "Der Händler liefert 1 000 kg Orangen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Eine Spende von 24 000 Euro wird zu gleichen Teilen an 4 Tierheime überwiesen.",
+    "question": "Wie viel Euro erhält jedes einzelne Tierheim?",
+    "calculation": "24000 : 4",
+    "answer": 6000,
+    "unit": "Euro",
+    "answerText": "Jedes Tierheim erhält 6 000 Euro.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Auf einer Autobahnbrücke passieren vormittags 14 200 Fahrzeuge und nachmittags 18 700 Fahrzeuge die Zählstelle.",
+    "question": "Wie viele Fahrzeuge wurden an diesem Tag insgesamt gezählt?",
+    "calculation": "14200 + 18700",
+    "answer": 32900,
+    "unit": "Fahrzeuge",
+    "answerText": "Es wurden 32 900 Fahrzeuge gezählt.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Öltank enthielt 25 000 Liter Heizöl. Im Winter wurden 16 500 Liter verbraucht.",
+    "question": "Wie viel Liter Heizöl sind noch im Tank?",
+    "calculation": "25000 − 16500",
+    "answer": 8500,
+    "unit": "l",
+    "answerText": "Es sind noch 8 500 l Heizöl im Tank.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Bauer erntet auf 12 Feldern durchschnittlich jeweils 35 Tonnen Weizen.",
+    "question": "Wie viele Tonnen (t) Weizen erntet der Bauer insgesamt?",
+    "calculation": "12 · 35",
+    "answer": 420,
+    "unit": "t",
+    "answerText": "Der Bauer erntet 420 t Weizen.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Papierwerk stellt 48 000 Hefte her und verpackt sie in Kartons zu je 80 Stück.",
+    "question": "Wie viele Kartons werden benötigt?",
+    "calculation": "48000 : 80",
+    "answer": 600,
+    "unit": "Kartons",
+    "answerText": "Es werden 600 Kartons benötigt.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Schwimmbecken wird mit 250 000 Liter Wasser aus der Quelle und 180 000 Liter Leitungswasser gefüllt.",
+    "question": "Wie viel Liter Wasser befinden sich danach im Becken?",
+    "calculation": "250000 + 180000",
+    "answer": 430000,
+    "unit": "l",
+    "answerText": "Es befinden sich 430 000 l Wasser im Becken.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Sportstadion bietet Platz für 30 000 Zuschauer. 21 500 Eintrittskarten sind verkauft.",
+    "question": "Wie viele Plätze sind im Stadion noch frei?",
+    "calculation": "30000 − 21500",
+    "answer": 8500,
+    "unit": "Plätze",
+    "answerText": "Es sind noch 8 500 Plätze frei.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Transportzug besteht aus 15 Waggons. Jeder Waggon ist mit 40 Tonnen Eisenerz beladen.",
+    "question": "Wie viele Tonnen (t) Eisenerz befördert der Güterzug insgesamt?",
+    "calculation": "15 · 40",
+    "answer": 600,
+    "unit": "t",
+    "answerText": "Der Güterzug befördert 600 t Eisenerz.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Eine Schulbehörde verteilt 72 000 Schulbücher gleichmäßig an 9 Schulbezirke.",
+    "question": "Wie viele Schulbücher erhält jeder Bezirk?",
+    "calculation": "72000 : 9",
+    "answer": 8000,
+    "unit": "Bücher",
+    "answerText": "Jeder Bezirk erhält 8 000 Bücher.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Schiff fährt auf einer Flussreise 340 km stromaufwärts und 480 km stromabwärts.",
+    "question": "Wie viele Kilometer (km) ist das Schiff insgesamt gefahren?",
+    "calculation": "340 + 480",
+    "answer": 820,
+    "unit": "km",
+    "answerText": "Das Schiff ist 820 km gefahren.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein neues Schulgebäude kostet 500 000 Euro. Es wurden bereits Rechnungen von 385 000 Euro bezahlt.",
+    "question": "Wie viel Euro sind noch offen?",
+    "calculation": "500000 − 385000",
+    "answer": 115000,
+    "unit": "Euro",
+    "answerText": "Es sind noch 115 000 Euro offen.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Windrad erzeugt täglich 20 000 Kilowattstunden Strom. Ein Windpark hat 6 identische Windräder.",
+    "question": "Wie viele Kilowattstunden (kWh) Strom erzeugt der Windpark an einem Tag?",
+    "calculation": "6 · 20000",
+    "answer": 120000,
+    "unit": "kWh",
+    "answerText": "Der Windpark erzeugt 120 000 kWh Strom.",
+    "hint": "Überlege: Wenn mehrere gleiche Gruppen vorhanden sind, hilft die Malrechnung (·). Multipliziere die Gruppenanzahl mit der Menge je Gruppe."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Speicherbecken mit 64 000 Liter Wasser wird über 8 identische Rohre gleichmäßig entleert.",
+    "question": "Wie viel Liter Wasser fließen durch jedes Rohr?",
+    "calculation": "64000 : 8",
+    "answer": 8000,
+    "unit": "l",
+    "answerText": "Durch jedes Rohr fließen 8 000 l Wasser.",
+    "hint": "Überlege: Wenn eine Gesamtmenge gleichmäßig und gerecht aufgeteilt wird, hilft die Geteiltrechnung (:). Teile das Ganze durch die Anzahl der Teile."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "In einer großen Gärtnerei blühen 140 000 Stiefmütterchen und 160 000 Primeln.",
+    "question": "Wie viele Frühlingsblumen blühen insgesamt in der Gärtnerei?",
+    "calculation": "140000 + 160000",
+    "answer": 300000,
+    "unit": "Blumen",
+    "answerText": "Es blühen 300 000 Blumen in der Gärtnerei.",
+    "hint": "Überlege: Wenn Mengen zusammenkommen oder hinzukommen, wird das Gesamte mehr. Verbinde die Teilmengen mit Plus (+)."
+  },
+  {
+    "grade": 4,
+    "schulstufe": 4,
+    "lehrplanRef": "M-4-Sachaufgaben",
+    "story": "Ein Waldbrand zerstörte 45 000 Quadratmeter Wald. Durch Aufforstung wurden bereits 28 000 Quadratmeter neu bepflanzt.",
+    "question": "Wie viele Quadratmeter (m²) Wald müssen noch bepflanzt werden?",
+    "calculation": "45000 − 28000",
+    "answer": 17000,
+    "unit": "m²",
+    "answerText": "Es müssen noch 17 000 m² bepflanzt werden.",
+    "hint": "Überlege: Wenn etwas abgegeben, verbraucht oder weggenommen wird, bleibt ein Rest übrig. Ziehe die Menge mit Minus (−) ab."
+  }
+];
 
     let pool = [];
-    if (opts && opts.all) {
-      pool = [...storiesGrade2, ...storiesGrade3, ...storiesGrade4];
+    if (opts && opts.grade) {
+      pool = STORIES_POOL.filter(s => s.grade === opts.grade);
+    } else if (opts && opts.all) {
+      pool = STORIES_POOL;
     } else {
-      if (grades.includes(2)) pool.push(...storiesGrade2);
-      if (grades.includes(3)) pool.push(...storiesGrade3);
-      if (grades.includes(4)) pool.push(...storiesGrade4);
-      if (pool.length === 0) pool = storiesGrade2;
+      if (grades.includes(2)) pool.push(...STORIES_POOL.filter(s => s.grade === 2));
+      if (grades.includes(3)) pool.push(...STORIES_POOL.filter(s => s.grade === 3));
+      if (grades.includes(4)) pool.push(...STORIES_POOL.filter(s => s.grade === 4));
+      if (pool.length === 0) pool = STORIES_POOL.filter(s => s.grade === 2);
     }
 
     const targetCount = (opts && opts.forPrint) ? 3 : ((opts && opts.all) ? pool.length : 5);

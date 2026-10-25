@@ -61,6 +61,29 @@
   display: flex;
   align-items: center;
   gap: var(--abstand-2, 8px);
+  flex-wrap: wrap;
+}
+
+.treasure-select {
+  font-family: var(--schrift-text, inherit);
+  font-weight: 700;
+  font-size: 0.95rem;
+  min-height: var(--ziel-min, 56px);
+  padding: 0 12px;
+  border: 2px solid var(--linie, #3B4651);
+  border-radius: var(--radius);
+  background: var(--flaeche, #FFFFFF);
+  color: var(--tinte, #1E2A36);
+  flex: 1;
+  min-width: 220px;
+}
+
+.treasure-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--abstand-2, 8px);
+  flex: 1;
+  min-width: 240px;
 }
 
 .treasure-input {
@@ -68,7 +91,8 @@
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  width: 160px;
+  flex: 1;
+  min-width: 120px;
   text-align: center;
   min-height: var(--ziel-min, 56px);
   font-size: 1.1rem;
@@ -77,6 +101,7 @@
 .btn-treasure {
   min-height: var(--ziel-min, 56px);
   padding: 0 20px;
+  white-space: nowrap;
 }
 
 .treasure-feedback-msg {

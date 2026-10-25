@@ -307,7 +307,7 @@
           <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
           <span>Drucken</span>
         </button>
-        <button id="btn-qa-print-cert" class="btn btn-primary" type="button" title="Vollständige Urkunde (alle Sterne &amp; Stempel) für ein Kind drucken">
+        <button id="btn-qa-print-cert" class="btn btn-primary" type="button" title="Vollständige Urkunde (alle Sterne &amp; Sammel-Sticker) für ein Kind drucken">
           <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
           <span>Urkunde drucken</span>
         </button>
@@ -439,7 +439,7 @@
             const State = window.Schlaufuchs.State;
             const activeProfile = (State && State.getActiveProfile) ? State.getActiveProfile() : null;
             const defaultName = activeProfile ? activeProfile.name : 'Nils';
-            const name = window.prompt('Name des Kindes für die vollständige Ehrenurkunde (alle 84 Sterne & 16 Stempel):', defaultName);
+            const name = window.prompt('Name des Kindes für die vollständige Ehrenurkunde (alle 84 Sterne & 16 Sammel-Sticker):', defaultName);
             if (name && name.trim()) {
               if (window.Schlaufuchs.Print && window.Schlaufuchs.Print.printCertificate) {
                 window.Schlaufuchs.Print.printCertificate({ name: name.trim() }, { full: true });

@@ -10,24 +10,31 @@ window.Schlaufuchs = window.Schlaufuchs || {};
 window.Schlaufuchs.Print = (function () {
   'use strict';
 
-  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste
-  const SECRET_WORDS_BY_LENGTH = {
+  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste nach Wortlänge (SSOT)
+  const FALLBACK_SECRET_WORDS_BY_LENGTH = {
     3: ['UHU', 'MUT', 'BÄR', 'ROT', 'AST', 'SEE', 'TAG'],
     4: ['WALD', 'IGEL', 'EULE', 'BERG', 'HERZ', 'WOLF', 'BAUM', 'LUFT', 'GOLD', 'BLAU', 'HAUS', 'MAUS'],
-    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL'],
-    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN'],
-    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE'],
+    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL', 'ZEBRA', 'KÖNIG'],
+    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN', 'SCHATZ'],
+    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE', 'TAUSEND'],
     8: ['FUCHSBAU', 'SCHLAUER', 'WALDKAUZ', 'TAUSENDE', 'KÖNIGIN', 'LESEFEST', 'SCHULHOF'],
+    10: ['WINTERZEIT', 'BERGBLUMEN', 'SCHULSTART', 'LESESCHATZ', 'ZAUBERWALD'],
     12: ['RECHENKÖNIGE', 'ZAHLENZAUBER', 'WINTERZAUBER', 'SCHATZSUCHER', 'MEISTERSTERN', 'BÜCHERSCHATZ']
   };
 
-  const FALLBACK_WORDS = ['FUCHS', 'SCHLAU', 'BIBER', 'STERN', 'WALD', 'SONNE'];
+  function getSecretWordsMap() {
+    if (window.Schlaufuchs && window.Schlaufuchs.SecretWords && window.Schlaufuchs.SecretWords.byLength) {
+      return window.Schlaufuchs.SecretWords.byLength;
+    }
+    return FALLBACK_SECRET_WORDS_BY_LENGTH;
+  }
 
   function pickSecretWord(count) {
-    const list = SECRET_WORDS_BY_LENGTH[count] || (count >= 12 ? SECRET_WORDS_BY_LENGTH[12] : (count > 8 ? SECRET_WORDS_BY_LENGTH[8] : SECRET_WORDS_BY_LENGTH[5]));
+    const map = getSecretWordsMap();
+    const list = map[count] || (count >= 12 ? map[12] : (count >= 10 ? map[10] : (count > 8 ? map[8] : (count >= 7 ? map[7] : (count >= 6 ? map[6] : map[5])))));
     let word = list[Math.floor(Math.random() * list.length)] || 'FUCHS';
-    if (count && word.length !== count && SECRET_WORDS_BY_LENGTH[count]) {
-      word = SECRET_WORDS_BY_LENGTH[count][0];
+    if (count && word.length !== count && map[count]) {
+      word = map[count][0];
     }
     try {
       const Storage = window.Schlaufuchs.Storage;
@@ -35,11 +42,38 @@ window.Schlaufuchs.Print = (function () {
         const existing = Storage.lesen('valid_secret_words') || [];
         if (!existing.includes(word)) {
           existing.push(word);
-          Storage.schreiben('valid_secret_words', existing.slice(-20));
+          Storage.schreiben('valid_secret_words', existing.slice(-30));
         }
       }
     } catch (e) {}
     return word;
+  }
+
+  function renderSecretWordBar(secretWord) {
+    if (!secretWord || secretWord.length === 0) return '';
+    const letters = secretWord.split('');
+    let boxesHtml = '';
+    letters.forEach((_, idx) => {
+      boxesHtml += `
+        <div class="print-secret-box">
+          <span class="print-box-num">${idx + 1}</span>
+          <span class="print-box-cell"></span>
+        </div>
+      `;
+    });
+
+    return `
+      <div class="print-secret-word-bar">
+        <div class="print-secret-prompt">
+          <span class="print-secret-badge">LÖSUNGSWORT</span>
+          <span class="print-secret-desc">Trage für jede gelöste Aufgabe den Lösungsbuchstaben ein:</span>
+          <span class="print-secret-check">◯ Im Sticker-Album eingetragen</span>
+        </div>
+        <div class="print-secret-letter-boxes">
+          ${boxesHtml}
+        </div>
+      </div>
+    `;
   }
 
   function getEffectiveGradeLabel(tasks, fallbackGradeText) {
@@ -98,6 +132,12 @@ window.Schlaufuchs.Print = (function () {
     const grade = targetGrade || (meta && meta.grades ? meta.grades[0] : 2);
     const gradeLabel = `${grade}. Klasse`;
 
+    try {
+      if (window.Schlaufuchs && window.Schlaufuchs.Storage) {
+        window.Schlaufuchs.Storage.schreiben('last_printed_topic', topicId);
+      }
+    } catch (e) {}
+
     const tasks = PrintEngine ? PrintEngine.generateWorksheetTasks(topicId, grade) : [];
     if (!tasks || tasks.length === 0) return;
 
@@ -155,6 +195,12 @@ window.Schlaufuchs.Print = (function () {
     const grade = targetGrade || (meta && meta.grades ? meta.grades[0] : 2);
     const gradeLabel = `${grade}. Klasse`;
 
+    try {
+      if (window.Schlaufuchs && window.Schlaufuchs.Storage) {
+        window.Schlaufuchs.Storage.schreiben('last_printed_topic', topicId);
+      }
+    } catch (e) {}
+
     const tasks = PrintEngine ? PrintEngine.generateWorksheetTasks(topicId, grade) : [];
     if (!tasks || tasks.length === 0) return;
 
@@ -206,15 +252,20 @@ window.Schlaufuchs.Print = (function () {
     if (tasks.length === 1 && tasks[0].type === 'reading' && tasks[0].questions) {
       tasks[0].questions.forEach((q, qIdx) => {
         const solText = q.options[q.correctIndex];
+        const letter = secretWord[qIdx] || '';
         solutionsHtml += `
           <div class="print-knick-item">
             <span class="print-knick-num">${qIdx + 1}.</span>
             <span class="print-knick-val">${solText}</span>
+            ${letter ? `<span class="print-knick-letter-badge">(${letter})</span>` : ''}
           </div>
         `;
       });
     } else {
       tasks.forEach((task, idx) => {
+        if (!task.secretLetter && secretWord[idx]) {
+          task.secretLetter = secretWord[idx];
+        }
         solutionsHtml += renderKnickSolutionRow(task, idx);
       });
     }
@@ -248,7 +299,10 @@ window.Schlaufuchs.Print = (function () {
               ${tasksHtml}
             </div>
 
-            <!-- DEZENTE SELBSTEINSCHÄTZUNG & STEMPELFELD AM FUSS -->
+            <!-- LÖSUNGSWORT-LEISTE FÜR DAS SAMMELALBUM -->
+            ${renderSecretWordBar(secretWord)}
+
+            <!-- DEZENTE SELBSTEINSCHÄTZUNG AM FUSS -->
             <div class="print-sheet-footer">
               <div class="print-footer-left">
                 <div class="print-self-eval-inline">
@@ -259,15 +313,6 @@ window.Schlaufuchs.Print = (function () {
                 </div>
                 <div class="print-footer-sub">
                   <span>Blatt-Nr. ${seed} · Seite 1 von 1 · Schlaufuchs</span>
-                </div>
-              </div>
-              <div class="print-stamp-badge" title="Stempel- oder Stickerfeld für deinen Ordner">
-                <span class="print-stamp-label">Sammel-Stempel:</span>
-                <div class="print-stamp-box">
-                  <svg viewBox="0 0 36 36" width="26" height="26">
-                    <circle cx="18" cy="18" r="15" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="3,2"/>
-                    <path d="M18,9 L20.5,14.5 L26.5,15.2 L22,19.3 L23.2,25.2 L18,22.2 L12.8,25.2 L14,19.3 L9.5,15.2 L15.5,14.5 Z" fill="none" stroke="#000000" stroke-width="1.2"/>
-                  </svg>
                 </div>
               </div>
             </div>
@@ -293,7 +338,7 @@ window.Schlaufuchs.Print = (function () {
               <div class="print-knick-secret">
                 <span class="print-knick-secret-title">SCHATZKISTE</span>
                 <span class="print-knick-secret-word">${secretWord}</span>
-                <span class="print-knick-secret-sub">Geheimwort im Sticker-Album eingeben für dein Sammelbild!</span>
+                <span class="print-knick-secret-sub">Lösungswort im Sticker-Album eingeben für dein Sammelbild!</span>
               </div>
             </div>
           </div>
@@ -315,15 +360,20 @@ window.Schlaufuchs.Print = (function () {
     if (tasks.length === 1 && tasks[0].type === 'reading' && tasks[0].questions) {
       tasks[0].questions.forEach((q, qIdx) => {
         const solText = q.options[q.correctIndex];
+        const letter = secretWord[qIdx] || '';
         solutionsHtml += `
           <div class="print-knick-item">
             <span class="print-knick-num">${qIdx + 1}.</span>
             <span class="print-knick-val">${solText}</span>
+            ${letter ? `<span class="print-knick-letter-badge">(${letter})</span>` : ''}
           </div>
         `;
       });
     } else {
       tasks.forEach((task, idx) => {
+        if (!task.secretLetter && secretWord[idx]) {
+          task.secretLetter = secretWord[idx];
+        }
         solutionsHtml += renderKnickSolutionRow(task, idx);
       });
     }
@@ -354,6 +404,9 @@ window.Schlaufuchs.Print = (function () {
           ${tasksHtml}
         </div>
 
+        <!-- LÖSUNGSWORT-LEISTE FÜR DAS SAMMELALBUM -->
+        ${renderSecretWordBar(secretWord)}
+
         <div class="print-sheet-footer">
           <div class="print-footer-left">
             <div class="print-self-eval-inline">
@@ -364,15 +417,6 @@ window.Schlaufuchs.Print = (function () {
             </div>
             <div class="print-footer-sub">
               <span>Blatt-Nr. ${seed} · Seite 1 von 2 · Schlaufuchs</span>
-            </div>
-          </div>
-          <div class="print-stamp-badge" title="Stempel- oder Stickerfeld für deinen Ordner">
-            <span class="print-stamp-label">Sammel-Stempel:</span>
-            <div class="print-stamp-box">
-              <svg viewBox="0 0 36 36" width="26" height="26">
-                <circle cx="18" cy="18" r="15" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="3,2"/>
-                <path d="M18,9 L20.5,14.5 L26.5,15.2 L22,19.3 L23.2,25.2 L18,22.2 L12.8,25.2 L14,19.3 L9.5,15.2 L15.5,14.5 Z" fill="none" stroke="#000000" stroke-width="1.2"/>
-              </svg>
             </div>
           </div>
         </div>
@@ -398,7 +442,7 @@ window.Schlaufuchs.Print = (function () {
           <div class="print-knick-secret" style="margin-top: 24px; max-width: 320px;">
             <span class="print-knick-secret-title">SCHATZKISTE</span>
             <span class="print-knick-secret-word">${secretWord}</span>
-            <span class="print-knick-secret-sub">Geheimwort im Sticker-Album eingeben für dein Sammelbild!</span>
+            <span class="print-knick-secret-sub">Lösungswort im Sticker-Album eingeben für dein Sammelbild!</span>
           </div>
         </div>
 
@@ -840,16 +884,24 @@ window.Schlaufuchs.Print = (function () {
     }
     // Rechengeschichten
     else if (task.type === 'text-problem') {
+      const hasQuestionInStory = Boolean(task.story && task.story.includes('?'));
+      const questionHtml = (!hasQuestionInStory && task.question)
+        ? `<div class="print-story-question"><strong>Frage:</strong> ${task.question}</div>`
+        : (!hasQuestionInStory ? `<div class="print-story-row"><strong class="print-story-label">Frage:</strong> <span class="print-line print-story-line"></span></div>` : '');
+
       body = `
         <div>
           <div class="print-story-text">${task.story}</div>
-          <div class="print-fra-container">
-            <div class="print-fra-row"><strong>F:</strong> <span class="print-line" style="flex:1;"></span></div>
-            <div class="print-fra-row" style="margin: 6px 0;">
-              <strong>R:</strong> <span class="print-line" style="width: 170px;"></span>
-              <span class="print-calc-grid-mm" style="width: 110px; height: 36px; margin-left: 15px;"></span>
+          <div class="print-story-work-area">
+            ${questionHtml}
+            <div class="print-story-row">
+              <strong class="print-story-label">Rechnung:</strong>
+              <span class="print-calc-grid-mm print-story-grid"></span>
             </div>
-            <div class="print-fra-row"><strong>A:</strong> <span class="print-line" style="flex:1;"></span></div>
+            <div class="print-story-row">
+              <strong class="print-story-label">Antwort:</strong>
+              <span class="print-line print-story-line"></span>
+            </div>
           </div>
         </div>
       `;
@@ -910,11 +962,14 @@ window.Schlaufuchs.Print = (function () {
 
   function renderKnickSolutionRow(task, idx) {
     const solText = getTaskSolutionText(task);
+    const letter = task.secretLetter || '';
+    const letterBadge = letter ? `<span class="print-knick-letter-badge">(${letter})</span>` : '';
 
     return `
       <div class="print-knick-item">
         <span class="print-knick-num">${idx + 1}.</span>
         <span class="print-knick-val">${solText}</span>
+        ${letterBadge}
       </div>
     `;
   }

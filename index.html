@@ -831,7 +831,7 @@
                   <div class="admin-action-row" style="gap: 10px; flex-wrap: wrap;">
                     <button type="button" id="btn-admin-print-full-cert" class="btn btn-primary">
                       <img src="assets/icons/drucken.svg" class="icon-inline-svg" alt="">
-                      <span>Vollständige Urkunde drucken (alle Sterne &amp; Stempel)</span>
+                      <span>Vollständige Urkunde drucken (alle Sterne &amp; Sammel-Sticker)</span>
                     </button>
                     <button type="button" id="btn-admin-print-cert" class="btn btn-secondary">
                       <span>Mit aktuellem Gerätestand drucken</span>
@@ -939,14 +939,16 @@
           <!-- SCHLAUFUCHS-SCHATZKISTE (OFFLINE-LERN-BELOHNUNG) -->
           <div class="stickers-treasure-banner">
             <div class="treasure-info">
-              <h4><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"> Schlaufuchs-Schatzkiste (Arbeitsblatt-Geheimwort)</h4>
-              <p>Hast du ein Arbeitsblatt offline mit Stift gelöst? Gib hier dein Geheimwort ein!</p>
+              <h4><img src="assets/icons/fuchs.svg" class="icon-inline-svg" alt="" style="width: 20px; height: 20px;"> Schlaufuchs-Schatzkiste (Arbeitsblatt-Lösungswort)</h4>
+              <p>Hast du ein Arbeitsblatt offline mit Stift gelöst? Gib dein Lösungswort ein, um dein neues Sammelbild im Album freizuschalten!</p>
             </div>
             <form id="treasure-code-form" class="treasure-form" autocomplete="off">
-              <input type="text" id="input-treasure-code" class="task-input treasure-input" placeholder="GEHEIMWORT" maxlength="15" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" required />
-              <button type="submit" id="btn-submit-treasure-code" class="btn btn-primary btn-treasure">
-                <span>Öffnen</span>
-              </button>
+              <div class="treasure-input-wrap">
+                <input type="text" id="input-treasure-code" class="task-input treasure-input" placeholder="LÖSUNGSWORT" maxlength="15" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" required />
+                <button type="submit" id="btn-submit-treasure-code" class="btn btn-primary btn-treasure">
+                  <span>Schatz öffnen ➔</span>
+                </button>
+              </div>
             </form>
           </div>
           <div id="treasure-feedback-msg" class="treasure-feedback-msg" style="display: none;"></div>

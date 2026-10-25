@@ -28,11 +28,17 @@ function createStickersSandbox(customProfile = null) {
   };
 
   const mockState = {
-    getActiveProfile: () => profile,
-    loadAllProfiles: () => [profile],
-    saveAllProfiles: (all) => { profile = all[0]; },
+    getActiveProfile: () => JSON.parse(JSON.stringify(profile)),
+    getActiveProfileId: () => profile.id,
+    loadAllProfiles: () => [JSON.parse(JSON.stringify(profile))],
+    saveAllProfiles: (all) => { profile = JSON.parse(JSON.stringify(all[0])); },
     notify: () => {},
-    subscribe: () => () => {}
+    subscribe: () => () => {},
+    getStarsForTopic: (tId) => (profile.stars && profile.stars[tId]) || 0,
+    saveStarsForTopic: (tId, count) => {
+      if (!profile.stars) profile.stars = {};
+      profile.stars[tId] = count;
+    }
   };
 
   const sandbox = {
@@ -55,7 +61,8 @@ function createStickersSandbox(customProfile = null) {
   return {
     Stickers: sandbox.window.Schlaufuchs.Stickers,
     getProfile: () => profile,
-    setProfile: (p) => { profile = p; }
+    setProfile: (p) => { profile = p; },
+    storage: mockStorage
   };
 }
 
@@ -133,6 +140,86 @@ test('Stickers: Schatzkisten-Geheimwort schaltet deterministisch nächstes Samme
   assert.equal(resDup.success, false);
 });
 
+test('Stickers: Einlösen eines gelösten Arbeitsblatts schreibt zusätzlich einen Stern auf der Themenkarte gut', () => {
+  const { Stickers, getProfile } = createStickersSandbox({
+    id: 'p_stars',
+    stars: {},
+    unlockedStickers: ['s1']
+  });
+
+  // 1. Erstes Arbeitsblatt für math-addition einlösen -> +1 Stern (insg. 1)
+  const res1 = Stickers.redeemTreasureWord('FUCHS', 'math-addition');
+  assert.equal(res1.success, true);
+  assert.equal(res1.starAwarded, true, 'Stern muss gutgeschrieben werden');
+  assert.equal(getProfile().stars['math-addition'], 1, 'Thema muss jetzt 1 Stern haben');
+  assert.equal(getProfile().unlockedStickers.length, 2, 'Sticker muss ebenfalls freigeschaltet sein');
+
+  // 2. Zweites Arbeitsblatt für math-addition einlösen -> +1 Stern (insg. 2)
+  const res2 = Stickers.redeemTreasureWord('WALD', 'math-addition');
+  assert.equal(res2.success, true);
+  assert.equal(res2.starAwarded, true);
+  assert.equal(getProfile().stars['math-addition'], 2, 'Thema muss jetzt 2 Sterne haben');
+
+  // 3. Drittes Arbeitsblatt -> +1 Stern (insg. 3, Meister)
+  const res3 = Stickers.redeemTreasureWord('BIBER', 'math-addition');
+  assert.equal(res3.success, true);
+  assert.equal(res3.starAwarded, true);
+  assert.equal(getProfile().stars['math-addition'], 3, 'Thema muss 3 Sterne (Maximum) haben');
+
+  // 4. Viertes Arbeitsblatt -> Stern bleibt bei 3 (Meister-Status), Sticker wird trotzdem freigeschaltet
+  const res4 = Stickers.redeemTreasureWord('STERN', 'math-addition');
+  assert.equal(res4.success, true);
+  assert.equal(res4.starAwarded, false, 'Kein weiterer Stern über 3 hinaus');
+  assert.equal(getProfile().stars['math-addition'], 3);
+  assert.equal(getProfile().unlockedStickers.length, 5);
+});
+
+test('Stickers: Alle Wörter aus SECRET_WORDS_BY_LENGTH aller Längen (3 bis 12) sind geräteübergreifend gültig', () => {
+  const { Stickers } = createStickersSandbox();
+  const wordsMap = Stickers.SECRET_WORDS_BY_LENGTH;
+  assert.ok(wordsMap, 'SECRET_WORDS_BY_LENGTH muss vorhanden sein');
+
+  // Prüfe exemplarisch Wörter jeder Längenklasse ohne localStorage-Vorregistrierung (Fremdgerät-Szenario)
+  const testSamples = [
+    { word: 'UHU', len: 3 },
+    { word: 'BÄR', len: 3 },
+    { word: 'WALD', len: 4 },
+    { word: 'BERG', len: 4 },
+    { word: 'FUCHS', len: 5 },
+    { word: 'SCHLAU', len: 6 },
+    { word: 'FREUNDE', len: 7 },
+    { word: 'FUCHSBAU', len: 8 },
+    { word: 'WINTERZEIT', len: 10 },
+    { word: 'RECHENKÖNIGE', len: 12 },
+    { word: 'ZAHLENZAUBER', len: 12 }
+  ];
+
+  testSamples.forEach(({ word, len }) => {
+    const { Stickers, getProfile } = createStickersSandbox({
+      id: 'p_test_' + word,
+      stars: {},
+      unlockedStickers: ['s1']
+    });
+
+    const res = Stickers.redeemTreasureWord(word);
+    assert.equal(
+      res.success,
+      true,
+      `Wort "${word}" (Länge ${len}) muss auf jedem Gerät offline gültig sein!`
+    );
+    assert.ok(res.sticker, 'Rückgabe muss freigeschaltetes Sammelbild enthalten');
+  });
+
+  // Groß-/Kleinschreibung und Umlaut-Toleranz (baer vs bär)
+  const { Stickers: sCase } = createStickersSandbox({ id: 'p_case', stars: {}, unlockedStickers: ['s1'] });
+  const resLower = sCase.redeemTreasureWord('fuchs');
+  assert.equal(resLower.success, true, 'Kleinbuchstaben müssen funktionieren');
+
+  const { Stickers: sUmlaut } = createStickersSandbox({ id: 'p_umlaut', stars: {}, unlockedStickers: ['s1'] });
+  const resUmlaut = sUmlaut.redeemTreasureWord('baer');
+  assert.equal(resUmlaut.success, true, 'AE für Ä muss toleriert werden');
+});
+
 test('Stickers: Trophäen-Bedingungen schalten nach didaktischem Fortschritt frei', () => {
   const { Stickers } = createStickersSandbox();
   const getTrophy = (id) => Stickers.TROPHIES.find(t => t.id === id);
@@ -157,3 +244,26 @@ test('Stickers: Trophäen-Bedingungen schalten nach didaktischem Fortschritt fre
   assert.equal(getTrophy('t_star50').check({ stars: { 'm1': 5, 'm2': 5, 'm3': 4 } }), false); // 14 Sterne
   assert.equal(getTrophy('t_star50').check({ stars: { 'm1': 5, 'm2': 5, 'm3': 5 } }), true);  // 15 Sterne
 });
+
+test('Stickers: redeemTreasureWord ohne Dropdown nutzt last_printed_topic und persistiert Sticker persistent', () => {
+  const { Stickers, getProfile, storage } = createStickersSandbox({
+    id: 'p_hybrid',
+    stars: {},
+    unlockedStickers: ['s1']
+  });
+
+  // Simuliere: Arbeitsblatt wurde zuvor gedruckt
+  storage.schreiben('last_printed_topic', 'math-story');
+
+  const res = Stickers.redeemTreasureWord('WALD');
+  assert.equal(res.success, true);
+  assert.equal(res.starAwarded, true, 'Stern für last_printed_topic muss automatisch gutgeschrieben werden');
+  assert.equal(getProfile().stars['math-story'], 1, 'Thema math-story muss 1 Stern haben');
+
+  // Prüfe: Der Sticker ist dauerhaft in unlockedStickers
+  const profile = getProfile();
+  assert.equal(profile.unlockedStickers.length, 2, 'Sticker muss freigeschaltet und persistiert sein');
+  assert.ok(profile.unlockedStickers.includes('s2'), 's2 muss in unlockedStickers sein');
+  assert.ok(profile.redeemedTreasureWords.includes('WALD'), 'WALD muss in redeemedTreasureWords sein');
+});
+

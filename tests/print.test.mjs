@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
+const texteCode = readFileSync('js/core/texte.js', 'utf8');
 const storageCode = readFileSync('js/core/storage.js', 'utf8');
 const stateCode = readFileSync('js/state.js', 'utf8');
 const printCode = readFileSync('js/print.js', 'utf8');
@@ -23,6 +24,7 @@ const sandbox = {
 };
 sandbox.window = sandbox;
 
+vm.runInNewContext(texteCode, sandbox);
 vm.runInNewContext(storageCode, sandbox);
 vm.runInNewContext(stateCode, sandbox);
 vm.runInNewContext(printCode, sandbox);
@@ -103,7 +105,11 @@ test('Print: Arbeitsblatt-Druck erzeugt Knick-Lösungsstreifen standardmäßig',
   assert.ok(createdElement.innerHTML.includes('HIER VOR DEM LÖSEN NACH HINTEN KNICKEN'), 'Falt-Indikator muss vorhanden sein');
   assert.ok(createdElement.innerHTML.includes('LÖSUNGEN'), 'Lösungs-Header muss vorhanden sein');
   assert.ok(createdElement.innerHTML.includes('Wie war das Blatt für dich?'), 'Selbsteinschätzung muss vorhanden sein');
-  assert.ok(createdElement.innerHTML.includes('print-stamp-badge'), 'Sammel-Stempelfeld als Papiermotivator muss vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('print-secret-check'), 'Checkbox für Sticker-Album muss auf Lösungswort-Leiste vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('◯ Im Sticker-Album eingetragen'), 'Sticker-Album-Checkbox für das Kind muss vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('print-secret-word-bar'), 'Lösungswort-Kästchenleiste für das Kind muss auf Schülerseite sein');
+  assert.ok(createdElement.innerHTML.includes('print-secret-box'), 'Nummerierte Kästchen für das Lösungswort müssen vorhanden sein');
+  assert.ok(createdElement.innerHTML.includes('print-knick-letter-badge'), 'Lösungsbuchstaben müssen im Knickstreifen ausgegeben werden');
   assert.ok(createdElement.innerHTML.includes('print-knick-secret'), 'Schatzkisten-Geheimwort muss auf dem Knickstreifen sein');
   assert.ok(!createdElement.innerHTML.includes('www.schlaufuchs.at'), 'Keine externe URL auf dem Arbeitsblatt (Regel 10)');
   assert.ok(createdElement.innerHTML.includes('Blatt-Nr.'), 'Blatt-Nr. (Seed) muss in der Fußzeile stehen (Regel 15)');
@@ -143,6 +149,7 @@ test('Print: buildTwoPageHtml erzeugt separates Lösungsblatt auf Seite 2 ohne N
   assert.ok(html.includes('print-twopage-sheet'), 'Muss Seite 1 enthalten');
   assert.ok(html.includes('print-twopage-solution'), 'Muss separates Lösungsblatt auf Seite 2 enthalten');
   assert.ok(html.includes('LÖSUNGEN (Selbstkontrolle)'), 'Muss Lösungs-Header auf Seite 2 tragen');
+  assert.ok(html.includes('print-secret-word-bar'), 'Muss Lösungswort-Leiste auf Seite 1 enthalten');
   assert.ok(html.includes('Seite 1 von 2'), 'Fußzeile Seite 1 muss Seitenzahl ausweisen');
   assert.ok(html.includes('Seite 2 von 2'), 'Fußzeile Seite 2 muss Seitenzahl ausweisen');
 });
@@ -197,4 +204,32 @@ test('Print: printCertificate(options.full = true) druckt vollständige Urkunde 
   assert.ok(createdElement.innerHTML.includes('Champion'), 'Muss Champion-Badge enthalten');
   assert.ok(createdElement.innerHTML.includes('Unterschrift (Lehrkraft / Eltern)'), 'Muss Unterschriftszeile enthalten');
 });
+
+test('Print: Rechengeschichten (text-problem) rendern lesbar "Rechnung" und "Antwort" ohne kryptisches F-Kürzel', () => {
+  let createdElement = { id: 'print-area', innerHTML: '' };
+  sandbox.document.getElementById = () => createdElement;
+  sandbox.window.print = () => {};
+
+  const storyTasks = [
+    {
+      fach: 'mathe',
+      type: 'text-problem',
+      schulstufe: 2,
+      story: 'Ein Bäcker backt 8 Bleche mit jeweils 6 Semmeln. Wie viele Semmeln sind das?',
+      question: 'Wie viele Semmeln sind das?',
+      calculation: '8 · 6',
+      answer: 48,
+      unit: 'Semmeln'
+    }
+  ];
+
+  Print.generateAndPrintWorksheet('Rechengeschichten', '2. Klasse', storyTasks);
+  const html = createdElement.innerHTML;
+
+  assert.ok(html.includes('Rechnung:'), 'Muss "Rechnung:" als ausgeschriebenes Label enthalten');
+  assert.ok(html.includes('Antwort:'), 'Muss "Antwort:" als ausgeschriebenes Label enthalten');
+  assert.ok(html.includes('print-calc-grid-mm'), 'Muss Rechenkästchen-Raster für die Rechnung enthalten');
+  assert.ok(!html.includes('<strong>F:</strong>'), 'Darf kein kryptisches, isoliertes "F:" Kürzel enthalten');
+});
+
 

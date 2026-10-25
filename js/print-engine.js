@@ -40,23 +40,32 @@ window.Schlaufuchs.PrintEngine = (function () {
   // Zufallshelfer
   const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste nach Wortlänge
-  const SECRET_WORDS_BY_LENGTH = {
+  // Liste kindgerechter österreichischer Geheimwörter für die Schatzkiste nach Wortlänge (SSOT)
+  const FALLBACK_SECRET_WORDS_BY_LENGTH = {
     3: ['UHU', 'MUT', 'BÄR', 'ROT', 'AST', 'SEE', 'TAG'],
     4: ['WALD', 'IGEL', 'EULE', 'BERG', 'HERZ', 'WOLF', 'BAUM', 'LUFT', 'GOLD', 'BLAU', 'HAUS', 'MAUS'],
-    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL'],
-    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN'],
-    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE'],
+    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL', 'ZEBRA', 'KÖNIG'],
+    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN', 'SCHATZ'],
+    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE', 'TAUSEND'],
     8: ['FUCHSBAU', 'SCHLAUER', 'WALDKAUZ', 'TAUSENDE', 'KÖNIGIN', 'LESEFEST', 'SCHULHOF'],
+    10: ['WINTERZEIT', 'BERGBLUMEN', 'SCHULSTART', 'LESESCHATZ', 'ZAUBERWALD'],
     12: ['RECHENKÖNIGE', 'ZAHLENZAUBER', 'WINTERZAUBER', 'SCHATZSUCHER', 'MEISTERSTERN', 'BÜCHERSCHATZ']
   };
 
+  function getSecretWordsMap() {
+    if (window.Schlaufuchs && window.Schlaufuchs.SecretWords && window.Schlaufuchs.SecretWords.byLength) {
+      return window.Schlaufuchs.SecretWords.byLength;
+    }
+    return FALLBACK_SECRET_WORDS_BY_LENGTH;
+  }
+
   function pickSecretWord(preferredLength) {
+    const map = getSecretWordsMap();
     const len = preferredLength || 5;
-    const list = SECRET_WORDS_BY_LENGTH[len] || (len >= 12 ? SECRET_WORDS_BY_LENGTH[12] : (len > 8 ? SECRET_WORDS_BY_LENGTH[8] : SECRET_WORDS_BY_LENGTH[5]));
+    const list = map[len] || (len >= 12 ? map[12] : (len >= 10 ? map[10] : (len > 8 ? map[8] : (len >= 7 ? map[7] : (len >= 6 ? map[6] : map[5])))));
     let word = list[rand(0, list.length - 1)];
-    if (!word || (preferredLength && word.length !== preferredLength && SECRET_WORDS_BY_LENGTH[preferredLength])) {
-      word = SECRET_WORDS_BY_LENGTH[preferredLength][0];
+    if (!word || (preferredLength && word.length !== preferredLength && map[preferredLength])) {
+      word = map[preferredLength][0];
     }
     // Im Storage für die Schatzkiste im Sticker-Album registrieren
     try {
@@ -140,6 +149,12 @@ window.Schlaufuchs.PrintEngine = (function () {
 
     if (!tasks || tasks.length === 0) return [];
 
+    try {
+      if (window.Schlaufuchs && window.Schlaufuchs.Storage) {
+        window.Schlaufuchs.Storage.schreiben('last_printed_topic', topicId);
+      }
+    } catch (e) {}
+
     // Geheimwort-Bijektion für den Knick-Lösungsstreifen
     let effCount = tasks.length;
     if (tasks.length === 1 && tasks[0].type === 'reading' && tasks[0].questions) {
@@ -147,11 +162,15 @@ window.Schlaufuchs.PrintEngine = (function () {
     }
     const secretWord = pickSecretWord(effCount);
 
+    tasks.topicId = topicId;
+    tasks.secretWord = secretWord;
+
     // Aufgaben mit Schulstufen-Metadaten & Lösungsbuchstaben dekorieren
     tasks.forEach((t, i) => {
       if (!t.schulstufe) t.schulstufe = grade;
       if (!t.lehrplanRef && meta) t.lehrplanRef = meta.lehrplanRef;
       t.secretLetter = secretWord[i] || '';
+      t.topicId = topicId;
     });
 
     return tasks;

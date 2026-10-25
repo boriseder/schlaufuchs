@@ -144,10 +144,10 @@ test('Integration: Lösungsstreifen-Vollständigkeit für alle 28 Themen (Aufgab
       `Thema ${topic.id} (Stufe ${grade}): Erwartet ${effCount} Lösungen im Knickstreifen, aber ${solMatches} gefunden!`
     );
 
-    // Keine überflüssigen Geheimwort-Kästchen auf dem Blatt
+    // Lösungswort-Kästchenleiste für das Kind auf dem Blatt
     assert.ok(
-      !renderedHtml.includes('print-secret-box'),
-      `Thema ${topic.id}: Arbeitsblatt darf keine Geheimwort-Kästchen enthalten`
+      renderedHtml.includes('print-secret-box'),
+      `Thema ${topic.id}: Arbeitsblatt muss Geheimwort-Kästchen für das Kind enthalten`
     );
 
     // Prüfen, dass der Header die korrekte Schulstufe trägt

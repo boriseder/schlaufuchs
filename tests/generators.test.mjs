@@ -152,27 +152,23 @@ test('Sachunterricht: Sicherer Schulweg hat großen Fragenpool (>= 20 Fragen) un
   assert.ok(questionsSeen.size >= 20, `Schulweg-Pool muss mindestens 20 unterschiedliche Fragen liefern (gesehen: ${questionsSeen.size})`);
 });
 
-test('Sachunterricht: Alle 10 Wintertiere haben valide Verhaltensweisen und Standvögel sind enthalten', () => {
+test('Sachunterricht: Heimische Tiere im Winter hat großen Fragenpool (100 Fragen) und valide Verhaltensweisen', () => {
   const G = createSandbox([1, 2, 3, 4]);
-  const animalsSeen = new Set();
+  const questionsSeen = new Set();
 
   for (let r = 0; r < 50; r++) {
     const tasks = G.General.buildWinterTasks();
+    assert.equal(tasks.length, 5, 'Jeder Durchlauf muss genau 5 Aufgaben liefern');
     for (const t of tasks) {
-      const match = t.question.match(/Tier:\s*(.+)$/m);
-      if (match) {
-        const animal = match[1].trim();
-        animalsSeen.add(animal);
-        assert.ok(t.options.includes(t.correctText), `Tier ${animal}: correctText (${t.correctText}) nicht in options`);
-        assert.equal(t.options[t.correctIndex], t.correctText, `Tier ${animal}: correctIndex stimmt nicht`);
-
-        if (animal === 'Kohlmeise' || animal === 'Amsel') {
-          assert.ok(t.correctText.startsWith('Standvogel'), `${animal} muss als Standvogel klassifiziert sein`);
-        }
-      }
+      assert.ok(t.question.length > 10, 'Fragetext muss vorhanden sein');
+      assert.ok(Array.isArray(t.options) && t.options.length >= 3, 'Multiple-Choice-Optionen erforderlich');
+      assert.ok(t.options.includes(t.correctText), `correctText (${t.correctText}) nicht in options`);
+      assert.equal(t.options[t.correctIndex], t.correctText, `correctIndex stimmt nicht`);
+      questionsSeen.add(t.question);
     }
   }
-  assert.equal(animalsSeen.size, 10, 'Alle 10 Tiere aus dem Pool müssen generiert worden sein');
+  // Bei 100 Pool-Fragen müssen in 50 Ziehungen à 5 Fragen mindestens 30 unterschiedliche Fragen vorkommen
+  assert.ok(questionsSeen.size >= 30, `Wintertiere-Pool muss viele unterschiedliche Fragen liefern (gesehen: ${questionsSeen.size})`);
 });
 
 test('Deutsch: Schüttelsätze verwenden ausschließlich österreichische Standardsprache', () => {
@@ -239,4 +235,56 @@ test('Gehirntraining: Tier-Memory erzeugt echte, vollflächige Tier- und Natur-S
   for (const [id, count] of Object.entries(pairCounts)) {
     assert.equal(count, 2, `Paar ${id} muss exakt 2 Karten haben`);
   }
+});
+
+test('Pool-basierte Generatoren: Alle 13 statischen Themen besitzen Pools mit mindestens 100 didaktischen Fragen', () => {
+  const G = createSandbox([1, 2, 3, 4]);
+
+  // Sachunterricht (5 Themen)
+  const calendarTasks = G.General.buildCalendarTasks({ all: true });
+  assert.equal(calendarTasks.length, 100, `Kalender-Pool muss exakt 100 Fragen haben (hat: ${calendarTasks.length})`);
+
+  const winterTasks = G.General.buildWinterTasks({ all: true });
+  assert.equal(winterTasks.length, 100, `Wintertiere-Pool muss exakt 100 Fragen haben (hat: ${winterTasks.length})`);
+
+  const austriaTasks = G.General.buildAustriaTasks({ all: true });
+  assert.equal(austriaTasks.length, 100, `Österreich-Pool muss exakt 100 Fragen haben (hat: ${austriaTasks.length})`);
+
+  const bikeTasks = G.General.buildTrafficTasks({ all: true });
+  assert.equal(bikeTasks.length, 100, `Radfahrprüfung-Pool muss exakt 100 Fragen haben (hat: ${bikeTasks.length})`);
+
+  const schoolWalkTasks = G.General.buildSchoolWalkTasks({ all: true });
+  assert.equal(schoolWalkTasks.length, 100, `Schulweg-Pool muss exakt 100 Fragen haben (hat: ${schoolWalkTasks.length})`);
+
+  // Deutsch (7 Themen)
+  const wordTypeTasks = G.German.buildWordTypesTasks({ all: true });
+  assert.equal(wordTypeTasks.length, 100, `Wortarten-Pool muss exakt 100 Sätze haben (hat: ${wordTypeTasks.length})`);
+
+  const capitalizationTasks = G.German.buildCapitalizationTasks({ all: true });
+  assert.equal(capitalizationTasks.length, 100, `Groß-/Kleinschreibung-Pool muss exakt 100 Sätze haben (hat: ${capitalizationTasks.length})`);
+
+  const scrambleTasks = G.German.buildScrambleTasks({ all: true });
+  assert.equal(scrambleTasks.length, 100, `Schüttelsatz-Pool muss exakt 100 Sätze haben (hat: ${scrambleTasks.length})`);
+
+  const casesTasks = G.German.buildCasesTasks({ all: true });
+  assert.equal(casesTasks.length, 100, `4-Fälle-Pool muss exakt 100 Aufgaben haben (hat: ${casesTasks.length})`);
+
+  const tensesTasks = G.German.buildTensesTasks({ all: true });
+  assert.equal(tensesTasks.length, 100, `Zeitformen-Pool muss exakt 100 Aufgaben haben (hat: ${tensesTasks.length})`);
+
+  const syllableTasks = G.German.buildSyllableTasks({ all: true });
+  assert.equal(syllableTasks.length, 100, `Silben-Pool muss exakt 100 Wörter haben (hat: ${syllableTasks.length})`);
+
+  const readingTasks = G.German.buildReadingTasks({ all: true });
+  assert.equal(readingTasks.length, 25, `Lesetexte-Pool muss 25 Sachtexte haben (hat: ${readingTasks.length})`);
+  let totalReadingQuestions = 0;
+  for (const r of readingTasks) {
+    assert.equal(r.questions.length, 4, `Lesetext "${r.title}" muss 4 Fragen haben`);
+    totalReadingQuestions += r.questions.length;
+  }
+  assert.equal(totalReadingQuestions, 100, `Leseverständnis muss insgesamt 100 Fragen umfassen (hat: ${totalReadingQuestions})`);
+
+  // Mathematik (1 Thema)
+  const storyTasks = G.Math.buildStoryTasks({ all: true });
+  assert.equal(storyTasks.length, 100, `Rechengeschichten-Pool muss exakt 100 Aufgaben haben (hat: ${storyTasks.length})`);
 });

@@ -1003,11 +1003,46 @@
   margin-bottom: 3px;
 }
 
-/* Rechengeschichten F - R - A */
+/* Rechengeschichten */
 .print-story-text {
   font-weight: 800;
   font-size: var(--druck-schrift-s3, 14pt);
   line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.print-story-work-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: var(--druck-schrift-s3, 14pt);
+}
+
+.print-story-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.print-story-label {
+  font-weight: 800;
+  font-size: 11pt;
+  min-width: 80px;
+  color: #000000;
+}
+
+.print-story-grid {
+  width: 170px;
+  height: 36px;
+}
+
+.print-story-line {
+  flex: 1;
+}
+
+.print-story-question {
+  font-size: var(--druck-schrift-s3, 14pt);
+  font-weight: 700;
   margin-bottom: 4px;
 }
 
@@ -1022,6 +1057,115 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Lösungswort-Kästchenleiste für das Sammelalbum (Schülerseite) */
+.print-secret-word-bar {
+  border: var(--druck-linie, 0.6mm) solid #000000;
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.print-secret-prompt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8pt;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.print-secret-check {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #000000;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.print-secret-badge {
+  font-weight: 900;
+  font-size: 7.5pt;
+  letter-spacing: 0.8px;
+  border: 1pt solid #000000;
+  border-radius: 3px;
+  padding: 1px 5px;
+  background: var(--druck-grau-band, #f0f0f0);
+  white-space: nowrap;
+}
+
+.print-secret-desc {
+  font-weight: 700;
+  color: #333333;
+  font-size: 7.5pt;
+}
+
+.print-secret-letter-boxes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.print-secret-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.print-box-num {
+  font-size: 6.5pt;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1;
+}
+
+.print-box-cell {
+  width: 22px;
+  height: 22px;
+  border: 1.2pt solid #000000;
+  border-radius: 3px;
+  background: #ffffff;
+  display: inline-block;
+}
+
+.print-knick-letter-badge {
+  font-size: 8.5pt;
+  font-weight: 900;
+  color: #000000;
+  border: 1pt solid #000000;
+  border-radius: 3px;
+  padding: 0 4px;
+  background: #ffffff;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.print-letter-tag {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 800;
+  border: 1pt solid #000000;
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 8px;
+  background: var(--druck-grau-band, #f0f0f0);
+}
+
+.print-stamp-check {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #000000;
+  white-space: nowrap;
 }
 
 /* Dezente Selbsteinschätzung am Fuß */
@@ -1116,11 +1260,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px 24px;
-}
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
 }
 
 .print-self-eval-inline {

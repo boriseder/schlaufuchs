@@ -62,10 +62,12 @@ window.Schlaufuchs.Stickers = (function () {
     if (btn) btn.classList.remove('has-packs');
   }
 
-  function unlockNextSticker() {
+  function unlockNextSticker(targetProfile) {
     const State = window.Schlaufuchs.State;
     if (!State) return null;
-    const profile = State.getActiveProfile();
+    const all = State.loadAllProfiles();
+    const activeId = State.getActiveProfileId ? State.getActiveProfileId() : (targetProfile ? targetProfile.id : null);
+    const profile = targetProfile || (all.find(p => p.id === activeId) || all[0]);
     if (!profile) return null;
 
     if (!Array.isArray(profile.unlockedStickers)) {
@@ -80,16 +82,17 @@ window.Schlaufuchs.Stickers = (function () {
 
     profile.unlockedStickers.push(nextSticker.id);
 
-    // Profil im State sichern
-    const all = State.loadAllProfiles();
-    const idx = all.findIndex(p => p.id === profile.id);
-    if (idx !== -1) {
-      all[idx] = profile;
-      State.saveAllProfiles(all);
-      State.notify('stickers-changed', {
-        profileId: profile.id,
-        unlockedStickers: profile.unlockedStickers
-      });
+    // Profil im State sichern, wenn nicht als targetProfile übergeben (dann sichert der Aufrufer atomar)
+    if (!targetProfile) {
+      const idx = all.findIndex(p => p.id === profile.id);
+      if (idx !== -1) {
+        all[idx] = profile;
+        State.saveAllProfiles(all);
+        State.notify('stickers-changed', {
+          profileId: profile.id,
+          unlockedStickers: profile.unlockedStickers
+        });
+      }
     }
 
     updateHeaderBadge();
@@ -113,6 +116,7 @@ window.Schlaufuchs.Stickers = (function () {
     const unlocked = Array.isArray(profile.unlockedStickers) ? profile.unlockedStickers : ['s1'];
 
     updateHeaderBadge();
+    populateTopicSelect();
 
     // Sticker-Gitter rendern (Ruhige Vitrine ohne Leistungsdruck und ohne Prozentangaben)
     const ownedCount = ALL_STICKERS.filter(s => unlocked.includes(s.id)).length;
@@ -175,28 +179,37 @@ window.Schlaufuchs.Stickers = (function () {
     modal.classList.add('active');
   }
 
-  function showStickerCelebration(sticker, isNew) {
+  function showStickerCelebration(sticker, isNew, extraInfo) {
     const overlay = document.getElementById('booster-reveal-overlay') || document.getElementById('sticker-reveal-overlay');
     const Dialog = window.Schlaufuchs.Dialog;
 
     if (!overlay) {
-      const msg = isNew
+      let msg = isNew
         ? `Juhuu! Du hast ein neues Sammelbild freigeschaltet:\n${sticker.name} (${sticker.desc})`
         : `Du hast betrachtet:\n${sticker.name} (${sticker.desc})`;
+      if (extraInfo && extraInfo.starAwarded && extraInfo.topicTitle) {
+        msg += `\n★ +1 Stern für ${extraInfo.topicTitle}!`;
+      }
       if (Dialog) Dialog.alert(msg, { icon: 'stern', title: 'Sammelbild' });
       else alert(msg);
       return;
     }
 
     const titleText = isNew ? 'Neues Sammelbild freigeschaltet!' : 'Sammelbild aus deiner Sammlung:';
-    const tagHtml = isNew
+    let badgesHtml = isNew
       ? '<span style="display:inline-block; background:var(--sach, #1B8A44); color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:var(--radius); margin-bottom:8px;">NEU IM ALBUM</span>'
       : '<span style="display:inline-block; background:var(--tinte-leise, #6f675e); color:white; font-size:0.8rem; font-weight:800; padding:3px 10px; border-radius:var(--radius); margin-bottom:8px;">Bereits in deiner Sammlung</span>';
+
+    if (extraInfo && extraInfo.starAwarded && extraInfo.topicTitle) {
+      badgesHtml += ` <span style="display:inline-block; background:var(--mathe-hell, #EAF1FB); color:var(--mathe, #2255A4); font-size:0.8rem; font-weight:800; padding:3px 10px; border:1.5px solid var(--mathe, #2255A4); border-radius:var(--radius); margin-bottom:8px;">★ +1 Stern für ${extraInfo.topicTitle}</span>`;
+    } else if (extraInfo && !extraInfo.starAwarded && extraInfo.topicTitle) {
+      badgesHtml += ` <span style="display:inline-block; background:var(--papier-hell, #F5EFE0); color:var(--tinte, #1E252B); font-size:0.8rem; font-weight:800; padding:3px 10px; border:1.5px solid var(--linie, #3B4651); border-radius:var(--radius); margin-bottom:8px;">★★★ ${extraInfo.topicTitle} (Meister)</span>`;
+    }
 
     overlay.innerHTML = `
       <div class="booster-reveal-card sticker-reveal-card">
         <div style="font-size: 1.15rem; font-weight: 900; color: var(--mathe); margin-bottom: 8px;">${titleText}</div>
-        ${tagHtml}
+        <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">${badgesHtml}</div>
         <div class="booster-sticker-anim sticker-anim" style="font-size: 4.5rem; margin: 12px 0;">${sticker.icon}</div>
         <h3 style="font-size: 1.5rem; color: var(--tinte); margin-bottom: 4px;">${sticker.name}</h3>
         <p style="color: var(--tinte-leise); font-weight: 700; margin-bottom: 20px;">„${sticker.desc}“</p>
@@ -220,37 +233,64 @@ window.Schlaufuchs.Stickers = (function () {
     }
   }
 
-  const VALID_SECRET_WORDS = [
-    'FUCHS', 'SCHLAU', 'WALD', 'BIBER', 'IGEL', 'EULE', 'SONNE', 'BLUME',
-    'WIESE', 'STERN', 'RAKETE', 'KOBEL', 'WINTER', 'SOMMER', 'HERBST',
-    'SCHNEE', 'SCHULE', 'PAPIER', 'FREUNDE', 'SCHATZ', 'BÜCHER', 'WALDKAUZ',
-    'FUCHSBAU', 'ZEBRA', 'TAUSEND', 'MEISTER', 'KÖNIG', 'HERZ'
-  ];
+  const FALLBACK_SECRET_WORDS_BY_LENGTH = {
+    3: ['UHU', 'MUT', 'BÄR', 'ROT', 'AST', 'SEE', 'TAG'],
+    4: ['WALD', 'IGEL', 'EULE', 'BERG', 'HERZ', 'WOLF', 'BAUM', 'LUFT', 'GOLD', 'BLAU', 'HAUS', 'MAUS'],
+    5: ['FUCHS', 'STERN', 'WIESE', 'BLUME', 'SONNE', 'BIBER', 'TAFEL', 'VOGEL', 'KOBEL', 'ZEBRA', 'KÖNIG'],
+    6: ['SCHLAU', 'WINTER', 'SOMMER', 'SCHNEE', 'HERBST', 'SCHULE', 'RAKETE', 'BÜCHER', 'FREUND', 'PAPIER', 'LEHRER', 'WISSEN', 'SCHATZ'],
+    7: ['FREUNDE', 'ZEICHEN', 'MEISTER', 'STERNEN', 'DRACHEN', 'KOBOLDE', 'TAUSEND'],
+    8: ['FUCHSBAU', 'SCHLAUER', 'WALDKAUZ', 'TAUSENDE', 'KÖNIGIN', 'LESEFEST', 'SCHULHOF'],
+    10: ['WINTERZEIT', 'BERGBLUMEN', 'SCHULSTART', 'LESESCHATZ', 'ZAUBERWALD'],
+    12: ['RECHENKÖNIGE', 'ZAHLENZAUBER', 'WINTERZAUBER', 'SCHATZSUCHER', 'MEISTERSTERN', 'BÜCHERSCHATZ']
+  };
 
-  function redeemTreasureWord(inputWord) {
-    if (!inputWord) return { success: false, msg: 'Bitte gib ein Geheimwort ein.' };
+  function getCanonicalSecretWords() {
+    if (window.Schlaufuchs && window.Schlaufuchs.SecretWords && Array.isArray(window.Schlaufuchs.SecretWords.all)) {
+      return window.Schlaufuchs.SecretWords.all;
+    }
+    return Array.from(new Set([
+      ...Object.values(FALLBACK_SECRET_WORDS_BY_LENGTH).flat(),
+      'FUCHS', 'SCHLAU', 'WALD', 'BIBER', 'IGEL', 'EULE', 'SONNE', 'BLUME',
+      'WIESE', 'STERN', 'RAKETE', 'KOBEL', 'WINTER', 'SOMMER', 'HERBST',
+      'SCHNEE', 'SCHULE', 'PAPIER', 'FREUNDE', 'SCHATZ', 'BÜCHER', 'WALDKAUZ',
+      'FUCHSBAU', 'ZEBRA', 'TAUSEND', 'MEISTER', 'KÖNIG', 'HERZ'
+    ]));
+  }
+
+  const VALID_SECRET_WORDS = getCanonicalSecretWords();
+
+  function redeemTreasureWord(inputWord, topicId) {
+    if (!inputWord) return { success: false, msg: 'Bitte gib ein Lösungswort ein.' };
     const State = window.Schlaufuchs.State;
     if (!State) return { success: false, msg: 'System nicht bereit.' };
-    const profile = State.getActiveProfile();
+
+    const allProfiles = State.loadAllProfiles();
+    const activeId = State.getActiveProfileId ? State.getActiveProfileId() : (allProfiles[0] && allProfiles[0].id);
+    const profile = allProfiles.find(p => p.id === activeId) || allProfiles[0];
     if (!profile) return { success: false, msg: 'Kein Profil gefunden.' };
 
-    const clean = inputWord.trim().toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE');
+    const clean = inputWord.trim().toUpperCase()
+      .replace(/Ä/g, 'AE')
+      .replace(/Ö/g, 'OE')
+      .replace(/Ü/g, 'UE')
+      .replace(/ß/g, 'SS');
 
     // Gültige Wörter prüfen
-    const normalizedValid = VALID_SECRET_WORDS.map(w => w.replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE'));
+    const allValid = getCanonicalSecretWords();
+    const normalizedValid = allValid.map(w => w.replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE').replace(/ß/g, 'SS'));
 
     let dynamicWords = [];
     try {
       const Storage = window.Schlaufuchs.Storage;
       dynamicWords = (Storage ? Storage.lesen('valid_secret_words') : []) || [];
     } catch (e) {}
-    const normalizedDynamic = dynamicWords.map(w => String(w).trim().toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE'));
+    const normalizedDynamic = dynamicWords.map(w => String(w).trim().toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE').replace(/ß/g, 'SS'));
 
     const isValid = normalizedValid.includes(clean) || normalizedDynamic.includes(clean);
     if (!isValid) {
       return {
         success: false,
-        msg: 'Dieses Geheimwort ist leider nicht bekannt. Prüfe die Buchstaben auf deinem Arbeitsblatt noch einmal!'
+        msg: 'Dieses Lösungswort ist leider nicht bekannt. Prüfe die Buchstaben auf deinem Arbeitsblatt noch einmal!'
       };
     }
 
@@ -258,21 +298,45 @@ window.Schlaufuchs.Stickers = (function () {
     if (profile.redeemedTreasureWords.includes(clean)) {
       return {
         success: false,
-        msg: 'Du hast dieses Geheimwort bereits eingelöst! Löse ein neues Arbeitsblatt für den nächsten Schatz.'
+        msg: 'Du hast dieses Lösungswort bereits eingelöst! Löse ein neues Arbeitsblatt für den nächsten Schatz.'
       };
     }
 
-    // Einlösen & Belohnen
+    // 1. Lösungswort vermerken
     profile.redeemedTreasureWords.push(clean);
-    const unlockRes = unlockNextSticker();
 
-    // Profil sichern
-    const allProfiles = State.loadAllProfiles();
-    const idx = allProfiles.findIndex(p => p.id === profile.id);
-    if (idx !== -1) {
-      allProfiles[idx] = profile;
-      State.saveAllProfiles(allProfiles);
+    // 2. Nächsten Sticker direkt an 'profile' in 'allProfiles' freischalten
+    if (!Array.isArray(profile.unlockedStickers)) {
+      profile.unlockedStickers = ['s1'];
     }
+    const nextSticker = ALL_STICKERS.find(s => !profile.unlockedStickers.includes(s.id));
+    let unlockRes = null;
+    if (nextSticker) {
+      profile.unlockedStickers.push(nextSticker.id);
+      unlockRes = { sticker: nextSticker, isNew: true };
+    } else {
+      unlockRes = { sticker: ALL_STICKERS[ALL_STICKERS.length - 1], isNew: false, allCompleted: true };
+    }
+
+    // 3. Stern für das Thema gutschreiben (automatisch aus last_printed_topic oder Parameter)
+    let starAwarded = false;
+    let topicTitle = '';
+    const Topics = window.Schlaufuchs && window.Schlaufuchs.Topics;
+    const effTopicId = topicId || (window.Schlaufuchs.Storage ? window.Schlaufuchs.Storage.lesen('last_printed_topic') : '');
+
+    if (effTopicId) {
+      const topicMeta = Topics && typeof Topics.getTopicById === 'function' ? Topics.getTopicById(effTopicId) : null;
+      topicTitle = topicMeta ? topicMeta.title : effTopicId;
+      if (!profile.stars) profile.stars = {};
+      const currentStars = profile.stars[effTopicId] || 0;
+      if (currentStars < 3) {
+        profile.stars[effTopicId] = currentStars + 1;
+        starAwarded = true;
+      }
+    }
+
+    // 4. Einziges, konsistentes und atomares Sichern aller Profile!
+    State.saveAllProfiles(allProfiles);
 
     // Audio & Konfetti
     if (window.Schlaufuchs.Confetti && typeof window.Schlaufuchs.Confetti.trigger === 'function') {
@@ -282,14 +346,67 @@ window.Schlaufuchs.Stickers = (function () {
       window.Schlaufuchs.Audio.playFanfare();
     }
 
-    State.notify('stickers-changed');
+    State.notify('stickers-changed', {
+      profileId: profile.id,
+      unlockedStickers: profile.unlockedStickers
+    });
+    if (starAwarded) {
+      State.notify('stars-changed', { topicId: effTopicId, stars: profile.stars[effTopicId] });
+    }
     updateHeaderBadge();
 
-    const stickerName = unlockRes && unlockRes.sticker ? unlockRes.sticker.name : 'Sammelbild';
+    const sticker = unlockRes && unlockRes.sticker;
+    const stickerName = sticker ? sticker.name : 'Sammelbild';
+
+    let successMsg = `Fantastisch! Du hast das Lösungswort „${inputWord.trim().toUpperCase()}“ richtig gelöst und das Sammelbild „${stickerName}“ freigeschaltet!`;
+    if (starAwarded && topicTitle) {
+      successMsg = `Großartig! Du hast das Lösungswort gelöst: +1 Stern für „${topicTitle}“ erhalten und das Sammelbild „${stickerName}“ freigeschaltet!`;
+    }
+
     return {
       success: true,
-      msg: `Fantastisch! Du hast das Geheimwort „${inputWord.trim().toUpperCase()}“ richtig gelöst und das Sammelbild „${stickerName}“ freigeschaltet!`
+      sticker: sticker,
+      isNew: unlockRes ? unlockRes.isNew : true,
+      allCompleted: unlockRes ? unlockRes.allCompleted : false,
+      starAwarded: starAwarded,
+      topicTitle: topicTitle,
+      msg: successMsg
     };
+  }
+
+  function populateTopicSelect() {
+    const sel = document.getElementById('select-treasure-topic');
+    if (!sel) return;
+    const Topics = window.Schlaufuchs && window.Schlaufuchs.Topics;
+    if (!Topics || typeof Topics.getAllTopics !== 'function') return;
+
+    if (sel.options.length > 1) return;
+
+    sel.innerHTML = '<option value="">Thema für deinen Stern wählen ...</option>';
+
+    const subjects = ['math', 'german', 'general', 'brain'];
+    subjects.forEach(sub => {
+      const topics = Topics.getTopicsBySubject ? Topics.getTopicsBySubject(sub) : Topics.getAllTopics().filter(t => t.subject === sub);
+      if (topics.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = Topics.getSubjectLabel(sub);
+        topics.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          opt.textContent = `${t.title} (${t.grades.map(g => g + '.').join(', ')} Kl.)`;
+          group.appendChild(opt);
+        });
+        sel.appendChild(group);
+      }
+    });
+
+    try {
+      const Storage = window.Schlaufuchs && window.Schlaufuchs.Storage;
+      const last = Storage ? Storage.lesen('last_printed_topic') : '';
+      if (last && sel.querySelector(`option[value="${last}"]`)) {
+        sel.value = last;
+      }
+    } catch (e) {}
   }
 
   function init() {
@@ -299,6 +416,8 @@ window.Schlaufuchs.Stickers = (function () {
     const treasureForm = document.getElementById('treasure-code-form');
     const treasureInput = document.getElementById('input-treasure-code');
     const treasureFeedback = document.getElementById('treasure-feedback-msg');
+
+    populateTopicSelect();
 
     if (openBtn) {
       openBtn.addEventListener('click', renderAlbumModal);
@@ -315,7 +434,9 @@ window.Schlaufuchs.Stickers = (function () {
       treasureForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const word = treasureInput.value.trim();
-        const res = redeemTreasureWord(word);
+        const topicSelect = document.getElementById('select-treasure-topic');
+        const topicId = topicSelect ? topicSelect.value : '';
+        const res = redeemTreasureWord(word, topicId);
         if (treasureFeedback) {
           treasureFeedback.style.display = 'block';
           treasureFeedback.className = res.success ? 'treasure-feedback-msg success' : 'treasure-feedback-msg error';
@@ -324,6 +445,9 @@ window.Schlaufuchs.Stickers = (function () {
         if (res.success) {
           treasureInput.value = '';
           renderAlbumModal();
+          if (res.sticker) {
+            showStickerCelebration(res.sticker, res.isNew, res);
+          }
         }
       });
     }
@@ -355,6 +479,8 @@ window.Schlaufuchs.Stickers = (function () {
     getAvailablePacksCount: getAvailablePacksCount,
     redeemTreasureWord: redeemTreasureWord,
     ALL_STICKERS: ALL_STICKERS,
-    TROPHIES: TROPHIES
+    TROPHIES: TROPHIES,
+    SECRET_WORDS_BY_LENGTH: FALLBACK_SECRET_WORDS_BY_LENGTH,
+    VALID_SECRET_WORDS: VALID_SECRET_WORDS
   };
 })();

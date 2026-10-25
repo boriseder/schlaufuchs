@@ -2,7 +2,7 @@
 // SCHLAUFUCHS – sw.js (Service Worker für 100% Offline-Betrieb)
 // =============================================================
 
-const CACHE_NAME = 'schlaufuchs-v3.11';
+const CACHE_NAME = 'schlaufuchs-v3.16';
 
 const PRECACHE_ASSETS = [
   './',
